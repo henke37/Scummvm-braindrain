@@ -11,17 +11,25 @@ namespace DebugHelp {
 			this.process = process;
 		}
 
-		public override void ReadBytes(uint addr, uint size, byte[] buff) {
+		public unsafe override void ReadBytes(uint addr, uint size, byte[] buff) {
 			int readC;
-			ReadProcessMemory(process.Handle, (IntPtr)addr, buff, size, out readC);
+			fixed (Byte* buffP = buff) {
+				ReadProcessMemory(process.Handle, addr, buffP, size, out readC);
+			}
 			if(readC != size) throw new Exception("Read failed to read all the data");
 		}
 
+		public unsafe override void ReadBytes(uint addr, uint size, void* buff) {
+			int readC;
+			ReadProcessMemory(process.Handle, addr, buff, size, out readC);
+			if(readC != size) throw new IncompleteReadException("Memory read didn't complete");
+		}
+
 		[DllImport("kernel32.dll", SetLastError = true)]
-		static extern bool ReadProcessMemory(
+		unsafe static extern bool ReadProcessMemory(
 			IntPtr hProcess,
-			IntPtr lpBaseAddress,
-			[Out] byte[] lpBuffer,
+			UInt32 lpBaseAddress,
+			[Out] void* lpBuffer,
 			uint dwSize,
 			out int lpNumberOfBytesRead
 		);

@@ -10,5 +10,6 @@ namespace DebugHelp {
 		UInt32 ReadUInt32At(uint addr);
 		Byte[] ReadBytes(uint addr, uint size);
 		void ReadBytes(uint addr, uint size, Byte[] buff);
+		unsafe void ReadBytes(uint addr, uint size, void *buff);
 	}
 }

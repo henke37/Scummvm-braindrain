@@ -1,5 +1,6 @@
 ﻿
 using DebugHelp;
+using DebugHelp.RTTI;
 using DrainLib.Engines;
 using System;
 using System.Collections.Generic;
@@ -14,6 +15,7 @@ namespace DrainLib {
 
 		private Process process;
 		private LiveProcessMemoryReader memoryReader;
+		private RTTIReader rttiReader;
 		private SymbolResolver resolver;
 
 		private uint g_engineAddr;
@@ -26,6 +28,8 @@ namespace DrainLib {
 
 			process = procs[0];
 			memoryReader = new LiveProcessMemoryReader(process);
+
+			rttiReader = new RTTIReader(memoryReader);
 
 			string pdbPath = process.MainModule.FileName.Replace(".exe", ".pdb");
 			resolver = new SymbolResolver(pdbPath);
@@ -42,6 +46,8 @@ namespace DrainLib {
 			var enginePtrVal=memoryReader.ReadUInt32At((uint)process.MainModule.BaseAddress + g_engineAddr);
 
 			if(enginePtrVal == 0) return null;
+
+			string mangledName = rttiReader.GetMangledClassNameFromObjPtr(enginePtrVal);
 
 			throw new NotImplementedException();
 		}

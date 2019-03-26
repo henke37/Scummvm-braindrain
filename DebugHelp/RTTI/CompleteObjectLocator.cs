@@ -1,10 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 
 namespace DebugHelp.RTTI {
 	internal class CompleteObjectLocator {
-		public uint signature;
-		public uint objectRootOffset;
-		public uint classDescriptorOffset;
+		public uint ObjectRootOffset;
+		public uint ConstructorDescriptorOffset;
+		public TypeDescriptor TypeDescriptor;
+		public ClassHierarchyDescriptor ClassHierarchyDescriptor;
+
+		[StructLayout(LayoutKind.Sequential, Pack = 1)]
+		internal struct MemoryStruct {
+			public uint Signature;
+			public uint ObjectRootOffset;
+			public uint ConstructorDescriptorOffset;
+			public uint pTypeDescriptor;
+			public uint pClassDescriptor;
+		}
 	}
 }
