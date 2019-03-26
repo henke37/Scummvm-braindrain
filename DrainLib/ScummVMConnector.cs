@@ -31,7 +31,7 @@ namespace DrainLib {
 			resolver = new SymbolResolver(pdbPath);
 
 			var g_engineSymb = resolver.findGlobal("g_engine");
-			g_engineAddr = g_engineSymb.addressOffset;
+			g_engineAddr = g_engineSymb.relativeVirtualAddress;
 		}
 
 		public BaseEngineAccessor Engine {
