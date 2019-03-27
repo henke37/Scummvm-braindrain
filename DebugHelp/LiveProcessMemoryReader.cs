@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 
@@ -14,14 +15,17 @@ namespace DebugHelp {
 		public unsafe override void ReadBytes(uint addr, uint size, byte[] buff) {
 			int readC;
 			fixed (Byte* buffP = buff) {
-				ReadProcessMemory(process.Handle, addr, buffP, size, out readC);
+				bool success=ReadProcessMemory(process.Handle, addr, buffP, size, out readC);
+				if(!success) throw new Win32Exception();
 			}
+
 			if(readC != size) throw new Exception("Read failed to read all the data");
 		}
 
 		public unsafe override void ReadBytes(uint addr, uint size, void* buff) {
 			int readC;
-			ReadProcessMemory(process.Handle, addr, buff, size, out readC);
+			bool success = ReadProcessMemory(process.Handle, addr, buff, size, out readC);
+			if(!success) throw new Win32Exception();
 			if(readC != size) throw new IncompleteReadException("Memory read didn't complete");
 		}
 
