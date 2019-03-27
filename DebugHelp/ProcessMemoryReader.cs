@@ -55,9 +55,7 @@ namespace DebugHelp {
 
 		public int[] ReadInt32Array(uint addr, uint count) {
 			Int32[] arr = new int[count];
-
 			uint byteC = count * 4;
-
 			Byte[] buff = GetReadBuff(byteC);
 
 			ReadBytes(addr, byteC, buff);
@@ -71,9 +69,7 @@ namespace DebugHelp {
 
 		public uint[] ReadUInt32Array(uint addr, uint count) {
 			UInt32[] arr = new uint[count];
-
 			uint byteC = count * 4;
-
 			Byte[] buff = GetReadBuff(byteC);
 
 			ReadBytes(addr, byteC, buff);

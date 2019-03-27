@@ -76,7 +76,6 @@ namespace DebugHelp.RTTI {
 			};
 
 			return desc;
-
 		}
 
 		private ClassHierarchyDescriptor.BaseClassDescriptor ReadBaseClassDescriptor(uint baseClassDescriptorPointer) {
