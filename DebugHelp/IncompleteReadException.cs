@@ -5,10 +5,7 @@ namespace DebugHelp {
 	[Serializable]
 	public class IncompleteReadException : Exception {
 
-		internal IncompleteReadException(string message) : base(message) {
-		}
-
-		internal IncompleteReadException(string message, Exception innerException) : base(message, innerException) {
+		internal IncompleteReadException() : base(Resources.ReadTooLitte) {
 		}
 
 		protected IncompleteReadException(SerializationInfo info, StreamingContext context) : base(info, context) {

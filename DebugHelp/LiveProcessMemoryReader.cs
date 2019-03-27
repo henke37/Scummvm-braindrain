@@ -24,7 +24,7 @@ namespace DebugHelp {
 				if(!success) throw new Win32Exception();
 			}
 
-			if(readC != size) throw new Exception("Read failed to read all the data");
+			if(readC != size) throw new IncompleteReadException();
 		}
 
 		[SecurityCritical]
@@ -34,7 +34,7 @@ namespace DebugHelp {
 			int readC;
 			bool success = ReadProcessMemory(process.Handle, addr, buff, size, out readC);
 			if(!success) throw new Win32Exception();
-			if(readC != size) throw new IncompleteReadException("Memory read didn't complete");
+			if(readC != size) throw new IncompleteReadException();
 		}
 
 		[DllImport("kernel32.dll", SetLastError = true)]
