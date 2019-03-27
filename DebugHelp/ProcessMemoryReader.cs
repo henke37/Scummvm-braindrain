@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using System.Text;
 
 namespace DebugHelp {
 	public abstract class ProcessMemoryReader {
@@ -19,6 +20,11 @@ namespace DebugHelp {
 			throw new NotImplementedException();
 		}
 
+		public Byte ReadByte(uint addr) {
+			ReadBytes(addr, 1, scratchBuff);
+			return scratchBuff[0];
+		}
+
 		public unsafe void ReadStruct<T>(uint addr, ref T buff) where T : struct {
 			GCHandle handle = GCHandle.Alloc(buff, GCHandleType.Pinned);
 			void* buffP = (void*)handle.AddrOfPinnedObject();
@@ -27,7 +33,14 @@ namespace DebugHelp {
 		}
 
 		public string ReadNullTermString(uint addr) {
-			throw new NotImplementedException();
+			List<Byte> buff=new List<byte>();
+			for(; ; addr++) {
+				Byte b = ReadByte(addr);
+				if(b == 0) break;
+				buff.Add(b);
+			}
+
+			return new string(Encoding.UTF8.GetChars(buff.ToArray()));
 		}
 
 		public int ReadInt32At(uint addr) {
