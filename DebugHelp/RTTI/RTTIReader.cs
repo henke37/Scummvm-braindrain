@@ -39,7 +39,7 @@ namespace DebugHelp.RTTI {
 
 			if(memoryStruct.Signature != 0) throw new InvalidDataException("Invalid COL signature");
 
-			Debug.Assert(memoryStruct.pTypeDescriptor != 0,"pTypeDescriptor shouldn't be 0!");
+			Debug.Assert(memoryStruct.pTypeDescriptor != 0, "pTypeDescriptor shouldn't be 0!");
 			Debug.Assert(memoryStruct.pClassDescriptor != 0, "pClassDescriptor shouldn't be 0!");
 
 			CompleteObjectLocator locator = new CompleteObjectLocator();

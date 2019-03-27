@@ -26,9 +26,9 @@ namespace DebugHelp.RTTI {
 			int pdisp;
 			int vdisp;
 
-			public uint LocateBaseObject(uint completeObjectAddr,ProcessMemoryReader reader) {
+			public uint LocateBaseObject(uint completeObjectAddr, ProcessMemoryReader reader) {
 				completeObjectAddr += (uint)mdisp;
-				if(pdisp!=-1) {
+				if(pdisp != -1) {
 					uint vtbl = (uint)(completeObjectAddr + pdisp);
 					completeObjectAddr += reader.ReadUInt32At((uint)(vtbl + vdisp));
 				}
@@ -46,8 +46,8 @@ namespace DebugHelp.RTTI {
 
 		[Flags]
 		public enum ClassHierarchyFlags : uint {
-			MultipleInhertience=1,
-			VirtualInhertience=2
+			MultipleInhertience = 1,
+			VirtualInhertience = 2
 		}
 	}
 }

@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 namespace DebugHelp {
 	public abstract class ProcessMemoryReader : IProcessMemoryReader {
 
-		protected Byte[] scratchBuff=new Byte[16];
+		protected Byte[] scratchBuff = new Byte[16];
 
 		public byte[] ReadBytes(uint addr, uint size) {
 			var buff = new Byte[size];
@@ -21,7 +21,7 @@ namespace DebugHelp {
 
 		public unsafe void ReadStruct<T>(uint addr, ref T buff) where T : struct {
 			GCHandle handle = GCHandle.Alloc(buff, GCHandleType.Pinned);
-			void*buffP= (void*)handle.AddrOfPinnedObject();
+			void* buffP = (void*)handle.AddrOfPinnedObject();
 			ReadBytes(addr, (uint)Marshal.SizeOf(typeof(T)), buffP);
 			handle.Free();
 		}

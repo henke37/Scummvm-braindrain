@@ -43,7 +43,7 @@ namespace DrainLib {
 		}
 
 		private BaseEngineAccessor getEngine() {
-			var enginePtrVal=memoryReader.ReadUInt32At((uint)process.MainModule.BaseAddress + g_engineAddr);
+			var enginePtrVal = memoryReader.ReadUInt32At((uint)process.MainModule.BaseAddress + g_engineAddr);
 
 			if(enginePtrVal == 0) return null;
 
@@ -56,7 +56,7 @@ namespace DrainLib {
 	[Serializable]
 	public class ProcessNotFoundException : Exception {
 		internal ProcessNotFoundException() : base("Target process not found") {
-			
+
 		}
 		protected ProcessNotFoundException(SerializationInfo info, StreamingContext context) : base(info, context) {
 		}
