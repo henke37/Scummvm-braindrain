@@ -48,7 +48,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IncompleteReadException.cs" />
-    <Compile Include="IProcessMemoryReader.cs" />
     <Compile Include="LiveProcessMemoryReader.cs" />
     <Compile Include="NameSearchOptions.cs" />
     <Compile Include="ProcessMemoryReader.cs" />

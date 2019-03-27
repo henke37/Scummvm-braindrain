@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
 namespace DebugHelp {
-	public abstract class ProcessMemoryReader : IProcessMemoryReader {
+	public abstract class ProcessMemoryReader {
 
 		protected Byte[] scratchBuff = new Byte[16];
 
