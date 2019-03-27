@@ -52,5 +52,41 @@ namespace DebugHelp {
 			ReadBytes(addr, 4, scratchBuff);
 			return (uint)(scratchBuff[0] | (scratchBuff[1] << 8) | (scratchBuff[2] << 16) | (scratchBuff[3] << 24));
 		}
+
+		public int[] ReadInt32Array(uint addr, uint count) {
+			Int32[] arr = new int[count];
+
+			uint byteC = count * 4;
+
+			Byte[] buff = GetReadBuff(byteC);
+
+			ReadBytes(addr, byteC, buff);
+
+			for(uint i = 0; i < count; ++i) {
+				arr[i]=buff[0+i*4] | (buff[1 + i * 4] << 8) | (buff[2 + i * 4] << 16) | (buff[3 + i * 4] << 24);
+			}
+
+			return arr;
+		}
+
+		public uint[] ReadUInt32Array(uint addr, uint count) {
+			UInt32[] arr = new uint[count];
+
+			uint byteC = count * 4;
+
+			Byte[] buff = GetReadBuff(byteC);
+
+			ReadBytes(addr, byteC, buff);
+
+			for(uint i = 0; i < count; ++i) {
+				arr[i] = (uint)(buff[0 + i * 4] | (buff[1 + i * 4] << 8) | (buff[2 + i * 4] << 16) | (buff[3 + i * 4] << 24));
+			}
+
+			return arr;
+		}
+
+		private byte[] GetReadBuff(uint count) {
+			return scratchBuff.Length <= count ? scratchBuff : new byte[count];
+		}
 	}
 }

@@ -69,9 +69,10 @@ namespace DebugHelp.RTTI {
 			desc.Flags = memoryStruct.Flags;
 			desc.BaseClasses = new List<ClassHierarchyDescriptor.BaseClassDescriptor>((int)memoryStruct.numBaseClasses);
 
+			var baseDescriptorPointers=processMemoryReader.ReadUInt32Array(memoryStruct.pBaseClassArray, memoryStruct.numBaseClasses);
+
 			for(uint baseClassIndex = 0; baseClassIndex < memoryStruct.numBaseClasses; ++baseClassIndex) {
-				var baseClassDescriptorPointer = processMemoryReader.ReadUInt32At(memoryStruct.pBaseClassArray + baseClassIndex * 4);
-				desc.BaseClasses.Add(ReadBaseClassDescriptor(baseClassDescriptorPointer));
+				desc.BaseClasses.Add(ReadBaseClassDescriptor(baseDescriptorPointers[baseClassIndex]));
 			};
 
 			return desc;
