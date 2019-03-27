@@ -6,8 +6,6 @@ using System.Text;
 namespace DebugHelp {
 	public abstract class ProcessMemoryReader {
 
-		protected Byte[] scratchBuff = new Byte[16];
-
 		public byte[] ReadBytes(uint addr, uint size) {
 			var buff = new Byte[size];
 			ReadBytes(addr, size, buff);
@@ -81,7 +79,10 @@ namespace DebugHelp {
 			return arr;
 		}
 
-		private byte[] GetReadBuff(uint count) {
+
+		protected Byte[] scratchBuff = new Byte[16];
+
+		protected byte[] GetReadBuff(uint count) {
 			return scratchBuff.Length <= count ? scratchBuff : new byte[count];
 		}
 	}
