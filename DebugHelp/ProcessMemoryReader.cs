@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using System.Security;
 using System.Text;
 
 namespace DebugHelp {
@@ -12,8 +13,10 @@ namespace DebugHelp {
 			return buff;
 		}
 
+		[SecuritySafeCritical]
 		public abstract void ReadBytes(uint addr, uint size, byte[] buff);
 
+		[SecurityCritical]
 		public virtual unsafe void ReadBytes(uint addr, uint size, void* buff) {
 			throw new NotImplementedException();
 		}
@@ -23,7 +26,7 @@ namespace DebugHelp {
 			return scratchBuff[0];
 		}
 
-		public unsafe void ReadStruct<T>(uint addr, ref T buff) where T : struct {
+		public unsafe void ReadStruct<T>(uint addr, ref T buff) where T : unmanaged {
 			GCHandle handle = GCHandle.Alloc(buff, GCHandleType.Pinned);
 			void* buffP = (void*)handle.AddrOfPinnedObject();
 			ReadBytes(addr, (uint)Marshal.SizeOf(typeof(T)), buffP);

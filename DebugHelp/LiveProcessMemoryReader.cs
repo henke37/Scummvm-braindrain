@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using System.Security;
+using System.Security.Permissions;
 
 namespace DebugHelp {
 	public class LiveProcessMemoryReader : ProcessMemoryReader {
@@ -12,6 +14,9 @@ namespace DebugHelp {
 			this.process = process;
 		}
 
+		[SecuritySafeCritical]
+		[SecurityPermission(SecurityAction.Assert, Flags = SecurityPermissionFlag.UnmanagedCode)]
+		[SuppressUnmanagedCodeSecurity]
 		public unsafe override void ReadBytes(uint addr, uint size, byte[] buff) {
 			int readC;
 			fixed (Byte* buffP = buff) {
@@ -22,6 +27,9 @@ namespace DebugHelp {
 			if(readC != size) throw new Exception("Read failed to read all the data");
 		}
 
+		[SecurityCritical]
+		[SecurityPermission(SecurityAction.Assert, Flags = SecurityPermissionFlag.UnmanagedCode)]
+		[SuppressUnmanagedCodeSecurity]
 		public unsafe override void ReadBytes(uint addr, uint size, void* buff) {
 			int readC;
 			bool success = ReadProcessMemory(process.Handle, addr, buff, size, out readC);
