@@ -4,10 +4,16 @@ using System.Collections.Generic;
 
 namespace DrainLib.Engines {
 	public abstract class BaseEngineAccessor {
-		private SymbolResolver resolver;
+		protected ScummVMConnector Connector;
 
-		internal BaseEngineAccessor(SymbolResolver resolver) {
-			this.resolver = resolver;
+		internal BaseEngineAccessor(ScummVMConnector connector) {
+			this.Connector = connector;
+		}
+
+		bool IsActiveEngine {
+			get {
+				throw new NotImplementedException();
+			}
 		}
 	}
 }

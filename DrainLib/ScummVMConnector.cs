@@ -14,11 +14,11 @@ namespace DrainLib {
 	public class ScummVMConnector {
 
 		private Process process;
-		private LiveProcessMemoryReader memoryReader;
-		private RTTIReader rttiReader;
-		private SymbolResolver resolver;
+		internal ProcessMemoryReader memoryReader;
+		internal RTTIReader rttiReader;
+		internal SymbolResolver resolver;
 
-		private uint g_engineAddr;
+		internal uint g_engineAddr;
 
 		public ScummVMConnector() { }
 
@@ -48,6 +48,10 @@ namespace DrainLib {
 			if(enginePtrVal == 0) return null;
 
 			string mangledName = rttiReader.GetMangledClassNameFromObjPtr(enginePtrVal);
+
+			if(rttiReader.TryDynamicCast(enginePtrVal, ".?AVScummEngine@Scumm@@", out uint scummEnginePtrVal)) {
+				return new ScummEngineAccessor(this, scummEnginePtrVal);
+			}
 
 			throw new NotImplementedException();
 		}
