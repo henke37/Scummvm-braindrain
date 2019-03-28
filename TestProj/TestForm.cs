@@ -12,7 +12,7 @@ namespace TestProj {
 			connector = new ScummVMConnector();
 			connector.Connect();
 
-			var engine = connector.Engine;
+			var engine = connector.GetEngine();
 		}
 	}
 }

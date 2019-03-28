@@ -38,11 +38,7 @@ namespace DrainLib {
 			g_engineAddr = g_engineSymb.relativeVirtualAddress;
 		}
 
-		public BaseEngineAccessor Engine {
-			get => getEngine();
-		}
-
-		private BaseEngineAccessor getEngine() {
+		public BaseEngineAccessor GetEngine() {
 			var enginePtrVal = memoryReader.ReadUInt32At((uint)process.MainModule.BaseAddress + g_engineAddr);
 
 			if(enginePtrVal == 0) return null;
