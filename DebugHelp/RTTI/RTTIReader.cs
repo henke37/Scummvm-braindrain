@@ -67,7 +67,7 @@ namespace DebugHelp.RTTI {
 
 			ClassHierarchyDescriptor desc = new ClassHierarchyDescriptor();
 			desc.Flags = memoryStruct.Flags;
-			desc.BaseClasses = new List<ClassHierarchyDescriptor.BaseClassDescriptor>((int)memoryStruct.numBaseClasses);
+			desc.BaseClasses = new List<BaseClassDescriptor>((int)memoryStruct.numBaseClasses);
 
 			var baseDescriptorPointers=processMemoryReader.ReadUInt32Array(memoryStruct.pBaseClassArray, memoryStruct.numBaseClasses);
 
@@ -78,11 +78,11 @@ namespace DebugHelp.RTTI {
 			return desc;
 		}
 
-		private ClassHierarchyDescriptor.BaseClassDescriptor ReadBaseClassDescriptor(uint baseClassDescriptorPointer) {
-			ClassHierarchyDescriptor.BaseClassDescriptor.MemoryStruct memoryStruct = new ClassHierarchyDescriptor.BaseClassDescriptor.MemoryStruct();
+		private BaseClassDescriptor ReadBaseClassDescriptor(uint baseClassDescriptorPointer) {
+			BaseClassDescriptor.MemoryStruct memoryStruct = new BaseClassDescriptor.MemoryStruct();
 			processMemoryReader.ReadStruct(baseClassDescriptorPointer, ref memoryStruct);
 
-			ClassHierarchyDescriptor.BaseClassDescriptor desc = new ClassHierarchyDescriptor.BaseClassDescriptor();
+			BaseClassDescriptor desc = new BaseClassDescriptor();
 			desc.TypeDescriptor = GetTypeDescriptor(memoryStruct.pTypeDescriptor);
 			desc.DisplacementData = memoryStruct.DisplacementData;
 			desc.NumContainedBases = memoryStruct.NumContainedBases;
@@ -103,14 +103,22 @@ namespace DebugHelp.RTTI {
 			);
 		}
 
-		public string GetMangledClassNameFromObjPtr(uint objAddr) {
-			var col = readObjPtr(objAddr);
+		public string GetMangledClassNameFromObjPtr(uint ObjAddr) {
+			var col = readObjPtr(ObjAddr);
 			return col.TypeDescriptor.MangledName;
 		}
 
-		public bool IsObjectInheritingMangledType(uint objAddr, string mangledName) {
-			readObjPtr(objAddr);
-			throw new NotImplementedException();
+		public BaseClassDescriptor GetBaseClassDescriptorForObject(uint ObjAddr, string mangledName) {
+			var col = readObjPtr(ObjAddr);
+			foreach(var baseClass in col.ClassHierarchyDescriptor.BaseClasses) {
+				if(baseClass.TypeDescriptor.MangledName == mangledName) return baseClass;
+			}
+			return null;
+		}
+
+		public ClassHierarchyDescriptor getMangledHeirarchyFromObjPtr(uint ObjAddr) {
+			var col = readObjPtr(ObjAddr);
+			return col.ClassHierarchyDescriptor;
 		}
 	}
 }

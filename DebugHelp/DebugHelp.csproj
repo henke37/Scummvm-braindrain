@@ -59,6 +59,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="RTTI\BaseClassDescriptor.cs" />
     <Compile Include="RTTI\ClassHierarchyDescriptor.cs" />
     <Compile Include="RTTI\CompleteObjectLocator.cs" />
     <Compile Include="RTTI\RTTIReader.cs" />
