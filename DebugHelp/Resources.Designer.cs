@@ -61,6 +61,15 @@ namespace DebugHelp {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Failed to find the base class {0}.
+        /// </summary>
+        internal static string BadDynamicCast_NoSuchBase {
+            get {
+                return ResourceManager.GetString("BadDynamicCast_NoSuchBase", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Read failed to read all the data.
         /// </summary>
         internal static string ReadTooLitte {

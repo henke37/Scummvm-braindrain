@@ -194,6 +194,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Engines\BaseEngineAccessor.cs" />
+    <Compile Include="Engines\ScummEngineAccessor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ScummVMConnector.cs" />
   </ItemGroup>

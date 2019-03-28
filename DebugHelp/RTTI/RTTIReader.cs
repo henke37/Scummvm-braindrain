@@ -103,22 +103,38 @@ namespace DebugHelp.RTTI {
 			);
 		}
 
-		public string GetMangledClassNameFromObjPtr(uint ObjAddr) {
-			var col = readObjPtr(ObjAddr);
+		public string GetMangledClassNameFromObjPtr(uint objAddr) {
+			var col = readObjPtr(objAddr);
 			return col.TypeDescriptor.MangledName;
 		}
 
-		public BaseClassDescriptor GetBaseClassDescriptorForObject(uint ObjAddr, string mangledName) {
-			var col = readObjPtr(ObjAddr);
-			foreach(var baseClass in col.ClassHierarchyDescriptor.BaseClasses) {
-				if(baseClass.TypeDescriptor.MangledName == mangledName) return baseClass;
-			}
-			return null;
+		public BaseClassDescriptor GetBaseClassDescriptorForObject(uint objAddr, string mangledName) {
+			var col = readObjPtr(objAddr);
+			return col.ClassHierarchyDescriptor[mangledName];
 		}
 
-		public ClassHierarchyDescriptor getMangledHeirarchyFromObjPtr(uint ObjAddr) {
-			var col = readObjPtr(ObjAddr);
+		public ClassHierarchyDescriptor GetMangledHeirarchyFromObjPtr(uint objAddr) {
+			var col = readObjPtr(objAddr);
 			return col.ClassHierarchyDescriptor;
+		}
+
+		public uint DynamicCast(uint objAddr, string mangledBaseClassName) {
+			var col = readObjPtr(objAddr);
+			var baseClass = col.ClassHierarchyDescriptor[mangledBaseClassName];
+			if(baseClass == null) throw new InvalidCastException(string.Format(Resources.BadDynamicCast_NoSuchBase, mangledBaseClassName));
+
+			var completeObjAddr = col.LocateCompleteObject(objAddr);
+			return baseClass.DisplacementData.LocateBaseObject(completeObjAddr, processMemoryReader);
+		}
+
+		public bool TryDynamicCast(uint objAddr, string mangledBaseClassName, out uint resAddr) {
+			var col = readObjPtr(objAddr);
+			var baseClass = col.ClassHierarchyDescriptor[mangledBaseClassName];
+			if(baseClass == null) { resAddr = 0; return false; }
+
+			var completeObjAddr = col.LocateCompleteObject(objAddr);
+			resAddr=baseClass.DisplacementData.LocateBaseObject(completeObjAddr, processMemoryReader);
+			return true;
 		}
 	}
 }

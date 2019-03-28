@@ -17,5 +17,9 @@ namespace DebugHelp.RTTI {
 			public uint pTypeDescriptor;
 			public uint pClassDescriptor;
 		}
+
+		public uint LocateCompleteObject(uint objAddr) {
+			return objAddr - ObjectRootOffset;
+		}
 	}
 }
