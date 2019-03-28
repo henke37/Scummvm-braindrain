@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
@@ -7,7 +6,7 @@ using System.Security;
 using System.Security.Permissions;
 
 namespace DebugHelp {
-	public class LiveProcessMemoryReader : ProcessMemoryReader {
+	public sealed class LiveProcessMemoryReader : ProcessMemoryReader {
 		private Process process;
 
 		public LiveProcessMemoryReader(Process process) {
@@ -37,7 +36,7 @@ namespace DebugHelp {
 		}
 
 		[DllImport("kernel32.dll", SetLastError = true)]
-		unsafe static extern bool ReadProcessMemory(
+		unsafe static extern private bool ReadProcessMemory(
 			IntPtr hProcess,
 			UInt32 lpBaseAddress,
 			[Out] void* lpBuffer,
