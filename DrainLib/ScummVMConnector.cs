@@ -58,11 +58,14 @@ namespace DrainLib {
 			if(rttiReader.HasBaseClass(enginePtrVal, ".?AVToonEngine@Toon@@")) {
 				return new ToonEngineAccessor(this);
 			}
-			if(rttiReader.HasBaseClass(enginePtrVal, ".? AVQueenEngine@Queen@@")) {
+			if(rttiReader.HasBaseClass(enginePtrVal, ".?AVQueenEngine@Queen@@")) {
 				return new QueenEngineAccessor(this);
 			}
+			if(rttiReader.HasBaseClass(enginePtrVal, ".?AVPinkEngine@Pink@@")) {
+				return new PinkEngineAccessor(this);
+			}
 
-			throw new NotImplementedException();
+			return new UnknownEngineAccessor(this);
 		}
 	}
 
