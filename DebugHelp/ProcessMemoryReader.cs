@@ -18,7 +18,9 @@ namespace DebugHelp {
 
 		[SecurityCritical]
 		public virtual unsafe void ReadBytes(uint addr, uint size, void* buff) {
-			throw new NotImplementedException();
+			Byte[] buffArr = new byte[size];
+			ReadBytes(addr, size, buffArr);
+			Marshal.Copy(buffArr, 0, (IntPtr)buff, (int)size);
 		}
 
 		public Byte ReadByte(uint addr) {
@@ -26,6 +28,7 @@ namespace DebugHelp {
 			return scratchBuff[0];
 		}
 
+		[SecuritySafeCritical]
 		public unsafe void ReadStruct<T>(uint addr, ref T buff) where T : unmanaged {
 			fixed (void* buffP = &buff) {
 				ReadBytes(addr, (uint)Marshal.SizeOf(typeof(T)), buffP);
