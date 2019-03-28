@@ -31,7 +31,7 @@ namespace DebugHelp {
 		[SecuritySafeCritical]
 		public unsafe void ReadStruct<T>(uint addr, ref T buff) where T : unmanaged {
 			fixed (void* buffP = &buff) {
-				ReadBytes(addr, (uint)Marshal.SizeOf(typeof(T)), buffP);
+				ReadBytes(addr, (uint)sizeof(T), buffP);
 			}
 		}
 
