@@ -31,8 +31,7 @@ namespace DebugHelp {
 		[SecurityPermission(SecurityAction.Assert, Flags = SecurityPermissionFlag.UnmanagedCode)]
 		[SuppressUnmanagedCodeSecurity]
 		public unsafe override void ReadBytes(uint addr, uint size, void* buff) {
-			int readC;
-			bool success = ReadProcessMemory(process.Handle, addr, buff, size, out readC);
+			bool success = ReadProcessMemory(process.Handle, addr, buff, size, out int readC);
 			if(!success) throw new Win32Exception();
 			if(readC != size) throw new IncompleteReadException();
 		}
