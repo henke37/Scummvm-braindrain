@@ -34,7 +34,7 @@ namespace DrainLib {
 			try {
 				string pdbPath = process.MainModule.FileName.Replace(".exe", ".pdb");
 				resolver = new SymbolResolver(pdbPath);
-			} catch(Win32Exception err) when(err.ErrorCode == IncompleteReadException.ErrorNumber) {
+			} catch(Win32Exception err) when(err.NativeErrorCode == IncompleteReadException.ErrorNumber) {
 				throw new IncompleteReadException(err);
 			}
 

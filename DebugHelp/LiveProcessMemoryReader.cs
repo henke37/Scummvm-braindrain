@@ -23,7 +23,7 @@ namespace DebugHelp {
 					bool success=ReadProcessMemory(process.Handle, addr, buffP, size, out readC);
 					if(!success) throw new Win32Exception();
 				}
-			} catch(Win32Exception err) when(err.ErrorCode == IncompleteReadException.ErrorNumber) {
+			} catch(Win32Exception err) when(err.NativeErrorCode == IncompleteReadException.ErrorNumber) {
 				throw new IncompleteReadException(err);
 			}
 
@@ -38,7 +38,7 @@ namespace DebugHelp {
 				bool success = ReadProcessMemory(process.Handle, addr, buff, size, out int readC);
 				if(!success) throw new Win32Exception();
 				if(readC != size) throw new IncompleteReadException();
-			} catch(Win32Exception err) when(err.ErrorCode == IncompleteReadException.ErrorNumber) {
+			} catch(Win32Exception err) when(err.NativeErrorCode == IncompleteReadException.ErrorNumber) {
 				throw new IncompleteReadException(err);
 			}
 		}
