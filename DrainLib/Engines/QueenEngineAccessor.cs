@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace DrainLib.Engines {
 	public class QueenEngineAccessor : BaseEngineAccessor {
-		internal QueenEngineAccessor(ScummVMConnector connector) : base(connector) {
+		internal QueenEngineAccessor(ScummVMConnector connector, uint engineAddr) : base(connector, engineAddr) {
 		}
 
 		internal override void LoadSymbols() {

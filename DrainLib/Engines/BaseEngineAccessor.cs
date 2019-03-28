@@ -6,8 +6,11 @@ namespace DrainLib.Engines {
 	public abstract class BaseEngineAccessor {
 		protected ScummVMConnector Connector;
 
-		internal BaseEngineAccessor(ScummVMConnector connector) {
+		protected uint EngineAddr;
+
+		internal BaseEngineAccessor(ScummVMConnector connector, uint engineAddr) {
 			this.Connector = connector;
+			this.EngineAddr = engineAddr;
 
 			LoadBaseSymbols();
 			LoadSymbols();
@@ -21,7 +24,8 @@ namespace DrainLib.Engines {
 
 		bool IsActiveEngine {
 			get {
-				throw new NotImplementedException();
+				var liveEnginePtrVal=Connector.memoryReader.ReadUInt32At(Connector.g_engineAddr);
+				return liveEnginePtrVal == EngineAddr;
 			}
 		}
 	}

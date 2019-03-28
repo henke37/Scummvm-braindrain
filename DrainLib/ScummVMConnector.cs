@@ -49,23 +49,24 @@ namespace DrainLib {
 
 			string mangledName = rttiReader.GetMangledClassNameFromObjPtr(enginePtrVal);
 
+
 			if(rttiReader.HasBaseClass(enginePtrVal, ".?AVScummEngine@Scumm@@")) {
-				return new ScummEngineAccessor(this);
+				return new ScummEngineAccessor(this, enginePtrVal);
 			}
 			if(rttiReader.HasBaseClass(enginePtrVal, ".?AVSkyEngine@Sky@@")) {
-				return new SkyEngineAccessor(this);
+				return new SkyEngineAccessor(this, enginePtrVal);
 			}
 			if(rttiReader.HasBaseClass(enginePtrVal, ".?AVToonEngine@Toon@@")) {
-				return new ToonEngineAccessor(this);
+				return new ToonEngineAccessor(this, enginePtrVal);
 			}
 			if(rttiReader.HasBaseClass(enginePtrVal, ".?AVQueenEngine@Queen@@")) {
-				return new QueenEngineAccessor(this);
+				return new QueenEngineAccessor(this, enginePtrVal);
 			}
 			if(rttiReader.HasBaseClass(enginePtrVal, ".?AVPinkEngine@Pink@@")) {
-				return new PinkEngineAccessor(this);
+				return new PinkEngineAccessor(this, enginePtrVal);
 			}
 
-			return new UnknownEngineAccessor(this);
+			return new UnknownEngineAccessor(this, enginePtrVal);
 		}
 	}
 
