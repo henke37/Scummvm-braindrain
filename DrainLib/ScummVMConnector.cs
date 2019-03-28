@@ -38,6 +38,10 @@ namespace DrainLib {
 			g_engineAddr = g_engineSymb.relativeVirtualAddress;
 		}
 
+		public bool Connected {
+			get => process != null && !process.HasExited;
+		}
+
 		public BaseEngineAccessor GetEngine() {
 			var enginePtrVal = memoryReader.ReadUInt32At((uint)process.MainModule.BaseAddress + g_engineAddr);
 

@@ -17,12 +17,11 @@ namespace DrainLib.Engines {
 		}
 
 		private void LoadBaseSymbols() {
-			throw new NotImplementedException();
 		}
 
 		internal abstract void LoadSymbols();
 
-		bool IsActiveEngine {
+		public bool IsActiveEngine {
 			get {
 				var liveEnginePtrVal=Connector.memoryReader.ReadUInt32At(Connector.g_engineAddr);
 				return liveEnginePtrVal == EngineAddr;
