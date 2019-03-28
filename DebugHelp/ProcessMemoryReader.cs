@@ -27,10 +27,9 @@ namespace DebugHelp {
 		}
 
 		public unsafe void ReadStruct<T>(uint addr, ref T buff) where T : unmanaged {
-			GCHandle handle = GCHandle.Alloc(buff, GCHandleType.Pinned);
-			void* buffP = (void*)handle.AddrOfPinnedObject();
-			ReadBytes(addr, (uint)Marshal.SizeOf(typeof(T)), buffP);
-			handle.Free();
+			fixed (void* buffP = &buff) {
+				ReadBytes(addr, (uint)Marshal.SizeOf(typeof(T)), buffP);
+			}
 		}
 
 		public string ReadNullTermString(uint addr) {
