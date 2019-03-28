@@ -88,7 +88,7 @@ namespace DebugHelp {
 		protected Byte[] scratchBuff = new Byte[16];
 
 		protected byte[] GetReadBuff(uint count) {
-			return scratchBuff.Length <= count ? scratchBuff : new byte[count];
+			return count <= scratchBuff.Length ? scratchBuff : new byte[count];
 		}
 	}
 }
