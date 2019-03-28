@@ -55,6 +55,9 @@ namespace DrainLib {
 			if(rttiReader.HasBaseClass(enginePtrVal, ".?AVSkyEngine@Sky@@")) {
 				return new SkyEngineAccessor(this);
 			}
+			if(rttiReader.HasBaseClass(enginePtrVal, ".?AVToonEngine@Toon@@")) {
+				return new ToonEngineAccessor(this);
+			}
 
 			throw new NotImplementedException();
 		}
