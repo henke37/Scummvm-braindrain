@@ -35,7 +35,7 @@ namespace DrainLib {
 			resolver = new SymbolResolver(pdbPath);
 
 			var g_engineSymb = resolver.findGlobal("g_engine");
-			g_engineAddr = g_engineSymb.relativeVirtualAddress;
+			g_engineAddr = g_engineSymb.relativeVirtualAddress + (uint)process.MainModule.BaseAddress;
 		}
 
 		public bool Connected {
@@ -43,7 +43,7 @@ namespace DrainLib {
 		}
 
 		public BaseEngineAccessor GetEngine() {
-			var enginePtrVal = memoryReader.ReadUInt32At((uint)process.MainModule.BaseAddress + g_engineAddr);
+			var enginePtrVal = memoryReader.ReadUInt32At(g_engineAddr);
 
 			if(enginePtrVal == 0) return null;
 
