@@ -1,4 +1,5 @@
-﻿using DrainLib;
+﻿using DebugHelp;
+using DrainLib;
 using DrainLib.Engines;
 using System;
 using System.Windows.Forms;
@@ -35,6 +36,8 @@ namespace TestProj {
 				try {
 					connector.Connect();
 				} catch (ProcessNotFoundException) {
+					return;
+				} catch (IncompleteReadException) {
 					return;
 				}
 			}

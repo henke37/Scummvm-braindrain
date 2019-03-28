@@ -28,15 +28,16 @@ namespace DrainLib {
 			if(procs.Length == 0) throw new ProcessNotFoundException();
 
 			process = procs[0];
-			memoryReader = new LiveProcessMemoryReader(process);
-
-			rttiReader = new RTTIReader(memoryReader);
 			try {
 				string pdbPath = process.MainModule.FileName.Replace(".exe", ".pdb");
 				resolver = new SymbolResolver(pdbPath);
 			} catch(Win32Exception err) when(err.NativeErrorCode == IncompleteReadException.ErrorNumber) {
+				process = null;
 				throw new IncompleteReadException(err);
 			}
+
+			memoryReader = new LiveProcessMemoryReader(process);
+			rttiReader = new RTTIReader(memoryReader);
 
 			var g_engineSymb = resolver.findGlobal("g_engine");
 			g_engineAddr = g_engineSymb.relativeVirtualAddress + (uint)process.MainModule.BaseAddress;
