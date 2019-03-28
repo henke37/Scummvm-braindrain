@@ -18,9 +18,13 @@ namespace DebugHelp {
 		[SuppressUnmanagedCodeSecurity]
 		public unsafe override void ReadBytes(uint addr, uint size, byte[] buff) {
 			int readC;
-			fixed (Byte* buffP = buff) {
-				bool success=ReadProcessMemory(process.Handle, addr, buffP, size, out readC);
-				if(!success) throw new Win32Exception();
+			try { 
+				fixed (Byte* buffP = buff) {
+					bool success=ReadProcessMemory(process.Handle, addr, buffP, size, out readC);
+					if(!success) throw new Win32Exception();
+				}
+			} catch(Win32Exception err) when(err.ErrorCode == IncompleteReadException.ErrorNumber) {
+				throw new IncompleteReadException(err);
 			}
 
 			if(readC != size) throw new IncompleteReadException();
@@ -30,9 +34,13 @@ namespace DebugHelp {
 		[SecurityPermission(SecurityAction.Assert, Flags = SecurityPermissionFlag.UnmanagedCode)]
 		[SuppressUnmanagedCodeSecurity]
 		public unsafe override void ReadBytes(uint addr, uint size, void* buff) {
-			bool success = ReadProcessMemory(process.Handle, addr, buff, size, out int readC);
-			if(!success) throw new Win32Exception();
-			if(readC != size) throw new IncompleteReadException();
+			try { 
+				bool success = ReadProcessMemory(process.Handle, addr, buff, size, out int readC);
+				if(!success) throw new Win32Exception();
+				if(readC != size) throw new IncompleteReadException();
+			} catch(Win32Exception err) when(err.ErrorCode == IncompleteReadException.ErrorNumber) {
+				throw new IncompleteReadException(err);
+			}
 		}
 
 		[DllImport("kernel32.dll", SetLastError = true)]

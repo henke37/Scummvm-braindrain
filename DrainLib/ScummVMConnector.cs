@@ -4,6 +4,7 @@ using DebugHelp.RTTI;
 using DrainLib.Engines;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection.Metadata;
@@ -30,9 +31,12 @@ namespace DrainLib {
 			memoryReader = new LiveProcessMemoryReader(process);
 
 			rttiReader = new RTTIReader(memoryReader);
-
-			string pdbPath = process.MainModule.FileName.Replace(".exe", ".pdb");
-			resolver = new SymbolResolver(pdbPath);
+			try {
+				string pdbPath = process.MainModule.FileName.Replace(".exe", ".pdb");
+				resolver = new SymbolResolver(pdbPath);
+			} catch(Win32Exception err) when(err.ErrorCode == IncompleteReadException.ErrorNumber) {
+				throw new IncompleteReadException(err);
+			}
 
 			var g_engineSymb = resolver.findGlobal("g_engine");
 			g_engineAddr = g_engineSymb.relativeVirtualAddress + (uint)process.MainModule.BaseAddress;

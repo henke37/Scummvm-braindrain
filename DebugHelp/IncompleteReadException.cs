@@ -5,7 +5,11 @@ namespace DebugHelp {
 	[Serializable]
 	public class IncompleteReadException : Exception {
 
-		internal IncompleteReadException() : base(Resources.ReadTooLitte) {
+		public const int ErrorNumber = 299;
+
+		public IncompleteReadException() : base(Resources.ReadTooLitte) {
+		}
+		public IncompleteReadException(Exception innerException) : base(Resources.ReadTooLitte, innerException) {
 		}
 
 		protected IncompleteReadException(SerializationInfo info, StreamingContext context) : base(info, context) {
