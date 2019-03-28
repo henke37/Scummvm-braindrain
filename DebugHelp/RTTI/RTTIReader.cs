@@ -136,5 +136,10 @@ namespace DebugHelp.RTTI {
 			resAddr=baseClass.DisplacementData.LocateBaseObject(completeObjAddr, processMemoryReader);
 			return true;
 		}
+
+		public bool HasBaseClass(uint objAddr, string mangledBaseClassName) {
+			var col = readObjPtr(objAddr);
+			return null != col.ClassHierarchyDescriptor[mangledBaseClassName];
+		}
 	}
 }

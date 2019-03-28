@@ -49,8 +49,11 @@ namespace DrainLib {
 
 			string mangledName = rttiReader.GetMangledClassNameFromObjPtr(enginePtrVal);
 
-			if(rttiReader.TryDynamicCast(enginePtrVal, ".?AVScummEngine@Scumm@@", out uint scummEnginePtrVal)) {
-				return new ScummEngineAccessor(this, scummEnginePtrVal);
+			if(rttiReader.HasBaseClass(enginePtrVal, ".?AVScummEngine@Scumm@@")) {
+				return new ScummEngineAccessor(this);
+			}
+			if(rttiReader.HasBaseClass(enginePtrVal, ".?AVSkyEngine@Sky@@")) {
+				return new SkyEngineAccessor(this);
 			}
 
 			throw new NotImplementedException();

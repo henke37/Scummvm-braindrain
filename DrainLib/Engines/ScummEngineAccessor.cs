@@ -4,7 +4,7 @@ using DebugHelp;
 
 namespace DrainLib.Engines {
 	public class ScummEngineAccessor : BaseEngineAccessor {
-		public ScummEngineAccessor(ScummVMConnector connector, uint engineAddr) : base(connector) {
+		public ScummEngineAccessor(ScummVMConnector connector) : base(connector) {
 		}
 	}
 }
