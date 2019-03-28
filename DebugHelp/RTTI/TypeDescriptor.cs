@@ -8,5 +8,9 @@ namespace DebugHelp.RTTI {
 		public TypeDescriptor(string mangledName) {
 			MangledName = mangledName;
 		}
+
+		public override string ToString() {
+			return MangledName;
+		}
 	}
 }

@@ -15,6 +15,10 @@ namespace DebugHelp.RTTI {
 			public uint Flags;
 		}
 
+		public override string ToString() {
+			return TypeDescriptor.MangledName;
+		}
+
 		public struct PMD {
 #pragma warning disable CS0649
 			int mdisp;
