@@ -5,5 +5,8 @@ namespace DrainLib.Engines {
 	public class SkyEngineAccessor : BaseEngineAccessor {
 		internal SkyEngineAccessor(ScummVMConnector connector) : base(connector) {
 		}
+
+		internal override void LoadSymbols() {
+		}
 	}
 }

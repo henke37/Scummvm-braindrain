@@ -8,7 +8,16 @@ namespace DrainLib.Engines {
 
 		internal BaseEngineAccessor(ScummVMConnector connector) {
 			this.Connector = connector;
+
+			LoadBaseSymbols();
+			LoadSymbols();
 		}
+
+		private void LoadBaseSymbols() {
+			throw new NotImplementedException();
+		}
+
+		internal abstract void LoadSymbols();
 
 		bool IsActiveEngine {
 			get {
