@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Text;
 
 namespace DrainLib.Engines {
 	public abstract class BaseEngineAccessor {
@@ -12,6 +13,9 @@ namespace DrainLib.Engines {
 		private uint mainMenuDialogOffset;
 		private uint guiVisibleOffset;
 		private uint pauseLevelOffset;
+
+		private uint comStringSizeOffset;
+		private uint comStringStrOffset;
 
 		internal BaseEngineAccessor(ScummVMConnector connector, uint engineAddr) {
 			this.Connector = connector;
@@ -34,6 +38,10 @@ namespace DrainLib.Engines {
 			Debug.Assert(fieldSize == 1, "guiVisibleSize!=1");
 
 			pauseLevelOffset = Connector.resolver.FieldOffset(engSymb, "_pauseLevel");
+
+			var comStringSymb = Connector.resolver.FindClass("Common::String");
+			comStringSizeOffset = Connector.resolver.FieldOffset(comStringSymb, "_size");
+			comStringStrOffset = Connector.resolver.FieldOffset(comStringSymb, "_str");
 		}
 
 		internal abstract void LoadSymbols();
@@ -59,6 +67,14 @@ namespace DrainLib.Engines {
 				int pauseLevel = Connector.memoryReader.ReadInt32At(EngineAddr + pauseLevelOffset);
 				return pauseLevel > 0;
 			}
+		}
+
+		protected string ReadComString(uint addr) {
+			uint size = Connector.memoryReader.ReadUInt32At(addr + comStringSizeOffset);
+			uint strPtr = Connector.memoryReader.ReadUInt32At(addr + comStringStrOffset);
+
+			var strBytes=Connector.memoryReader.ReadBytes(strPtr, size);
+			return new string(Encoding.UTF8.GetChars(strBytes));
 		}
 
 		public abstract string GameId { get; }

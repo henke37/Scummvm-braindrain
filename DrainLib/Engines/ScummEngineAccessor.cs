@@ -8,24 +8,48 @@ namespace DrainLib.Engines {
 		private uint variantOffset;
 		private uint versionOffset;
 		private uint heVersionOffset;
+
 		private uint gameOffset;
+		private uint smushActiveOffset;
+		private uint smushPlayerOffset;
+
+		private uint smushPlayerNBFramesOffset;
+		private uint smushPlayerFrameOffset;
+		private uint smushPlayerSpeedOffset;
+		private uint smushPlayerSeekFileOffset;
 
 		public readonly GameSettings GameSettings;
 
 		internal ScummEngineAccessor(ScummVMConnector connector, uint engineAddr) : base(connector, engineAddr) {
 			GameSettings = GetGameSettings();
+
+			if(GameSettings.Version>=7) {
+				LoadSmushSymbols();
+			}
 		}
 
 		internal override void LoadSymbols() {
 			var engineClSymb = Connector.resolver.FindClass("Scumm::ScummEngine");
-			gameOffset = Connector.resolver.FieldOffset(engineClSymb,"_game");
+			gameOffset = Connector.resolver.FieldOffset(engineClSymb, "_game");
 
 			var gameSettingsSymb = Connector.resolver.FindClass("Scumm::GameSettings");
-			gameIdOffset = Connector.resolver.FieldOffset(gameSettingsSymb,"gameId");
-			variantOffset = Connector.resolver.FieldOffset(gameSettingsSymb,"variantId");
-			variantOffset = Connector.resolver.FieldOffset(gameSettingsSymb,"variantId");
-			versionOffset = Connector.resolver.FieldOffset(gameSettingsSymb,"version");
-			heVersionOffset = Connector.resolver.FieldOffset(gameSettingsSymb,"heversion");
+			gameIdOffset = Connector.resolver.FieldOffset(gameSettingsSymb, "gameId");
+			variantOffset = Connector.resolver.FieldOffset(gameSettingsSymb, "variantId");
+			variantOffset = Connector.resolver.FieldOffset(gameSettingsSymb, "variantId");
+			versionOffset = Connector.resolver.FieldOffset(gameSettingsSymb, "version");
+			heVersionOffset = Connector.resolver.FieldOffset(gameSettingsSymb, "heversion");
+		}
+
+		private void LoadSmushSymbols() {
+			var engine7ClSymb = Connector.resolver.FindClass("Scumm::ScummEngine_v7");
+			smushActiveOffset = Connector.resolver.FieldOffset(engine7ClSymb, "_smushActive");
+			smushPlayerOffset = Connector.resolver.FieldOffset(engine7ClSymb, "_splayer");
+
+			var smushPlayerClSymb = Connector.resolver.FindClass("Scumm::SmushPlayer");
+			smushPlayerNBFramesOffset = Connector.resolver.FieldOffset(smushPlayerClSymb, "_nbframes");
+			smushPlayerFrameOffset = Connector.resolver.FieldOffset(smushPlayerClSymb, "_frame");
+			smushPlayerSpeedOffset = Connector.resolver.FieldOffset(smushPlayerClSymb, "_speed");
+			smushPlayerSeekFileOffset = Connector.resolver.FieldOffset(smushPlayerClSymb, "_seekFile");
 		}
 
 		public override string GameId => GameSettings.GameId;
@@ -43,7 +67,28 @@ namespace DrainLib.Engines {
 			return settings;
 		}
 
-		
+		public SmushState GetSmushState() {
+			if(GameSettings.Version < 7) return null;
+
+			var active = Connector.memoryReader.ReadByte(EngineAddr + smushActiveOffset) != 0;
+			if(!active) return null;
+
+			var addr = Connector.memoryReader.ReadUInt32At(EngineAddr + smushPlayerOffset);
+
+			var state = new SmushState();
+			state.CurrentFrame = Connector.memoryReader.ReadUInt32At(addr + smushPlayerFrameOffset);
+			state.FrameCount = Connector.memoryReader.ReadUInt32At(addr + smushPlayerNBFramesOffset);
+			state.FrameRate = Connector.memoryReader.ReadInt32At(addr + smushPlayerSpeedOffset);
+			state.File = ReadComString(addr + smushPlayerSeekFileOffset);
+			return state;
+		}
+	}
+
+	public class SmushState {
+		public uint CurrentFrame;
+		public uint FrameCount;
+		public int FrameRate;
+		public string File;
 	}
 
 	public class GameSettings {
