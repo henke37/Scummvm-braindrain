@@ -6,6 +6,8 @@ namespace DrainLib.Engines {
 		internal SkyEngineAccessor(ScummVMConnector connector, uint engineAddr) : base(connector, engineAddr) {
 		}
 
+		public override string GameId => "sky";
+
 		internal override void LoadSymbols() {
 		}
 	}

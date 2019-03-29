@@ -6,6 +6,8 @@ namespace DrainLib.Engines {
 		internal UnknownEngineAccessor(ScummVMConnector connector, uint engineAddr) : base(connector, engineAddr) {
 		}
 
+		public override string GameId => "???";
+
 		internal override void LoadSymbols() {
 		}
 	}

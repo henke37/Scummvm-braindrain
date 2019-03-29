@@ -6,6 +6,8 @@ namespace DrainLib.Engines {
 		internal QueenEngineAccessor(ScummVMConnector connector, uint engineAddr) : base(connector, engineAddr) {
 		}
 
+		public override string GameId => "queen";
+
 		internal override void LoadSymbols() {
 			
 		}

@@ -60,5 +60,7 @@ namespace DrainLib.Engines {
 				return pauseLevel > 0;
 			}
 		}
+
+		public abstract string GameId { get; }
 	}
 }
