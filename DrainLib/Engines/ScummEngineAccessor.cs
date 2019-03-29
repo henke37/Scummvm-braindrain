@@ -10,7 +10,10 @@ namespace DrainLib.Engines {
 		private uint heVersionOffset;
 		private uint gameOffset;
 
+		public readonly GameSettings GameSettings;
+
 		internal ScummEngineAccessor(ScummVMConnector connector, uint engineAddr) : base(connector, engineAddr) {
+			GameSettings = GetGameSettings();
 		}
 
 		internal override void LoadSymbols() {
@@ -25,9 +28,9 @@ namespace DrainLib.Engines {
 			heVersionOffset = Connector.resolver.FieldOffset(gameSettingsSymb,"heversion");
 		}
 
-		public override string GameId => GetGameSettings().GameId;
+		public override string GameId => GameSettings.GameId;
 
-		public GameSettings GetGameSettings() {
+		private GameSettings GetGameSettings() {
 			uint addr=Connector.memoryReader.ReadUInt32At(EngineAddr+gameOffset);
 
 			var settings = new GameSettings();
@@ -40,11 +43,13 @@ namespace DrainLib.Engines {
 			return settings;
 		}
 
-		public class GameSettings {
-			public string GameId;
-			public string Variant;
-			public int Version;
-			public int HeVersion;
-		}
+		
+	}
+
+	public class GameSettings {
+		public string GameId;
+		public string Variant;
+		public int Version;
+		public int HeVersion;
 	}
 }
