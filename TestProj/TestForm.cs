@@ -32,6 +32,13 @@ namespace TestProj {
 				statusTxt.Text = "Main menu open";
 				return;
 			}
+			if(engine is ScummEngineAccessor scummEngine) {
+				var smush = scummEngine.GetSmushState();
+				if(smush!=null) {
+					statusTxt.Text = $"{smush.File} {smush.CurrentFrame}/{smush.FrameCount}";
+					return;
+				}
+			}
 			statusTxt.Text = engine.GameId;
 		}
 
