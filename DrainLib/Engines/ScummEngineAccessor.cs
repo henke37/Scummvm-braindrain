@@ -33,9 +33,8 @@ namespace DrainLib.Engines {
 			gameOffset = Connector.resolver.FieldOffset(engineClSymb, "_game");
 
 			var gameSettingsSymb = Connector.resolver.FindClass("Scumm::GameSettings");
-			gameIdOffset = Connector.resolver.FieldOffset(gameSettingsSymb, "gameId");
-			variantOffset = Connector.resolver.FieldOffset(gameSettingsSymb, "variantId");
-			variantOffset = Connector.resolver.FieldOffset(gameSettingsSymb, "variantId");
+			gameIdOffset = Connector.resolver.FieldOffset(gameSettingsSymb, "gameid");
+			variantOffset = Connector.resolver.FieldOffset(gameSettingsSymb, "variant");
 			versionOffset = Connector.resolver.FieldOffset(gameSettingsSymb, "version");
 			heVersionOffset = Connector.resolver.FieldOffset(gameSettingsSymb, "heversion");
 		}
@@ -55,7 +54,7 @@ namespace DrainLib.Engines {
 		public override string GameId => GameSettings.GameId;
 
 		private GameSettings GetGameSettings() {
-			uint addr=Connector.memoryReader.ReadUInt32At(EngineAddr+gameOffset);
+			uint addr=EngineAddr+gameOffset;
 
 			var settings = new GameSettings();
 			var gameIdPtrVal = Connector.memoryReader.ReadUInt32At(addr + gameIdOffset);

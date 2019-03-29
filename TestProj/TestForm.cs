@@ -32,7 +32,7 @@ namespace TestProj {
 				statusTxt.Text = "Main menu open";
 				return;
 			}
-			statusTxt.Text = engine.ToString();
+			statusTxt.Text = engine.GameId;
 		}
 
 		private void UpdateConnector() {
