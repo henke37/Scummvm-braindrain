@@ -11,6 +11,7 @@ namespace DrainLib.Engines {
 
 		private uint mainMenuDialogOffset;
 		private uint guiVisibleOffset;
+		private uint pauseLevelOffset;
 
 		internal BaseEngineAccessor(ScummVMConnector connector, uint engineAddr) {
 			this.Connector = connector;
@@ -31,6 +32,8 @@ namespace DrainLib.Engines {
 			Debug.Assert(guiVisibleOffset != 0, "guiVisibleOffset==0");
 			var fieldSize = Connector.resolver.FieldSize(guiDialogSymb, "_visible");
 			Debug.Assert(fieldSize == 1, "guiVisibleSize!=1");
+
+			pauseLevelOffset = Connector.resolver.FieldOffset(engSymb, "_pauseLevel");
 		}
 
 		internal abstract void LoadSymbols();
@@ -48,6 +51,13 @@ namespace DrainLib.Engines {
 				if(mainMenuDialogPtrVal == 0) return false;
 				byte visibleVal = Connector.memoryReader.ReadByte(mainMenuDialogPtrVal + guiVisibleOffset);
 				return visibleVal != 0;
+			}
+		}
+
+		public bool Paused {
+			get {
+				int pauseLevel = Connector.memoryReader.ReadInt32At(EngineAddr + pauseLevelOffset);
+				return pauseLevel > 0;
 			}
 		}
 	}
