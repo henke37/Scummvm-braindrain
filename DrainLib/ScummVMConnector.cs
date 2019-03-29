@@ -39,7 +39,7 @@ namespace DrainLib {
 			memoryReader = new LiveProcessMemoryReader(process);
 			rttiReader = new RTTIReader(memoryReader);
 
-			var g_engineSymb = resolver.findGlobal("g_engine");
+			var g_engineSymb = resolver.FindGlobal("g_engine");
 			g_engineAddr = g_engineSymb.relativeVirtualAddress + (uint)process.MainModule.BaseAddress;
 		}
 

@@ -28,6 +28,10 @@ namespace TestProj {
 				statusTxt.Text = Resources.Status_NoGame;
 				return;
 			}
+			if(engine.MainMenuOpen) {
+				statusTxt.Text = "Main menu open";
+				return;
+			}
 			statusTxt.Text = engine.ToString();
 		}
 
@@ -49,7 +53,11 @@ namespace TestProj {
 		}
 
 		private void UpdateTimer_Tick(object sender, EventArgs e) {
+			//turn off the timer while processing to prevent multiple processings run at the same time
+			//also makes exceptions not turn it back on
+			UpdateTimer.Enabled = false;
 			Update();
+			UpdateTimer.Enabled = true;
 		}
 	}
 }
