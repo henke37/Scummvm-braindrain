@@ -23,18 +23,18 @@ namespace DebugHelp {
 			return result.Item(0);
 		}
 
-		public IDiaSymbol FindField(IDiaSymbol engSymb, string fieldName) {
-			session.findChildren(engSymb, SymTagEnum.SymTagData, fieldName, (uint)NameSearchOptions.CaseSensitive, out var result);
+		public IDiaSymbol FindField(IDiaSymbol classSymb, string fieldName) {
+			session.findChildren(classSymb, SymTagEnum.SymTagData, fieldName, (uint)NameSearchOptions.CaseSensitive, out var result);
 			return result.Item(0);
 		}
 
-		public uint FieldOffset(IDiaSymbol engSymb, string fieldName) {
-			IDiaSymbol field = FindField(engSymb, fieldName);
+		public uint FieldOffset(IDiaSymbol classSymb, string fieldName) {
+			IDiaSymbol field = FindField(classSymb, fieldName);
 			return (uint)field.offset;
 		}
 
-		public uint FieldSize(IDiaSymbol engSymb, string fieldName) {
-			IDiaSymbol field = FindField(engSymb, fieldName);
+		public uint FieldSize(IDiaSymbol classSymb, string fieldName) {
+			IDiaSymbol field = FindField(classSymb, fieldName);
 			return (uint)field.type.length;
 		}
 	}
