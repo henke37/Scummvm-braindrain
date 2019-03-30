@@ -30,7 +30,7 @@ namespace DebugHelp.RTTI {
 				completeObjectAddr += (uint)mdisp;
 				if(pdisp != -1) {
 					uint vtbl = (uint)(completeObjectAddr + pdisp);
-					completeObjectAddr += reader.ReadUInt32At((uint)(vtbl + vdisp));
+					completeObjectAddr += reader.ReadUInt32((uint)(vtbl + vdisp));
 				}
 				return completeObjectAddr;
 			}

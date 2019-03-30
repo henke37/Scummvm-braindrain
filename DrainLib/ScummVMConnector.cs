@@ -48,7 +48,7 @@ namespace DrainLib {
 		}
 
 		public BaseEngineAccessor GetEngine() {
-			var enginePtrVal = memoryReader.ReadUInt32At(g_engineAddr);
+			var enginePtrVal = memoryReader.ReadUInt32(g_engineAddr);
 
 			if(enginePtrVal == 0) return null;
 

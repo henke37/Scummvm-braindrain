@@ -25,15 +25,15 @@ namespace DrainLib.Engines {
 
 		protected ADGameDescriptor GetGameDescriptor() {
 			var addr = EngineAddr + descOffset;
-			addr = Connector.memoryReader.ReadUInt32At(addr);
+			addr = Connector.memoryReader.ReadUInt32(addr);
 
 			var gameDesc = new ADGameDescriptor();
 
-			uint gameIdVal = Connector.memoryReader.ReadUInt32At(addr + gameIdOffset);
+			uint gameIdVal = Connector.memoryReader.ReadUInt32(addr + gameIdOffset);
 			gameDesc.GameId = Connector.memoryReader.ReadNullTermString(gameIdVal);
-			uint extraVal = Connector.memoryReader.ReadUInt32At(addr + extraOffset);
+			uint extraVal = Connector.memoryReader.ReadUInt32(addr + extraOffset);
 			gameDesc.Extra = Connector.memoryReader.ReadNullTermString(extraVal);
-			uint flagsVal = Connector.memoryReader.ReadUInt32At(addr + flagsOffset);
+			uint flagsVal = Connector.memoryReader.ReadUInt32(addr + flagsOffset);
 			gameDesc.GameFlags = (GameFlags)flagsVal;
 
 			return gameDesc;

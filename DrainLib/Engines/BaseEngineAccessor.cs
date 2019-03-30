@@ -48,14 +48,14 @@ namespace DrainLib.Engines {
 
 		public bool IsActiveEngine {
 			get {
-				var liveEnginePtrVal=Connector.memoryReader.ReadUInt32At(Connector.g_engineAddr);
+				var liveEnginePtrVal=Connector.memoryReader.ReadUInt32(Connector.g_engineAddr);
 				return liveEnginePtrVal == EngineAddr;
 			}
 		}
 
 		public bool MainMenuOpen {
 			get {
-				uint mainMenuDialogPtrVal=Connector.memoryReader.ReadUInt32At(EngineAddr + mainMenuDialogOffset);
+				uint mainMenuDialogPtrVal=Connector.memoryReader.ReadUInt32(EngineAddr + mainMenuDialogOffset);
 				if(mainMenuDialogPtrVal == 0) return false;
 				byte visibleVal = Connector.memoryReader.ReadByte(mainMenuDialogPtrVal + guiVisibleOffset);
 				return visibleVal != 0;
@@ -64,14 +64,14 @@ namespace DrainLib.Engines {
 
 		public bool Paused {
 			get {
-				int pauseLevel = Connector.memoryReader.ReadInt32At(EngineAddr + pauseLevelOffset);
+				int pauseLevel = Connector.memoryReader.ReadInt32(EngineAddr + pauseLevelOffset);
 				return pauseLevel > 0;
 			}
 		}
 
 		protected string ReadComString(uint addr) {
-			uint size = Connector.memoryReader.ReadUInt32At(addr + comStringSizeOffset);
-			uint strPtr = Connector.memoryReader.ReadUInt32At(addr + comStringStrOffset);
+			uint size = Connector.memoryReader.ReadUInt32(addr + comStringSizeOffset);
+			uint strPtr = Connector.memoryReader.ReadUInt32(addr + comStringStrOffset);
 
 			var strBytes=Connector.memoryReader.ReadBytes(strPtr, size);
 			return new string(Encoding.UTF8.GetChars(strBytes));

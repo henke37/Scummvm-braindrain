@@ -57,9 +57,9 @@ namespace DrainLib.Engines {
 			uint addr=EngineAddr+gameOffset;
 
 			var settings = new GameSettings();
-			var gameIdPtrVal = Connector.memoryReader.ReadUInt32At(addr + gameIdOffset);
+			var gameIdPtrVal = Connector.memoryReader.ReadUInt32(addr + gameIdOffset);
 			settings.GameId = Connector.memoryReader.ReadNullTermString(gameIdPtrVal);
-			var variantPtrVal = Connector.memoryReader.ReadUInt32At(addr + variantOffset);
+			var variantPtrVal = Connector.memoryReader.ReadUInt32(addr + variantOffset);
 			settings.Variant = Connector.memoryReader.ReadNullTermString(variantPtrVal);
 			settings.Version = Connector.memoryReader.ReadByte(addr + versionOffset);
 			settings.HeVersion = Connector.memoryReader.ReadByte(addr + heVersionOffset);
@@ -72,12 +72,12 @@ namespace DrainLib.Engines {
 			var active = Connector.memoryReader.ReadByte(EngineAddr + smushActiveOffset) != 0;
 			if(!active) return null;
 
-			var addr = Connector.memoryReader.ReadUInt32At(EngineAddr + smushPlayerOffset);
+			var addr = Connector.memoryReader.ReadUInt32(EngineAddr + smushPlayerOffset);
 
 			var state = new SmushState();
-			state.CurrentFrame = Connector.memoryReader.ReadUInt32At(addr + smushPlayerFrameOffset);
-			state.FrameCount = Connector.memoryReader.ReadUInt32At(addr + smushPlayerNBFramesOffset);
-			state.FrameRate = Connector.memoryReader.ReadInt32At(addr + smushPlayerSpeedOffset);
+			state.CurrentFrame = Connector.memoryReader.ReadUInt32(addr + smushPlayerFrameOffset);
+			state.FrameCount = Connector.memoryReader.ReadUInt32(addr + smushPlayerNBFramesOffset);
+			state.FrameRate = Connector.memoryReader.ReadInt32(addr + smushPlayerSpeedOffset);
 			state.File = ReadComString(addr + smushPlayerSeekFileOffset);
 			return state;
 		}

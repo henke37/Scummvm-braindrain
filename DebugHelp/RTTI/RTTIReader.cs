@@ -20,8 +20,8 @@ namespace DebugHelp.RTTI {
 		}
 
 		private CompleteObjectLocator readObjPtr(uint objAddr) {
-			var vtblPtrVal = processMemoryReader.ReadUInt32At(objAddr);
-			var metaPtrVal = processMemoryReader.ReadUInt32At(vtblPtrVal - 4);
+			var vtblPtrVal = processMemoryReader.ReadUInt32(objAddr);
+			var metaPtrVal = processMemoryReader.ReadUInt32(vtblPtrVal - 4);
 
 			if(completeObjectLocatorMap.TryGetValue(metaPtrVal, out CompleteObjectLocator objectLocator)) {
 				return objectLocator;

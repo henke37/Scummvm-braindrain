@@ -46,22 +46,22 @@ namespace DebugHelp {
 			return new string(Encoding.UTF8.GetChars(buff.ToArray()));
 		}
 
-		public int ReadInt32At(uint addr) {
+		public int ReadInt32(uint addr) {
 			ReadBytes(addr, 4, scratchBuff);
 			return scratchBuff[0] | (scratchBuff[1] << 8) | (scratchBuff[2] << 16) | (scratchBuff[3] << 24);
 		}
 
-		public uint ReadUInt32At(uint addr) {
+		public uint ReadUInt32(uint addr) {
 			ReadBytes(addr, 4, scratchBuff);
 			return (uint)(scratchBuff[0] | (scratchBuff[1] << 8) | (scratchBuff[2] << 16) | (scratchBuff[3] << 24));
 		}
 
-		public short ReadInt16At(uint addr) {
+		public short ReadInt16(uint addr) {
 			ReadBytes(addr, 2, scratchBuff);
 			return (short)(scratchBuff[0] | (scratchBuff[1] << 8));
 		}
 
-		public ushort ReadUInt16At(uint addr) {
+		public ushort ReadUInt16(uint addr) {
 			ReadBytes(addr, 2, scratchBuff);
 			return (ushort)(scratchBuff[0] | (scratchBuff[1] << 8));
 		}
