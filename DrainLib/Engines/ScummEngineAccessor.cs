@@ -83,6 +83,21 @@ namespace DrainLib.Engines {
 		}
 	}
 
+	public class ScummState {
+		public byte CurrentRoom;
+		public byte RoomCount;
+
+		public int[] RoomVars;
+		public int[] ScummVars;
+
+
+		public bool GetBitVar(uint varNum) {
+			return (bitVarData[varNum / 8] >> ((int)(varNum % 8))) != 0;
+		}
+
+		private byte[] bitVarData;
+	}
+
 	public class SmushState {
 		public uint CurrentFrame;
 		public uint FrameCount;
