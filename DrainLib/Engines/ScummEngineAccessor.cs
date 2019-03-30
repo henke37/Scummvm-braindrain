@@ -17,10 +17,14 @@ namespace DrainLib.Engines {
 		private uint scummVarsOffset;
 		private uint bitVarsOffset;
 		private uint inventoryOffset;
+		private uint classDataOffset;
+		private uint objectOwnerTableOffset;
+		private uint objectStateTableOffset;
 		private uint numVarsOffset;
 		private uint numRoomVarsOffset;
 		private uint numBitVarsOffset;
 		private uint numInventoryOffset;
+		private uint numGlobalObjectsOffset;
 
 
 		private uint smushActiveOffset;
@@ -51,10 +55,14 @@ namespace DrainLib.Engines {
 			scummVarsOffset = Connector.resolver.FieldOffset(engineClSymb, "_scummVars");
 			bitVarsOffset = Connector.resolver.FieldOffset(engineClSymb, "_bitVars");
 			inventoryOffset = Connector.resolver.FieldOffset(engineClSymb, "_inventory");
+			classDataOffset = Connector.resolver.FieldOffset(engineClSymb, "_classData");
+			objectOwnerTableOffset = Connector.resolver.FieldOffset(engineClSymb, "_numGlobalObjects");
+			objectStateTableOffset = Connector.resolver.FieldOffset(engineClSymb, "_objectStateTable");
 			numVarsOffset = Connector.resolver.FieldOffset(engineClSymb, "_numVariables");
 			numRoomVarsOffset = Connector.resolver.FieldOffset(engineClSymb, "_numRoomVariables");
 			numBitVarsOffset = Connector.resolver.FieldOffset(engineClSymb, "_numBitVariables");
 			numInventoryOffset = Connector.resolver.FieldOffset(engineClSymb, "_numInventory");
+			numGlobalObjectsOffset = Connector.resolver.FieldOffset(engineClSymb, "_numGlobalObjects");
 
 			var gameSettingsSymb = Connector.resolver.FindClass("Scumm::GameSettings");
 			gameIdOffset = Connector.resolver.FieldOffset(gameSettingsSymb, "gameid");
@@ -136,6 +144,20 @@ namespace DrainLib.Engines {
 				state.Inventory = Connector.memoryReader.ReadInt16Array(inventoryPtr, (uint)inventoryCount);
 			}
 
+			uint numGlobalObjects = (uint)Connector.memoryReader.ReadInt32(EngineAddr + numGlobalObjectsOffset);
+			{
+				var classDataPtr = Connector.memoryReader.ReadUInt32(EngineAddr + classDataOffset);
+				state.GlobalObjectClasses = Connector.memoryReader.ReadUInt32Array(classDataPtr, numGlobalObjects);
+			}
+			{
+				var objectOwnerTablePtr = Connector.memoryReader.ReadUInt32(EngineAddr + objectOwnerTableOffset);
+				state.GlobalObjectOwners = Connector.memoryReader.ReadBytes(objectOwnerTablePtr, numGlobalObjects);
+			}
+			{
+				var objectStateTablePtr = Connector.memoryReader.ReadUInt32(EngineAddr + objectStateTableOffset);
+				state.GlobalObjectStates = Connector.memoryReader.ReadBytes(objectStateTablePtr, numGlobalObjects);
+			}
+
 			return state;
 		}
 	}
@@ -150,6 +172,8 @@ namespace DrainLib.Engines {
 		public int[] ScummVars;
 		public short[] Inventory;
 		public uint[] GlobalObjectClasses;
+		public byte[] GlobalObjectOwners;
+		public byte[] GlobalObjectStates;
 
 		public bool GetBitVar(uint varNum) {
 			return (bitVarData[varNum / 8] >> ((int)(varNum % 8))) != 0;
