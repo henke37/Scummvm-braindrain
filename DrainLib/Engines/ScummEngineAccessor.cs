@@ -10,6 +10,19 @@ namespace DrainLib.Engines {
 		private uint heVersionOffset;
 
 		private uint gameOffset;
+		private uint bootParamOffset;
+		private uint currentRoomOffset;
+		private uint numRoomsOffset;
+		private uint roomVarsOffset;
+		private uint scummVarsOffset;
+		private uint bitVarsOffset;
+		private uint inventoryOffset;
+		private uint numVarsOffset;
+		private uint numRoomVarsOffset;
+		private uint numBitVarsOffset;
+		private uint numInventoryOffset;
+
+
 		private uint smushActiveOffset;
 		private uint smushPlayerOffset;
 
@@ -31,6 +44,17 @@ namespace DrainLib.Engines {
 		internal override void LoadSymbols() {
 			var engineClSymb = Connector.resolver.FindClass("Scumm::ScummEngine");
 			gameOffset = Connector.resolver.FieldOffset(engineClSymb, "_game");
+			bootParamOffset = Connector.resolver.FieldOffset(engineClSymb, "_bootParam");
+			currentRoomOffset = Connector.resolver.FieldOffset(engineClSymb, "_currentRoom");
+			numRoomsOffset = Connector.resolver.FieldOffset(engineClSymb, "_numRooms");
+			roomVarsOffset = Connector.resolver.FieldOffset(engineClSymb, "_roomVars");
+			scummVarsOffset = Connector.resolver.FieldOffset(engineClSymb, "_scummVars");
+			bitVarsOffset = Connector.resolver.FieldOffset(engineClSymb, "_bitVars");
+			inventoryOffset = Connector.resolver.FieldOffset(engineClSymb, "_inventory");
+			numVarsOffset = Connector.resolver.FieldOffset(engineClSymb, "_numVariables");
+			numRoomVarsOffset = Connector.resolver.FieldOffset(engineClSymb, "_numRoomVariables");
+			numBitVarsOffset = Connector.resolver.FieldOffset(engineClSymb, "_numBitVariables");
+			numInventoryOffset = Connector.resolver.FieldOffset(engineClSymb, "_numInventory");
 
 			var gameSettingsSymb = Connector.resolver.FindClass("Scumm::GameSettings");
 			gameIdOffset = Connector.resolver.FieldOffset(gameSettingsSymb, "gameid");
@@ -81,6 +105,39 @@ namespace DrainLib.Engines {
 			state.File = ReadComString(addr + smushPlayerSeekFileOffset);
 			return state;
 		}
+
+		public ScummState GetScummState() {
+			var state = new ScummState();
+			state.CurrentRoom = Connector.memoryReader.ReadByte(EngineAddr + currentRoomOffset);
+			state.RoomCount = Connector.memoryReader.ReadByte(EngineAddr + numRoomsOffset);
+			state.BootParam = Connector.memoryReader.ReadInt32(EngineAddr + bootParamOffset);
+
+			if(GameSettings.HeVersion>0) {
+				var roomVarCount = Connector.memoryReader.ReadInt32(EngineAddr + numRoomVarsOffset);
+				var roomVarsPtr = Connector.memoryReader.ReadUInt32(EngineAddr + roomVarsOffset);
+				state.RoomVars = Connector.memoryReader.ReadInt32Array(roomVarsPtr, (uint)roomVarCount);
+			}
+
+			{
+				var varCount = Connector.memoryReader.ReadInt32(EngineAddr + numVarsOffset);
+				var varsPtr = Connector.memoryReader.ReadUInt32(EngineAddr + scummVarsOffset);
+				state.ScummVars = Connector.memoryReader.ReadInt32Array(varsPtr, (uint)varCount);
+			}
+
+			{
+				var bitVarCount = Connector.memoryReader.ReadInt32(EngineAddr + numBitVarsOffset) / 8;
+				var bitVarsPtr = Connector.memoryReader.ReadUInt32(EngineAddr + scummVarsOffset);
+				state.bitVarData = Connector.memoryReader.ReadBytes(bitVarsPtr, (uint)bitVarCount);
+			}
+
+			{
+				var inventoryCount = Connector.memoryReader.ReadInt32(EngineAddr + numInventoryOffset);
+				var inventoryPtr = Connector.memoryReader.ReadUInt32(EngineAddr + inventoryOffset);
+				state.Inventory = Connector.memoryReader.ReadInt16Array(inventoryPtr, (uint)inventoryCount);
+			}
+
+			return state;
+		}
 	}
 
 	public class ScummState {
@@ -98,7 +155,7 @@ namespace DrainLib.Engines {
 			return (bitVarData[varNum / 8] >> ((int)(varNum % 8))) != 0;
 		}
 
-		private byte[] bitVarData;
+		internal byte[] bitVarData;
 	}
 
 	public class SmushState {
