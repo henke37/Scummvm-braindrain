@@ -56,6 +56,16 @@ namespace DebugHelp {
 			return (uint)(scratchBuff[0] | (scratchBuff[1] << 8) | (scratchBuff[2] << 16) | (scratchBuff[3] << 24));
 		}
 
+		public short ReadInt16At(uint addr) {
+			ReadBytes(addr, 2, scratchBuff);
+			return (short)(scratchBuff[0] | (scratchBuff[1] << 8));
+		}
+
+		public ushort ReadUInt16At(uint addr) {
+			ReadBytes(addr, 2, scratchBuff);
+			return (ushort)(scratchBuff[0] | (scratchBuff[1] << 8));
+		}
+
 		public int[] ReadInt32Array(uint addr, uint count) {
 			Int32[] arr = new int[count];
 			uint byteC = count * 4;
