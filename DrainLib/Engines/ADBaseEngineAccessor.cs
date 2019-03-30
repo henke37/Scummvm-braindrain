@@ -30,9 +30,9 @@ namespace DrainLib.Engines {
 			var gameDesc = new ADGameDescriptor();
 
 			uint gameIdVal = Connector.memoryReader.ReadUInt32(addr + gameIdOffset);
-			gameDesc.GameId = Connector.memoryReader.ReadNullTermString(gameIdVal);
+			gameDesc.GameId = gameIdVal == 0 ? "" : Connector.memoryReader.ReadNullTermString(gameIdVal);
 			uint extraVal = Connector.memoryReader.ReadUInt32(addr + extraOffset);
-			gameDesc.Extra = Connector.memoryReader.ReadNullTermString(extraVal);
+			gameDesc.Extra = extraVal == 0 ? "" : Connector.memoryReader.ReadNullTermString(extraVal);
 			uint flagsVal = Connector.memoryReader.ReadUInt32(addr + flagsOffset);
 			gameDesc.GameFlags = (GameFlags)flagsVal;
 
@@ -48,18 +48,18 @@ namespace DrainLib.Engines {
 
 		[Flags]
 		public enum GameFlags {
-			None=0,
-			AutoGenTarget=1<<20,
-			Unstable=1<<21,
-			Testing=1<<22,
-			Pirated=1<<23,
-			AddEnglish=1<<24,
-			MacResFork=1<<25,
-			UseExtraAsTitle=1<<26,
-			DropLanguage=1<<27,
-			DropPlatform=1<<28,
-			CD=1<<29,
-			Demo = 1<<30
+			None = 0,
+			AutoGenTarget = 1 << 20,
+			Unstable = 1 << 21,
+			Testing = 1 << 22,
+			Pirated = 1 << 23,
+			AddEnglish = 1 << 24,
+			MacResFork = 1 << 25,
+			UseExtraAsTitle = 1 << 26,
+			DropLanguage = 1 << 27,
+			DropPlatform = 1 << 28,
+			CD = 1 << 29,
+			Demo = 1 << 30
 		}
 	}
 }
