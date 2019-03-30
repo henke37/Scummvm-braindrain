@@ -66,6 +66,34 @@ namespace DebugHelp {
 			return (ushort)(scratchBuff[0] | (scratchBuff[1] << 8));
 		}
 
+		public short[] ReadInt16Array(uint addr, uint count) {
+			Int16[] arr = new short[count];
+			uint byteC = count * 2;
+			Byte[] buff = GetReadBuff(byteC);
+
+			ReadBytes(addr, byteC, buff);
+
+			for(uint i = 0; i < count; ++i) {
+				arr[i] = (short)(buff[0 + i * 4] | (buff[1 + i * 4] << 8));
+			}
+
+			return arr;
+		}
+
+		public ushort[] ReadUInt16Array(uint addr, uint count) {
+			UInt16[] arr = new ushort[count];
+			uint byteC = count * 2;
+			Byte[] buff = GetReadBuff(byteC);
+
+			ReadBytes(addr, byteC, buff);
+
+			for(uint i = 0; i < count; ++i) {
+				arr[i] = (ushort)(buff[0 + i * 4] | (buff[1 + i * 4] << 8));
+			}
+
+			return arr;
+		}
+
 		public int[] ReadInt32Array(uint addr, uint count) {
 			Int32[] arr = new int[count];
 			uint byteC = count * 4;
