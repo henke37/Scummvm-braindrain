@@ -23,7 +23,7 @@ namespace DrainLib.Engines {
 		internal ScummEngineAccessor(ScummVMConnector connector, uint engineAddr) : base(connector, engineAddr) {
 			GameSettings = GetGameSettings();
 
-			if(GameSettings.Version>=7) {
+			if(GameSettings.Version >= 7) {
 				LoadSmushSymbols();
 			}
 		}
@@ -54,13 +54,13 @@ namespace DrainLib.Engines {
 		public override string GameId => GameSettings.GameId;
 
 		private GameSettings GetGameSettings() {
-			uint addr=EngineAddr+gameOffset;
+			uint addr = EngineAddr + gameOffset;
 
 			var settings = new GameSettings();
 			var gameIdPtrVal = Connector.memoryReader.ReadUInt32(addr + gameIdOffset);
-			settings.GameId = Connector.memoryReader.ReadNullTermString(gameIdPtrVal);
+			settings.GameId = gameIdPtrVal == 0 ? "" : Connector.memoryReader.ReadNullTermString(gameIdPtrVal);
 			var variantPtrVal = Connector.memoryReader.ReadUInt32(addr + variantOffset);
-			settings.Variant = Connector.memoryReader.ReadNullTermString(variantPtrVal);
+			settings.Variant = variantPtrVal == 0 ? "" : Connector.memoryReader.ReadNullTermString(variantPtrVal);
 			settings.Version = Connector.memoryReader.ReadByte(addr + versionOffset);
 			settings.HeVersion = Connector.memoryReader.ReadByte(addr + heVersionOffset);
 			return settings;
