@@ -125,9 +125,9 @@ namespace DrainLib.Engines {
 			}
 
 			{
-				var bitVarCount = Connector.memoryReader.ReadInt32(EngineAddr + numBitVarsOffset) / 8;
+				var bitVarByteCount = Connector.memoryReader.ReadInt32(EngineAddr + numBitVarsOffset) / 8;
 				var bitVarsPtr = Connector.memoryReader.ReadUInt32(EngineAddr + scummVarsOffset);
-				state.bitVarData = Connector.memoryReader.ReadBytes(bitVarsPtr, (uint)bitVarCount);
+				state.bitVarData = Connector.memoryReader.ReadBytes(bitVarsPtr, (uint)bitVarByteCount);
 			}
 
 			{
