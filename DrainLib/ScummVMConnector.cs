@@ -31,16 +31,16 @@ namespace DrainLib {
 			try {
 				string pdbPath = process.MainModule.FileName.Replace(".exe", ".pdb");
 				resolver = new SymbolResolver(pdbPath);
+
+				memoryReader = new LiveProcessMemoryReader(process);
+				rttiReader = new RTTIReader(memoryReader);
+
+				var g_engineSymb = resolver.FindGlobal("g_engine");
+				g_engineAddr = g_engineSymb.relativeVirtualAddress + (uint)process.MainModule.BaseAddress;
 			} catch(Win32Exception err) when(err.NativeErrorCode == IncompleteReadException.ErrorNumber) {
 				process = null;
 				throw new IncompleteReadException(err);
 			}
-
-			memoryReader = new LiveProcessMemoryReader(process);
-			rttiReader = new RTTIReader(memoryReader);
-
-			var g_engineSymb = resolver.FindGlobal("g_engine");
-			g_engineAddr = g_engineSymb.relativeVirtualAddress + (uint)process.MainModule.BaseAddress;
 		}
 
 		public bool Connected {
