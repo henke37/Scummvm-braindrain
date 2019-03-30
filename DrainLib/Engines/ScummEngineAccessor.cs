@@ -87,9 +87,12 @@ namespace DrainLib.Engines {
 		public byte CurrentRoom;
 		public byte RoomCount;
 
+		public int BootParam;
+
 		public int[] RoomVars;
 		public int[] ScummVars;
-
+		public short[] Inventory;
+		public uint[] GlobalObjectClasses;
 
 		public bool GetBitVar(uint varNum) {
 			return (bitVarData[varNum / 8] >> ((int)(varNum % 8))) != 0;
