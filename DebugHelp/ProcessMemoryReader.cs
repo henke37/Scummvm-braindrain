@@ -74,7 +74,7 @@ namespace DebugHelp {
 			ReadBytes(addr, byteC, buff);
 
 			for(uint i = 0; i < count; ++i) {
-				arr[i] = (short)(buff[0 + i * 4] | (buff[1 + i * 4] << 8));
+				arr[i] = (short)(buff[0 + i * 2] | (buff[1 + i * 2] << 8));
 			}
 
 			return arr;
@@ -88,7 +88,7 @@ namespace DebugHelp {
 			ReadBytes(addr, byteC, buff);
 
 			for(uint i = 0; i < count; ++i) {
-				arr[i] = (ushort)(buff[0 + i * 4] | (buff[1 + i * 4] << 8));
+				arr[i] = (ushort)(buff[0 + i * 2] | (buff[1 + i * 2] << 8));
 			}
 
 			return arr;

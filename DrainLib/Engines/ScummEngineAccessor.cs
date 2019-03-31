@@ -56,7 +56,7 @@ namespace DrainLib.Engines {
 			bitVarsOffset = Connector.resolver.FieldOffset(engineClSymb, "_bitVars");
 			inventoryOffset = Connector.resolver.FieldOffset(engineClSymb, "_inventory");
 			classDataOffset = Connector.resolver.FieldOffset(engineClSymb, "_classData");
-			objectOwnerTableOffset = Connector.resolver.FieldOffset(engineClSymb, "_numGlobalObjects");
+			objectOwnerTableOffset = Connector.resolver.FieldOffset(engineClSymb, "_objectOwnerTable");
 			objectStateTableOffset = Connector.resolver.FieldOffset(engineClSymb, "_objectStateTable");
 			numVarsOffset = Connector.resolver.FieldOffset(engineClSymb, "_numVariables");
 			numRoomVarsOffset = Connector.resolver.FieldOffset(engineClSymb, "_numRoomVariables");
