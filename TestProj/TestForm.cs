@@ -39,6 +39,11 @@ namespace TestProj {
 					return;
 				}
 			}
+			if(engine is PinkEngineAccessor pinkEngine) {
+				var state = pinkEngine.GetPinkState();
+				statusTxt.Text = $"{state.Module}/{state.Page}";
+				return;
+			}
 			statusTxt.Text = engine.GameId;
 		}
 
