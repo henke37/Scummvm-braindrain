@@ -162,6 +162,7 @@ namespace DrainLib.Engines {
 		}
 	}
 
+	[Serializable]
 	public class ScummState {
 		public byte CurrentRoom;
 		public byte RoomCount;
@@ -182,6 +183,7 @@ namespace DrainLib.Engines {
 		internal byte[] bitVarData;
 	}
 
+	[Serializable]
 	public class SmushState {
 		public uint CurrentFrame;
 		public uint FrameCount;
@@ -189,6 +191,7 @@ namespace DrainLib.Engines {
 		public string File;
 	}
 
+	[Serializable]
 	public class GameSettings {
 		public string GameId;
 		public string Variant;
