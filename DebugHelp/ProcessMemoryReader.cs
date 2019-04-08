@@ -18,7 +18,7 @@ namespace DebugHelp {
 
 		[SecurityCritical]
 		public virtual unsafe void ReadBytes(uint addr, uint size, void* buff) {
-			Byte[] buffArr = new byte[size];
+			Byte[] buffArr = GetReadBuff(size);
 			ReadBytes(addr, size, buffArr);
 			Marshal.Copy(buffArr, 0, (IntPtr)buff, (int)size);
 		}
