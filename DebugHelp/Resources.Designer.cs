@@ -72,9 +72,18 @@ namespace DebugHelp {
         /// <summary>
         ///   Looks up a localized string similar to Read failed to read all the data.
         /// </summary>
-        internal static string ReadTooLitte {
+        internal static string ReadTooLittle {
             get {
-                return ResourceManager.GetString("ReadTooLitte", resourceCulture);
+                return ResourceManager.GetString("ReadTooLittle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Write failed to write all the data.
+        /// </summary>
+        internal static string WroteTooLittle {
+            get {
+                return ResourceManager.GetString("WroteTooLittle", resourceCulture);
             }
         }
     }

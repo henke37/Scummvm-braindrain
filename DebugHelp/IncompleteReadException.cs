@@ -7,9 +7,9 @@ namespace DebugHelp {
 
 		public const int ErrorNumber = 299;
 
-		public IncompleteReadException() : base(Resources.ReadTooLitte) {
+		public IncompleteReadException() : base(Resources.ReadTooLittle) {
 		}
-		public IncompleteReadException(Exception innerException) : base(Resources.ReadTooLitte, innerException) {
+		public IncompleteReadException(Exception innerException) : base(Resources.ReadTooLittle, innerException) {
 		}
 
 		protected IncompleteReadException(SerializationInfo info, StreamingContext context) : base(info, context) {

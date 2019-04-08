@@ -50,7 +50,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IncompleteReadException.cs" />
+    <Compile Include="IncompleteWriteException.cs" />
     <Compile Include="LiveProcessMemoryReader.cs" />
+    <Compile Include="LiveProcessMemoryWriter.cs" />
     <Compile Include="NameSearchOptions.cs" />
     <Compile Include="ProcessMemoryReader.cs" />
     <Compile Include="ProcessMemoryWriter.cs" />
