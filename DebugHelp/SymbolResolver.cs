@@ -23,6 +23,16 @@ namespace DebugHelp {
 			return result.Item(0);
 		}
 
+		public IDiaSymbol FindNestedClass(IDiaSymbol outerClass,string className) {
+			outerClass.findChildren(SymTagEnum.SymTagUDT, className, (uint)NameSearchOptions.CaseSensitive, out var result);
+			return result.Item(0);
+		}
+
+		public IDiaSymbol FindTypeDef(string typeName) {
+			session.findChildren(session.globalScope, SymTagEnum.SymTagTypedef, typeName, (uint)NameSearchOptions.CaseSensitive, out var result);
+			return result.Item(0);
+		}
+
 		public IDiaSymbol FindField(IDiaSymbol classSymb, string fieldName) {
 			session.findChildren(classSymb, SymTagEnum.SymTagData, fieldName, (uint)NameSearchOptions.CaseSensitive, out var result);
 			return result.Item(0);
@@ -36,6 +46,11 @@ namespace DebugHelp {
 		public uint FieldSize(IDiaSymbol classSymb, string fieldName) {
 			IDiaSymbol field = FindField(classSymb, fieldName);
 			return (uint)field.type.length;
+		}
+
+		public IDiaSymbol GetBaseClass(IDiaSymbol thisClass) {
+			thisClass.findChildren(SymTagEnum.SymTagBaseClass, null, (uint)NameSearchOptions.None, out var result);
+			return result.Item(0);
 		}
 	}
 }
