@@ -7,8 +7,7 @@ namespace DrainLib.Engines {
 		private uint logicOffset;
 		private uint currentRoomOffset;
 		private uint gameStateOffset;
-
-		private uint gameStateCount = 211;
+		private const uint gameStateCount = 211;
 
 		internal QueenEngineAccessor(ScummVMConnector connector, uint engineAddr) : base(connector, engineAddr) {
 		}
