@@ -35,6 +35,22 @@ namespace DebugHelp {
 			}
 		}
 
+		public T[] ReadStructArr<T>(uint addr, uint count) where T : unmanaged {
+			var arr = new T[count];
+
+			ReadStructArr<T>(addr, arr);
+
+			return arr;
+		}
+
+		private unsafe void ReadStructArr<T>(uint addr, T[] arr) where T : unmanaged {
+			int arrLen = arr.Length;
+			for(int i=0;i<arrLen;++i) {
+				ReadStruct(addr, ref arr[i]);
+				addr += (uint)sizeof(T);
+			}
+		}
+
 		public string ReadNullTermString(uint addr) {
 			List<Byte> buff=new List<byte>();
 			for(; ; addr++) {
