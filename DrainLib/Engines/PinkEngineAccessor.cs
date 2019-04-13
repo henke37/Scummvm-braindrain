@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Diagnostics;
 
 namespace DrainLib.Engines {
 	public class PinkEngineAccessor : ADBaseEngineAccessor {
@@ -8,6 +9,7 @@ namespace DrainLib.Engines {
 		private uint gameVarsOffset;
 		private uint objNameOffset;
 		private uint pageOffset;
+		private uint pagesOffset;
 		private uint moduleVariablesOffset;
 		private uint pageVariablesOffset;
 
@@ -16,6 +18,9 @@ namespace DrainLib.Engines {
 		private const uint StringMapNodeDummyVal = 1;
 		private uint stringMapNodeKeyOffset;
 		private uint stringMapNodeValueOffset;
+		private uint pagesArrOffset;
+		private uint pagesArrSizeOffset;
+		private uint pagesArrStorageOffset;
 
 		internal PinkEngineAccessor(ScummVMConnector connector, uint engineAddr) : base(connector, engineAddr) {
 		}
@@ -32,6 +37,16 @@ namespace DrainLib.Engines {
 			var moduleSymb = Connector.resolver.FindClass("Pink::Module");
 			pageOffset = Connector.resolver.FieldOffset(moduleSymb,"_page");
 			moduleVariablesOffset = Connector.resolver.FieldOffset(moduleSymb, "_variables");
+
+			var pagesSymb = Connector.resolver.FindField(moduleSymb, "_pages");
+			pagesOffset = (uint)pagesSymb.offset;
+			var pagesClSymb = pagesSymb.type;
+			var pagesBaseClSymb = Connector.resolver.GetBaseClass(pagesClSymb);
+			var pagesBaseName = pagesBaseClSymb.name;
+			pagesArrOffset=(uint)pagesBaseClSymb.offset;
+			pagesArrSizeOffset = Connector.resolver.FieldOffset(pagesBaseClSymb, "_size");
+			pagesArrStorageOffset = Connector.resolver.FieldOffset(pagesBaseClSymb, "_storage");
+
 
 			var pageSymb = Connector.resolver.FindClass("Pink::GamePage");
 			pageVariablesOffset = Connector.resolver.FieldOffset(pageSymb,"_variables");
@@ -61,14 +76,41 @@ namespace DrainLib.Engines {
 			var moduleNameAddr = modulePtrVal + objNameOffset;
 			state.Module = ReadComString(moduleNameAddr);
 			var pagePtrVal = Connector.memoryReader.ReadUInt32(modulePtrVal + pageOffset);
-			var pageNameAddr = pagePtrVal + objNameOffset;
-			state.Page = ReadComString(pageNameAddr);
 
 			state.GameVars = ReadStringMap(EngineAddr + gameVarsOffset);
-			state.ModuleVars=ReadStringMap(modulePtrVal + moduleVariablesOffset);
-			state.PageVars = ReadStringMap(pagePtrVal + pageVariablesOffset);
+			state.ModuleVars = ReadStringMap(modulePtrVal + moduleVariablesOffset);
+			state.Pages = ReadPages(modulePtrVal,out state.CurrentPage);
 
 			return state;
+		}
+
+		private Dictionary<string,Page> ReadPages(uint moduleAddr, out Page currentPage) {
+			var pagePtrs = ReadPagePointers(moduleAddr, out var pagesSize);
+			var pageMap = new Dictionary<string, Page>((int)pagesSize);
+
+			var currentPageAddr = Connector.memoryReader.ReadUInt32(moduleAddr + pageOffset);
+			currentPage = null;
+
+			foreach(var pagePtr in pagePtrs) {
+				var pageNameAddr = pagePtr + objNameOffset;
+				var page = new Page();
+				page.Name = ReadComString(pageNameAddr);
+				page.Vars = ReadStringMap(pagePtr + pageVariablesOffset);
+				pageMap.Add(page.Name, page);
+				if(pagePtr==currentPageAddr) {
+					currentPage = page;
+				}
+			}
+
+			return pageMap;
+		}
+
+		private UInt32[] ReadPagePointers(uint moduleAddr, out uint pagesSize) {
+			var pagesArrAddr = moduleAddr + pagesOffset + pagesArrOffset;
+			var pagesStorage = Connector.memoryReader.ReadUInt32(pagesArrAddr + pagesArrStorageOffset);
+			pagesSize = Connector.memoryReader.ReadUInt32(pagesArrAddr + pagesArrSizeOffset);
+			Debug.Assert(pagesStorage >= 4000);
+			return Connector.memoryReader.ReadUInt32Array(pagesStorage, pagesSize);
 		}
 
 		protected Dictionary<string,string> ReadStringMap(uint mapAddr) {
@@ -92,9 +134,14 @@ namespace DrainLib.Engines {
 	[Serializable]
 	public class PinkState {
 		public string Module;
-		public string Page;
+		public Page CurrentPage;
 		public Dictionary<string, string> GameVars;
 		public Dictionary<string, string> ModuleVars;
-		public Dictionary<string, string> PageVars;
+		public Dictionary<string, Page> Pages;
+	}
+
+	public class Page {
+		public string Name;
+		public Dictionary<string, string> Vars;
 	}
 }

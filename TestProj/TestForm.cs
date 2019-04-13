@@ -41,7 +41,9 @@ namespace TestProj {
 			}
 			if(engine is PinkEngineAccessor pinkEngine) {
 				var state = pinkEngine.GetPinkState();
-				statusTxt.Text = $"{state.Module}/{state.Page}";
+				statusTxt.Text = $"{state.Module}/{state.CurrentPage.Name}";
+				return;
+			}
 				return;
 			}
 			statusTxt.Text = engine.GameId;
