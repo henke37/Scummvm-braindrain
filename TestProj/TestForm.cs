@@ -44,6 +44,9 @@ namespace TestProj {
 				statusTxt.Text = $"{state.Module}/{state.CurrentPage.Name}";
 				return;
 			}
+			if(engine is QueenEngineAccessor queenEngine) {
+				var state = queenEngine.GetState();
+				statusTxt.Text = $"{state.CurrentRoom}";
 				return;
 			}
 			statusTxt.Text = engine.GameId;
