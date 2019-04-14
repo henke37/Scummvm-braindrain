@@ -49,6 +49,9 @@ namespace TestProj {
 				statusTxt.Text = $"{state.CurrentRoom}";
 				return;
 			}
+			if(engine is SkyEngineAccessor skyEngine) {
+				var state = skyEngine.GetState();
+			}
 			statusTxt.Text = engine.GameId;
 		}
 
