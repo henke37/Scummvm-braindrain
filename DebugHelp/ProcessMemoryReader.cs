@@ -85,7 +85,6 @@ namespace DebugHelp {
 		public short[] ReadInt16Array(uint addr, uint count) {
 			Int16[] arr = new short[count];
 			ReadInt16Array(addr, count, arr);
-
 			return arr;
 		}
 
