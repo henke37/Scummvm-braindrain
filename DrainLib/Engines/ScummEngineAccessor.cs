@@ -5,11 +5,14 @@ using Dia2Lib;
 
 namespace DrainLib.Engines {
 	public class ScummEngineAccessor : BaseEngineAccessor {
+		#region Symbol data
+		//GameSettings
 		private uint gameIdOffset;
 		private uint variantOffset;
 		private uint versionOffset;
 		private uint heVersionOffset;
 
+		//ScummEngine
 		private uint gameOffset;
 		private uint bootParamOffset;
 		private uint currentRoomOffset;
@@ -26,15 +29,24 @@ namespace DrainLib.Engines {
 		private uint numBitVarsOffset;
 		private uint numInventoryOffset;
 		private uint numGlobalObjectsOffset;
-
-
+		private uint resOffset;
 		private uint smushActiveOffset;
 		private uint smushPlayerOffset;
 
+		//SmushPlayer
 		private uint smushPlayerNBFramesOffset;
 		private uint smushPlayerFrameOffset;
 		private uint smushPlayerSpeedOffset;
 		private uint smushPlayerSeekFileOffset;
+
+		//ResourceManager
+		private uint resTypesOffset;
+		private ulong resTypeDataSize;
+		private uint resArrStorageOffset;
+		private ulong resouceSize;
+		private uint resourceAddressOffset;
+
+		#endregion
 
 		public readonly GameSettings GameSettings;
 
@@ -66,12 +78,23 @@ namespace DrainLib.Engines {
 			numBitVarsOffset = Connector.resolver.FieldOffset(engineClSymb, "_numBitVariables");
 			numInventoryOffset = Connector.resolver.FieldOffset(engineClSymb, "_numInventory");
 			numGlobalObjectsOffset = Connector.resolver.FieldOffset(engineClSymb, "_numGlobalObjects");
+			resOffset = Connector.resolver.FieldOffset(engineClSymb, "_res");
 
 			var gameSettingsSymb = Connector.resolver.FindClass("Scumm::GameSettings");
 			gameIdOffset = Connector.resolver.FieldOffset(gameSettingsSymb, "gameid");
 			variantOffset = Connector.resolver.FieldOffset(gameSettingsSymb, "variant");
 			versionOffset = Connector.resolver.FieldOffset(gameSettingsSymb, "version");
 			heVersionOffset = Connector.resolver.FieldOffset(gameSettingsSymb, "heversion");
+
+			var resManClSymb = Connector.resolver.FindClass("Scumm::ResourceManager");
+			resTypesOffset = Connector.resolver.FieldOffset(resManClSymb, "_types");
+			var resTypeClSymb = Connector.resolver.FindNestedClass(resManClSymb, "ResTypeData");
+			resTypeDataSize = resTypeClSymb.length;
+			var resTypeArrClSymb = Connector.resolver.GetBaseClass(resTypeClSymb);
+			resArrStorageOffset = Connector.resolver.FieldOffset(resTypeArrClSymb, "_storage");
+			var resouceClSymb = Connector.resolver.FindNestedClass(resManClSymb, "Resource");
+			resouceSize = resouceClSymb.length;
+			resourceAddressOffset = Connector.resolver.FieldOffset(resouceClSymb, "_address");
 		}
 
 		private void LoadSmushSymbols() {
@@ -185,6 +208,21 @@ namespace DrainLib.Engines {
 			}
 
 			return map;
+		}
+
+		public void ReadArray(uint arrayId) {
+			if(GameSettings.Version < 6) throw new InvalidOperationException("Arrays aren't used in this game");
+			var arrayHeaderAddr = GetResourceAddr(7, arrayId);
+		}
+
+		private uint GetResourceAddr(uint type, uint index) {
+			var resManPtrVal = Connector.memoryReader.ReadUInt32(EngineAddr + resOffset);
+			var typesBase = resManPtrVal + resTypesOffset;
+			uint typeLocation = (uint)(typesBase + type * resTypeDataSize);
+			var resStorageBase = Connector.memoryReader.ReadUInt32(typeLocation + resArrStorageOffset);
+			uint resLocation = (uint)(resStorageBase + resouceSize * index);
+
+			return Connector.memoryReader.ReadUInt32(resLocation + resourceAddressOffset);
 		}
 	}
 
