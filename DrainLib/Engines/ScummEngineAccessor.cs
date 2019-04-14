@@ -162,7 +162,7 @@ namespace DrainLib.Engines {
 			state.RoomCount = Connector.memoryReader.ReadByte(EngineAddr + numRoomsOffset);
 			state.BootParam = Connector.memoryReader.ReadInt32(EngineAddr + bootParamOffset);
 
-			if(GameSettings.HeVersion>0) {
+			if(GameSettings.HeVersion > 0) {
 				var roomVarCount = Connector.memoryReader.ReadInt32(EngineAddr + numRoomVarsOffset);
 				var roomVarsPtr = Connector.memoryReader.ReadUInt32(EngineAddr + roomVarsOffset);
 				state.RoomVars = Connector.memoryReader.ReadInt32Array(roomVarsPtr, (uint)roomVarCount);
@@ -203,7 +203,7 @@ namespace DrainLib.Engines {
 			return state;
 		}
 
-		private Dictionary<string,byte> BuildVarMap() {
+		private Dictionary<string, byte> BuildVarMap() {
 			var engineClSymb = Connector.resolver.FindClass("Scumm::ScummEngine");
 			engineClSymb.findChildren(
 				Dia2Lib.SymTagEnum.SymTagData,
@@ -235,9 +235,9 @@ namespace DrainLib.Engines {
 			uint numElements = (uint)(dim1 * dim2);
 
 			uint dataAddr = arrayHeaderAddr + arrHeadDataOffset;
-			if(type!= IntArray) {
+			if(type != IntArray) {
 				Connector.memoryReader.ReadBytes(dataAddr, numElements);
-			} else if(GameSettings.Version==8) {
+			} else if(GameSettings.Version == 8) {
 				Connector.memoryReader.ReadUInt32Array(dataAddr, numElements);
 			} else {
 				Connector.memoryReader.ReadUInt16Array(dataAddr, numElements);
