@@ -2,7 +2,7 @@
 
 namespace DebugHelp {
 	[Flags]
-	enum NameSearchOptions {
+	public enum NameSearchOptions : uint {
 		None,
 		CaseSensitive = 0x1,
 		CaseInsensitive = 0x2,
