@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using DebugHelp;
+using Dia2Lib;
 
 namespace DrainLib.Engines {
 	public class ScummEngineAccessor : BaseEngineAccessor {
@@ -43,6 +44,8 @@ namespace DrainLib.Engines {
 			if(GameSettings.Version >= 7) {
 				LoadSmushSymbols();
 			}
+
+			VarMap = BuildVarMap();
 		}
 
 		internal override void LoadSymbols() {
@@ -84,6 +87,8 @@ namespace DrainLib.Engines {
 		}
 
 		public override string GameId => GameSettings.GameId;
+
+		public Dictionary<string, byte> VarMap { get; }
 
 		private GameSettings GetGameSettings() {
 			uint addr = EngineAddr + gameOffset;
@@ -159,6 +164,27 @@ namespace DrainLib.Engines {
 			}
 
 			return state;
+		}
+
+		private Dictionary<string,byte> BuildVarMap() {
+			var engineClSymb = Connector.resolver.FindClass("Scumm::ScummEngine");
+			engineClSymb.findChildren(
+				Dia2Lib.SymTagEnum.SymTagData,
+				"VAR_*",
+				(uint)NameSearchOptions.Glob,
+				out var varSymbols
+			);
+
+			var map = new Dictionary<string, byte>(varSymbols.count);
+
+			foreach(IDiaSymbol varSymb in varSymbols) {
+				string varName = varSymb.name;
+				byte varId = Connector.memoryReader.ReadByte(EngineAddr + (uint)varSymb.offset);
+				if(varId == 0xFF) continue;
+				map.Add(varName, varId);
+			}
+
+			return map;
 		}
 	}
 
