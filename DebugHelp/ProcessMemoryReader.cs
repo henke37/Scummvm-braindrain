@@ -84,6 +84,12 @@ namespace DebugHelp {
 
 		public short[] ReadInt16Array(uint addr, uint count) {
 			Int16[] arr = new short[count];
+			ReadInt16Array(addr, count, arr);
+
+			return arr;
+		}
+
+		public void ReadInt16Array(uint addr, uint count, short[] arr) {
 			uint byteC = count * 2;
 			Byte[] buff = GetReadBuff(byteC);
 
@@ -92,12 +98,15 @@ namespace DebugHelp {
 			for(uint i = 0; i < count; ++i) {
 				arr[i] = (short)(buff[0 + i * 2] | (buff[1 + i * 2] << 8));
 			}
-
-			return arr;
 		}
 
 		public ushort[] ReadUInt16Array(uint addr, uint count) {
 			UInt16[] arr = new ushort[count];
+			ReadUint16Array(addr, count, arr);
+			return arr;
+		}
+
+		public void ReadUint16Array(uint addr, uint count, ushort[] arr) {
 			uint byteC = count * 2;
 			Byte[] buff = GetReadBuff(byteC);
 
@@ -106,26 +115,32 @@ namespace DebugHelp {
 			for(uint i = 0; i < count; ++i) {
 				arr[i] = (ushort)(buff[0 + i * 2] | (buff[1 + i * 2] << 8));
 			}
-
-			return arr;
 		}
 
 		public int[] ReadInt32Array(uint addr, uint count) {
 			Int32[] arr = new int[count];
+			ReadInt32Array(addr, count, arr);
+			return arr;
+		}
+
+		public void ReadInt32Array(uint addr, uint count, int[] arr) {
 			uint byteC = count * 4;
 			Byte[] buff = GetReadBuff(byteC);
 
 			ReadBytes(addr, byteC, buff);
 
 			for(uint i = 0; i < count; ++i) {
-				arr[i]=buff[0+i*4] | (buff[1 + i * 4] << 8) | (buff[2 + i * 4] << 16) | (buff[3 + i * 4] << 24);
+				arr[i] = buff[0 + i * 4] | (buff[1 + i * 4] << 8) | (buff[2 + i * 4] << 16) | (buff[3 + i * 4] << 24);
 			}
-
-			return arr;
 		}
 
 		public uint[] ReadUInt32Array(uint addr, uint count) {
 			UInt32[] arr = new uint[count];
+			ReadUInt32Array(addr, count, arr);
+			return arr;
+		}
+
+		public void ReadUInt32Array(uint addr, uint count, uint[] arr) {
 			uint byteC = count * 4;
 			Byte[] buff = GetReadBuff(byteC);
 
@@ -134,10 +149,7 @@ namespace DebugHelp {
 			for(uint i = 0; i < count; ++i) {
 				arr[i] = (uint)(buff[0 + i * 4] | (buff[1 + i * 4] << 8) | (buff[2 + i * 4] << 16) | (buff[3 + i * 4] << 24));
 			}
-
-			return arr;
 		}
-
 
 		protected Byte[] scratchBuff = new Byte[16];
 
