@@ -46,6 +46,14 @@ namespace DrainLib.Engines {
 		private ulong resouceSize;
 		private uint resourceAddressOffset;
 
+		//ArrayHeader
+		private uint arrHeadDim1Offset;
+		private uint arrHeadDim2Offset;
+		private uint arrHeadTypeOffset;
+		private uint arrHeadDataOffset;
+
+		private const int IntArray = 5;
+
 		#endregion
 
 		public readonly GameSettings GameSettings;
@@ -95,6 +103,12 @@ namespace DrainLib.Engines {
 			var resouceClSymb = Connector.resolver.FindNestedClass(resManClSymb, "Resource");
 			resouceSize = resouceClSymb.length;
 			resourceAddressOffset = Connector.resolver.FieldOffset(resouceClSymb, "_address");
+
+			var arrayHeaderClSymb = Connector.resolver.FindClass("Scumm::ScummEngine_v6::ArrayHeader");
+			arrHeadDim1Offset = Connector.resolver.FieldOffset(arrayHeaderClSymb, "dim1");
+			arrHeadDim2Offset = Connector.resolver.FieldOffset(arrayHeaderClSymb, "dim2");
+			arrHeadTypeOffset = Connector.resolver.FieldOffset(arrayHeaderClSymb, "type");
+			arrHeadDataOffset = Connector.resolver.FieldOffset(arrayHeaderClSymb, "data");
 		}
 
 		private void LoadSmushSymbols() {
@@ -212,17 +226,59 @@ namespace DrainLib.Engines {
 
 		public void ReadArray(uint arrayId) {
 			if(GameSettings.Version < 6) throw new InvalidOperationException("Arrays aren't used in this game");
-			var arrayHeaderAddr = GetResourceAddr(7, arrayId);
+			var arrayHeaderAddr = GetResourceAddr(ResourceType.String, arrayId);
+
+			short dim1 = Connector.memoryReader.ReadInt16(arrayHeaderAddr + arrHeadDim1Offset);
+			short dim2 = Connector.memoryReader.ReadInt16(arrayHeaderAddr + arrHeadDim2Offset);
+			short type = Connector.memoryReader.ReadInt16(arrayHeaderAddr + arrHeadTypeOffset);
+
+			uint numElements = (uint)(dim1 * dim2);
+
+			uint dataAddr = arrayHeaderAddr + arrHeadDataOffset;
+			if(type!= IntArray) {
+				Connector.memoryReader.ReadBytes(dataAddr, numElements);
+			} else if(GameSettings.Version==8) {
+				Connector.memoryReader.ReadUInt32Array(dataAddr, numElements);
+			} else {
+				Connector.memoryReader.ReadUInt16Array(dataAddr, numElements);
+			}
 		}
 
-		private uint GetResourceAddr(uint type, uint index) {
+		private uint GetResourceAddr(ResourceType type, uint index) {
 			var resManPtrVal = Connector.memoryReader.ReadUInt32(EngineAddr + resOffset);
 			var typesBase = resManPtrVal + resTypesOffset;
-			uint typeLocation = (uint)(typesBase + type * resTypeDataSize);
+			uint typeLocation = (uint)(typesBase + (uint)type * resTypeDataSize);
 			var resStorageBase = Connector.memoryReader.ReadUInt32(typeLocation + resArrStorageOffset);
 			uint resLocation = (uint)(resStorageBase + resouceSize * index);
 
 			return Connector.memoryReader.ReadUInt32(resLocation + resourceAddressOffset);
+		}
+
+		private enum ResourceType {
+			Invalid = 0,
+			First = 1,
+			Room = 1,
+			Script = 2,
+			Costume = 3,
+			Sound = 4,
+			Inventory = 5,
+			Charset = 6,
+			String = 7,
+			Verb = 8,
+			ActorName = 9,
+			Buffer = 10,
+			ScaleTable = 11,
+			Temp = 12,
+			FlObject = 13,
+			Matrix = 14,
+			Box = 15,
+			ObjectName = 16,
+			RoomScripts = 17,
+			RoomImage = 18,
+			Image = 19,
+			Talkie = 20,
+			SpoolBuffer = 21,
+			Last = 21
 		}
 	}
 
