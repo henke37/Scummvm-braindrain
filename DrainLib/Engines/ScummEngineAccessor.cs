@@ -52,8 +52,6 @@ namespace DrainLib.Engines {
 		private uint arrHeadTypeOffset;
 		private uint arrHeadDataOffset;
 
-		private const int IntArray = 5;
-
 		#endregion
 
 		public readonly GameSettings GameSettings;
@@ -230,12 +228,12 @@ namespace DrainLib.Engines {
 
 			short dim1 = Connector.memoryReader.ReadInt16(arrayHeaderAddr + arrHeadDim1Offset);
 			short dim2 = Connector.memoryReader.ReadInt16(arrayHeaderAddr + arrHeadDim2Offset);
-			short type = Connector.memoryReader.ReadInt16(arrayHeaderAddr + arrHeadTypeOffset);
+			ArrayType type = (ArrayType)Connector.memoryReader.ReadInt16(arrayHeaderAddr + arrHeadTypeOffset);
 
 			uint numElements = (uint)(dim1 * dim2);
 
 			uint dataAddr = arrayHeaderAddr + arrHeadDataOffset;
-			if(type != IntArray) {
+			if(type != ArrayType.IntArray) {
 				Connector.memoryReader.ReadBytes(dataAddr, numElements);
 			} else if(GameSettings.Version == 8) {
 				Connector.memoryReader.ReadUInt32Array(dataAddr, numElements);
@@ -279,6 +277,14 @@ namespace DrainLib.Engines {
 			Talkie = 20,
 			SpoolBuffer = 21,
 			Last = 21
+		}
+		private enum ArrayType {
+			BitArray=1,
+			NibbleType=2,
+			ByteArray=3,
+			StringArray=4,
+			IntArray=5,
+			DWordArray=6
 		}
 	}
 
