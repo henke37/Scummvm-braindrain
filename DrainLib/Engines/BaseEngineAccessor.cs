@@ -10,12 +10,14 @@ namespace DrainLib.Engines {
 
 		protected uint EngineAddr;
 
+		#region Symbol data
 		private uint mainMenuDialogOffset;
 		private uint guiVisibleOffset;
 		private uint pauseLevelOffset;
 
 		private uint comStringSizeOffset;
 		private uint comStringStrOffset;
+		#endregion
 
 		internal BaseEngineAccessor(ScummVMConnector connector, uint engineAddr) {
 			this.Connector = connector;

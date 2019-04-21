@@ -4,12 +4,15 @@ using System.IO;
 
 namespace DrainLib.Engines {
 	public class QueenEngineAccessor : BaseEngineAccessor {
+
+		#region Symbol data
 		private uint logicOffset;
 		private uint currentRoomOffset;
 		private uint gameStateOffset;
 		private const uint gameStateCount = 211;
 		private uint numItemsOffset;
 		private uint itemDataOffset;
+		#endregion
 
 		internal QueenEngineAccessor(ScummVMConnector connector, uint engineAddr) : base(connector, engineAddr) {
 		}

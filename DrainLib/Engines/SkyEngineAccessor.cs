@@ -3,9 +3,12 @@ using System.Collections.Generic;
 
 namespace DrainLib.Engines {
 	public class SkyEngineAccessor : BaseEngineAccessor {
+
+		#region Symbol data
 		private uint logicOffset;
 		private uint scriptVarsOffset;
 		private const uint numScriptVars = 838;
+		#endregion
 
 		internal SkyEngineAccessor(ScummVMConnector connector, uint engineAddr) : base(connector, engineAddr) {
 		}

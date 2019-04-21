@@ -5,6 +5,8 @@ using System.Diagnostics;
 
 namespace DrainLib.Engines {
 	public class PinkEngineAccessor : ADBaseEngineAccessor {
+
+		#region Symbol data
 		private uint moduleOffset;
 		private uint gameVarsOffset;
 		private uint objNameOffset;
@@ -21,6 +23,7 @@ namespace DrainLib.Engines {
 		private uint pagesArrOffset;
 		private uint pagesArrSizeOffset;
 		private uint pagesArrStorageOffset;
+		#endregion
 
 		internal PinkEngineAccessor(ScummVMConnector connector, uint engineAddr) : base(connector, engineAddr) {
 		}
