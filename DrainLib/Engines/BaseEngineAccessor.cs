@@ -22,6 +22,10 @@ namespace DrainLib.Engines {
 
 		//Com::File
 		private uint comFileNameOffset;
+
+		//Com::Rational
+		private uint comRationalNumOffset;
+		private uint comRationalDenomOffset;
 		#endregion
 
 		internal BaseEngineAccessor(ScummVMConnector connector, uint engineAddr) {
@@ -52,6 +56,10 @@ namespace DrainLib.Engines {
 
 			var comFileClSymb = Connector.resolver.FindClass("Common::File");
 			comFileNameOffset = Connector.resolver.FieldOffset(comFileClSymb, "_name");
+
+			var comRationalClSymb = Connector.resolver.FindClass("Common::Rational");
+			comRationalNumOffset = Connector.resolver.FieldOffset(comRationalClSymb, "_num");
+			comRationalDenomOffset = Connector.resolver.FieldOffset(comRationalClSymb, "_denom");
 		}
 
 		internal abstract void LoadSymbols();
@@ -95,9 +103,31 @@ namespace DrainLib.Engines {
 			return ReadComString(fileAddr + comFileNameOffset);
 		}
 
+		protected Rational ReadRational(uint rationalAddr) {
+			Rational r;
+			r.Numerator = Connector.memoryReader.ReadInt32(rationalAddr + comRationalNumOffset);
+			r.Denominator = Connector.memoryReader.ReadInt32(rationalAddr + comRationalDenomOffset);
+			return r;
+		}
+
 		public virtual VideoState GetVideoState() { return null; }
 
 		public abstract string GameId { get; }
+
+		public struct Rational {
+			public int Numerator;
+			public int Denominator;
+
+			public float ToFloat() {
+				return (float)Numerator / Denominator;
+			}
+			public double ToDouble() {
+				return (double)Numerator / Denominator;
+			}
+
+			public static explicit operator float(Rational r) { return r.ToFloat(); }
+			public static explicit operator double(Rational r) { return r.ToDouble(); }
+		}
 	}
 
 	public class VideoState {
