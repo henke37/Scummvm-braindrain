@@ -11,10 +11,12 @@ namespace DrainLib.Engines {
 		protected uint EngineAddr;
 
 		#region Symbol data
+		//Engine
 		private uint mainMenuDialogOffset;
 		private uint guiVisibleOffset;
 		private uint pauseLevelOffset;
 
+		//Com::String
 		private uint comStringSizeOffset;
 		private uint comStringStrOffset;
 		#endregion
@@ -79,6 +81,15 @@ namespace DrainLib.Engines {
 			return new string(Encoding.UTF8.GetChars(strBytes));
 		}
 
+		public virtual VideoState GetVideoState() { return null; }
+
 		public abstract string GameId { get; }
+	}
+
+	public class VideoState {
+		public uint CurrentFrame;
+		public uint FrameCount;
+		public int FrameRate;
+		public string FileName;
 	}
 }

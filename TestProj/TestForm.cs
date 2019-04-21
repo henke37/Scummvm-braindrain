@@ -32,12 +32,14 @@ namespace TestProj {
 				statusTxt.Text = "Main menu open";
 				return;
 			}
-			if(engine is ScummEngineAccessor scummEngine) {
-				var smush = scummEngine.GetSmushState();
-				if(smush!=null) {
-					statusTxt.Text = $"{smush.File} {smush.CurrentFrame}/{smush.FrameCount}";
+			{
+				var video = engine.GetVideoState();
+				if(video!=null) {
+					statusTxt.Text = $"{video.FileName} {video.CurrentFrame}/{video.FrameCount}";
 					return;
 				}
+			}
+			if(engine is ScummEngineAccessor scummEngine) {
 			}
 			if(engine is PinkEngineAccessor pinkEngine) {
 				var state = pinkEngine.GetPinkState();

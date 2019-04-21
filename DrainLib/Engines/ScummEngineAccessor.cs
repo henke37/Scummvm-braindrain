@@ -138,7 +138,7 @@ namespace DrainLib.Engines {
 			return settings;
 		}
 
-		public SmushState GetSmushState() {
+		public override VideoState GetVideoState() {
 			if(GameSettings.Version < 7) return null;
 
 			var active = Connector.memoryReader.ReadByte(EngineAddr + smushActiveOffset) != 0;
@@ -146,11 +146,11 @@ namespace DrainLib.Engines {
 
 			var addr = Connector.memoryReader.ReadUInt32(EngineAddr + smushPlayerOffset);
 
-			var state = new SmushState();
+			var state = new VideoState();
 			state.CurrentFrame = Connector.memoryReader.ReadUInt32(addr + smushPlayerFrameOffset);
 			state.FrameCount = Connector.memoryReader.ReadUInt32(addr + smushPlayerNBFramesOffset);
 			state.FrameRate = Connector.memoryReader.ReadInt32(addr + smushPlayerSpeedOffset);
-			state.File = ReadComString(addr + smushPlayerSeekFileOffset);
+			state.FileName = ReadComString(addr + smushPlayerSeekFileOffset);
 			return state;
 		}
 
@@ -307,14 +307,6 @@ namespace DrainLib.Engines {
 		}
 
 		internal byte[] bitVarData;
-	}
-
-	[Serializable]
-	public class SmushState {
-		public uint CurrentFrame;
-		public uint FrameCount;
-		public int FrameRate;
-		public string File;
 	}
 
 	[Serializable]
