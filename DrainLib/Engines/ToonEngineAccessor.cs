@@ -28,6 +28,7 @@ namespace DrainLib.Engines {
 		//Video track
 		private uint smkTrackCurFrameOffset;
 		private uint smkTrackFrameCountOffset;
+		private uint smkTrackFrameRateOffset;
 		#endregion
 
 		internal ToonEngineAccessor(ScummVMConnector connector, uint engineAddr) : base(connector, engineAddr) {
@@ -62,6 +63,7 @@ namespace DrainLib.Engines {
 			var smkVideoTrackClSymb = Connector.resolver.FindNestedClass(smkDecClSymb, "SmackerVideoTrack");
 			smkTrackCurFrameOffset = Connector.resolver.FieldOffset(smkVideoTrackClSymb, "_curFrame");
 			smkTrackFrameCountOffset = Connector.resolver.FieldOffset(smkVideoTrackClSymb, "_frameCount");
+			smkTrackFrameRateOffset = Connector.resolver.FieldOffset(smkVideoTrackClSymb, "_frameRate");
 		}
 
 		public ToonState GetState() {
@@ -90,6 +92,7 @@ namespace DrainLib.Engines {
 			state.FileName = ReadFileName(fileStreamPtrVal);
 			state.CurrentFrame = Connector.memoryReader.ReadUInt32(videoTrackPtrVal + smkTrackCurFrameOffset);
 			state.FrameCount = (uint)Connector.memoryReader.ReadInt32(videoTrackPtrVal + smkTrackFrameCountOffset);
+			state.FrameRate=(float)ReadRational(videoTrackPtrVal + smkTrackFrameRateOffset);
 			return state;
 		}
 
