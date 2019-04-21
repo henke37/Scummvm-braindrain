@@ -19,6 +19,9 @@ namespace DrainLib.Engines {
 		//Com::String
 		private uint comStringSizeOffset;
 		private uint comStringStrOffset;
+
+		//Com::File
+		private uint comFileNameOffset;
 		#endregion
 
 		internal BaseEngineAccessor(ScummVMConnector connector, uint engineAddr) {
@@ -46,6 +49,9 @@ namespace DrainLib.Engines {
 			var comStringSymb = Connector.resolver.FindClass("Common::String");
 			comStringSizeOffset = Connector.resolver.FieldOffset(comStringSymb, "_size");
 			comStringStrOffset = Connector.resolver.FieldOffset(comStringSymb, "_str");
+
+			var comFileClSymb = Connector.resolver.FindClass("Common::File");
+			comFileNameOffset = Connector.resolver.FieldOffset(comFileClSymb, "_name");
 		}
 
 		internal abstract void LoadSymbols();
@@ -79,6 +85,14 @@ namespace DrainLib.Engines {
 
 			var strBytes=Connector.memoryReader.ReadBytes(strPtr, size);
 			return new string(Encoding.UTF8.GetChars(strBytes));
+		}
+
+		protected string ReadFileName(uint streamAddr) {
+			if(!Connector.rttiReader.TryDynamicCast(streamAddr, ".?AVFile@Common@@", out var fileAddr)) return null;
+			return ReadFileNameInternal(fileAddr);
+		}
+		protected string ReadFileNameInternal(uint fileAddr) {
+			return ReadComString(fileAddr + comFileNameOffset);
 		}
 
 		public virtual VideoState GetVideoState() { return null; }

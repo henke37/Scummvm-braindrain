@@ -54,6 +54,12 @@ namespace TestProj {
 			if(engine is SkyEngineAccessor skyEngine) {
 				var state = skyEngine.GetState();
 			}
+			if(engine is ToonEngineAccessor toonEngine) {
+				var state = toonEngine.GetState();
+
+				statusTxt.Text = $"{state.CurrentScene}";
+				return;
+			}
 			statusTxt.Text = engine.GameId;
 		}
 
