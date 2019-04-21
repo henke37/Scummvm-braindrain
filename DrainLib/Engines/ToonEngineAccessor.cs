@@ -22,7 +22,12 @@ namespace DrainLib.Engines {
 		//Movie
 		private uint moviePlayingOffset;
 		private uint movieDecoderOffset;
+		//Decoder
 		private uint smkDecFileStreamOffset;
+		private uint videoDecNextVideoTrackOffset;
+		//Video track
+		private uint smkTrackCurFrameOffset;
+		private uint smkTrackFrameCountOffset;
 		#endregion
 
 		internal ToonEngineAccessor(ScummVMConnector connector, uint engineAddr) : base(connector, engineAddr) {
@@ -50,6 +55,13 @@ namespace DrainLib.Engines {
 
 			var smkDecClSymb = Connector.resolver.FindClass("Video::SmackerDecoder");
 			smkDecFileStreamOffset = Connector.resolver.FieldOffset(smkDecClSymb, "_fileStream");
+
+			var videoDecClSymb = Connector.resolver.FindClass("Video::VideoDecoder");
+			videoDecNextVideoTrackOffset = Connector.resolver.FieldOffset(videoDecClSymb, "_nextVideoTrack");
+
+			var smkVideoTrackClSymb = Connector.resolver.FindNestedClass(smkDecClSymb, "SmackerVideoTrack");
+			smkTrackCurFrameOffset = Connector.resolver.FieldOffset(smkVideoTrackClSymb, "_curFrame");
+			smkTrackFrameCountOffset = Connector.resolver.FieldOffset(smkVideoTrackClSymb, "_frameCount");
 		}
 
 		public ToonState GetState() {
@@ -72,10 +84,12 @@ namespace DrainLib.Engines {
 			if(!playing) return null;
 			var decoderPtrVal = Connector.memoryReader.ReadUInt32(moviePlayerPtrVal + movieDecoderOffset);
 			var fileStreamPtrVal = Connector.memoryReader.ReadUInt32(decoderPtrVal + smkDecFileStreamOffset);
+			var videoTrackPtrVal = Connector.memoryReader.ReadUInt32(decoderPtrVal + videoDecNextVideoTrackOffset);
 
 			var state = new VideoState();
 			state.FileName = ReadFileName(fileStreamPtrVal);
-
+			state.CurrentFrame = Connector.memoryReader.ReadUInt32(videoTrackPtrVal + smkTrackCurFrameOffset);
+			state.FrameCount = (uint)Connector.memoryReader.ReadInt32(videoTrackPtrVal + smkTrackFrameCountOffset);
 			return state;
 		}
 
