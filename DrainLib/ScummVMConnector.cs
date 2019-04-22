@@ -70,6 +70,9 @@ namespace DrainLib {
 			if(rttiReader.HasBaseClass(enginePtrVal, ".?AVPinkEngine@Pink@@")) {
 				return new PinkEngineAccessor(this, enginePtrVal);
 			}
+			if(rttiReader.HasBaseClass(enginePtrVal, ".?AVDrasculaEngine@Drascula@@")) {
+				return new DrasculaEngineAccessor(this, enginePtrVal);
+			}
 
 			return new UnknownEngineAccessor(this, enginePtrVal);
 		}

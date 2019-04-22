@@ -60,6 +60,12 @@ namespace TestProj {
 				statusTxt.Text = $"{state.CurrentScene}";
 				return;
 			}
+			if(engine is DrasculaEngineAccessor drasculaEngine) {
+				var state = drasculaEngine.GetState();
+
+				statusTxt.Text = $"{state.RoomNumber}";
+				return;
+			}
 			statusTxt.Text = engine.GameId;
 		}
 
