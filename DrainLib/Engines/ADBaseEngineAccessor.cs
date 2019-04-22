@@ -8,12 +8,14 @@ namespace DrainLib.Engines {
 		private uint flagsOffset;
 
 		private uint descOffset;
+		private bool descIsPointer;
 
 		internal ADBaseEngineAccessor(ScummVMConnector connector, uint engineAddr) : base(connector, engineAddr) {
 		}
 
-		protected void LoadADSymbols(uint descOffset) {
+		protected void LoadADSymbols(uint descOffset, bool descIsPointer) {
 			this.descOffset = descOffset;
+			this.descIsPointer = descIsPointer;
 
 			var descSymb = Connector.resolver.FindClass("ADGameDescription");
 			gameIdOffset = Connector.resolver.FieldOffset(descSymb, "gameId");
@@ -25,7 +27,9 @@ namespace DrainLib.Engines {
 
 		protected ADGameDescriptor GetGameDescriptor() {
 			var addr = EngineAddr + descOffset;
-			addr = Connector.memoryReader.ReadUInt32(addr);
+			if(descIsPointer) {
+				addr = Connector.memoryReader.ReadUInt32(addr);
+			}
 
 			var gameDesc = new ADGameDescriptor();
 

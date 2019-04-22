@@ -54,7 +54,7 @@ namespace DrainLib.Engines {
 			var pageSymb = Connector.resolver.FindClass("Pink::GamePage");
 			pageVariablesOffset = Connector.resolver.FieldOffset(pageSymb,"_variables");
 
-			LoadADSymbols(descOffset);
+			LoadADSymbols(descOffset, false);
 
 			LoadStringMapSymbols();
 		}
