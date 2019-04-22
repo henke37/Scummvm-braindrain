@@ -80,7 +80,8 @@ namespace TestProj {
 				}
 			}
 
-			if(engine == null || !engine.IsActiveEngine) {
+			if(!engine.IsActiveEngine) engine = null;
+			if(engine == null) {
 				engine = connector.GetEngine();
 			}
 			if(engine == null) return;
