@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace DrainLib.Engines {
 	public abstract class ADBaseEngineAccessor : BaseEngineAccessor {
-		private uint gameIdOffset;
-		private uint extraOffset;
-		private uint flagsOffset;
+		private uint adGameIdOffset;
+		private uint adExtraOffset;
+		private uint adFlagsOffset;
 
 		private uint descOffset;
 		private bool descIsPointer;
@@ -18,9 +18,9 @@ namespace DrainLib.Engines {
 			this.descIsPointer = descIsPointer;
 
 			var descSymb = Connector.resolver.FindClass("ADGameDescription");
-			gameIdOffset = Connector.resolver.FieldOffset(descSymb, "gameId");
-			extraOffset = Connector.resolver.FieldOffset(descSymb, "extra");
-			flagsOffset = Connector.resolver.FieldOffset(descSymb, "flags");
+			adGameIdOffset = Connector.resolver.FieldOffset(descSymb, "gameId");
+			adExtraOffset = Connector.resolver.FieldOffset(descSymb, "extra");
+			adFlagsOffset = Connector.resolver.FieldOffset(descSymb, "flags");
 		}
 
 		public override string GameId => GetGameDescriptor().GameId;
@@ -33,11 +33,11 @@ namespace DrainLib.Engines {
 
 			var gameDesc = new ADGameDescriptor();
 
-			uint gameIdVal = Connector.memoryReader.ReadUInt32(addr + gameIdOffset);
+			uint gameIdVal = Connector.memoryReader.ReadUInt32(addr + adGameIdOffset);
 			gameDesc.GameId = gameIdVal == 0 ? "" : Connector.memoryReader.ReadNullTermString(gameIdVal);
-			uint extraVal = Connector.memoryReader.ReadUInt32(addr + extraOffset);
+			uint extraVal = Connector.memoryReader.ReadUInt32(addr + adExtraOffset);
 			gameDesc.Extra = extraVal == 0 ? "" : Connector.memoryReader.ReadNullTermString(extraVal);
-			uint flagsVal = Connector.memoryReader.ReadUInt32(addr + flagsOffset);
+			uint flagsVal = Connector.memoryReader.ReadUInt32(addr + adFlagsOffset);
 			gameDesc.GameFlags = (GameFlags)flagsVal;
 
 			return gameDesc;
