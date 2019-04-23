@@ -21,9 +21,15 @@ namespace ScummResearchForm {
 			InitializeComponent();
 
 			connector = new ScummVMConnector();
-			Update();
 
 			differ = new ScummDiffer();
+			differ.DifferenceFound += Differ_DifferenceFound;
+
+			Update();
+		}
+
+		private void Differ_DifferenceFound(string varName, object oldVal, object newVal) {
+			outputBox.AppendText($"{varName} {oldVal} -> {newVal}\n");
 		}
 
 		private void UpdateConnector() {
@@ -37,7 +43,7 @@ namespace ScummResearchForm {
 				}
 			}
 
-			if(!engine.IsActiveEngine) engine = null;
+			if(engine != null && !engine.IsActiveEngine) engine = null;
 			if(engine == null) {
 				engine = connector.GetEngine();
 			}

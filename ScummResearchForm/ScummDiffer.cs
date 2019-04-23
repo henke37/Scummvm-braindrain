@@ -9,7 +9,7 @@ namespace ScummResearchForm {
 
 		Dictionary<int, bool> ignoredVars;
 
-		event Action<string, object, object> DifferenceFound;
+		public event Action<string, object, object> DifferenceFound;
 
 		public ScummDiffer() {
 			ignoredVars = new Dictionary<int, bool>();
