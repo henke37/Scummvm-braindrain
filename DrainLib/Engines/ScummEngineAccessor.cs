@@ -306,7 +306,7 @@ namespace DrainLib.Engines {
 			return (bitVarData[varNum / 8] >> ((int)(varNum % 8))) != 0;
 		}
 
-		internal byte[] bitVarData;
+		public byte[] bitVarData;
 	}
 
 	[Serializable]

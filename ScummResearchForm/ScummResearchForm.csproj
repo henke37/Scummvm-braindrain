@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ScummDiffer.cs" />
     <Compile Include="ScummResearchForm.cs">
       <SubType>Form</SubType>
     </Compile>

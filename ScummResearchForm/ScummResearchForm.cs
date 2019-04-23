@@ -15,12 +15,15 @@ namespace ScummResearchForm {
 	public partial class ScummResearchForm : Form {
 		private ScummVMConnector connector;
 		private BaseEngineAccessor engine;
+		private ScummDiffer differ;
 
 		public ScummResearchForm() {
 			InitializeComponent();
 
 			connector = new ScummVMConnector();
 			Update();
+
+			differ = new ScummDiffer();
 		}
 
 		private void UpdateConnector() {
@@ -43,6 +46,12 @@ namespace ScummResearchForm {
 
 		private new void Update() {
 			UpdateConnector();
+			var scummEngine = engine as ScummEngineAccessor;
+			if(scummEngine == null) return;
+
+			var state = scummEngine.GetScummState();
+
+			differ.diff(state);
 		}
 
 		private void UpdateTimer_Tick(object sender, EventArgs e) {
