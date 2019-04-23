@@ -9,6 +9,8 @@ namespace ScummResearchForm {
 
 		Dictionary<int, bool> ignoredVars;
 
+		event Action<string, object, object> DifferenceFound;
+
 		public ScummDiffer() {
 			ignoredVars = new Dictionary<int, bool>();
 		}
@@ -27,6 +29,8 @@ namespace ScummResearchForm {
 				var newVal = state.ScummVars[varIndex];
 				var oldVal = prevState.ScummVars[varIndex];
 				if(newVal == oldVal) continue;
+
+				DifferenceFound?.Invoke($"scummvar{varIndex}", oldVal, newVal);
 			}
 
 			for(var bitVarByte=0; bitVarByte < state.bitVarData.Length;bitVarByte++) {
@@ -35,10 +39,12 @@ namespace ScummResearchForm {
 				if(newData == oldData) continue;
 
 				//bit juggling to extract the actual changed bitvars
-				for(var bitIndex=0;bitIndex<7;++bitIndex) {
+				for(var bitIndex=0;bitIndex<8;++bitIndex) {
 					bool newBit = (newData & 1 << bitIndex) != 0;
 					bool oldBit = (oldData & 1 << bitIndex) != 0;
 					if(newBit == oldBit) continue;
+
+					DifferenceFound?.Invoke($"bitvar{bitVarByte*8+bitIndex}", oldBit, newBit);
 				}
 			}
 		}
