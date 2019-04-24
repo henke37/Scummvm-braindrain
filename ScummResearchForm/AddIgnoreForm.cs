@@ -18,10 +18,6 @@ namespace ScummResearchForm {
 
 		private void VarNameTxt_KeyDown(object sender, KeyEventArgs e) {
 			switch(e.KeyCode) {
-				case Keys.Enter:
-					e.Handled = true;
-					AddButton.PerformClick();
-					break;
 				case Keys.Escape:
 					e.Handled = true;
 					Close();

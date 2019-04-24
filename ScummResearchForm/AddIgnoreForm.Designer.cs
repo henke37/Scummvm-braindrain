@@ -48,12 +48,15 @@
 			// 
 			// AddIgnoreForm
 			// 
+			this.AcceptButton = this.AddButton;
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(156, 73);
 			this.Controls.Add(this.VarNameTxt);
 			this.Controls.Add(this.AddButton);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+			this.MaximizeBox = false;
+			this.MinimizeBox = false;
 			this.Name = "AddIgnoreForm";
 			this.ShowIcon = false;
 			this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
