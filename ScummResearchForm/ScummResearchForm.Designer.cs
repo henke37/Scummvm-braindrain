@@ -30,6 +30,10 @@
 			this.UpdateTimer = new System.Windows.Forms.Timer(this.components);
 			this.outputBox = new System.Windows.Forms.TextBox();
 			this.IgnoreListBox = new System.Windows.Forms.CheckedListBox();
+			this.SaveButton = new System.Windows.Forms.ToolStripButton();
+			this.LoadButton = new System.Windows.Forms.ToolStripButton();
+			this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
+			this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
 			splitContainer1 = new System.Windows.Forms.SplitContainer();
 			toolStrip1 = new System.Windows.Forms.ToolStrip();
 			AddIgnoreBtn = new System.Windows.Forms.ToolStripButton();
@@ -80,7 +84,9 @@
 			// toolStrip1
 			// 
 			toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            AddIgnoreBtn});
+            AddIgnoreBtn,
+            this.SaveButton,
+            this.LoadButton});
 			toolStrip1.Location = new System.Drawing.Point(0, 0);
 			toolStrip1.Name = "toolStrip1";
 			toolStrip1.Size = new System.Drawing.Size(365, 25);
@@ -104,6 +110,32 @@
 			AddIgnoreBtn.Size = new System.Drawing.Size(33, 22);
 			AddIgnoreBtn.Text = "Add";
 			AddIgnoreBtn.Click += new System.EventHandler(this.AddIgnore_Click);
+			// 
+			// SaveButton
+			// 
+			this.SaveButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+			this.SaveButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.SaveButton.Name = "SaveButton";
+			this.SaveButton.Size = new System.Drawing.Size(35, 22);
+			this.SaveButton.Text = "Save";
+			this.SaveButton.Click += new System.EventHandler(this.SaveButton_Click);
+			// 
+			// LoadButton
+			// 
+			this.LoadButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+			this.LoadButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.LoadButton.Name = "LoadButton";
+			this.LoadButton.Size = new System.Drawing.Size(37, 22);
+			this.LoadButton.Text = "Load";
+			this.LoadButton.Click += new System.EventHandler(this.LoadButton_Click);
+			// 
+			// saveFileDialog
+			// 
+			this.saveFileDialog.DefaultExt = "txt";
+			// 
+			// openFileDialog
+			// 
+			this.openFileDialog.DefaultExt = "txt";
 			// 
 			// ScummResearchForm
 			// 
@@ -130,6 +162,10 @@
 		private System.Windows.Forms.Timer UpdateTimer;
 		private System.Windows.Forms.TextBox outputBox;
 		private System.Windows.Forms.CheckedListBox IgnoreListBox;
+		private System.Windows.Forms.ToolStripButton SaveButton;
+		private System.Windows.Forms.ToolStripButton LoadButton;
+		private System.Windows.Forms.SaveFileDialog saveFileDialog;
+		private System.Windows.Forms.OpenFileDialog openFileDialog;
 	}
 }
 

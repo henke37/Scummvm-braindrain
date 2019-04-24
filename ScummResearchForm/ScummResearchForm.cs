@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -78,7 +79,7 @@ namespace ScummResearchForm {
 		}
 
 		internal void AddIgnore(string varName) {
-			IgnoreListBox.Items.Add(varName,true);
+			IgnoreListBox.Items.Add(varName, true);
 			RebuildIgnoreLists();
 		}
 
@@ -102,6 +103,34 @@ namespace ScummResearchForm {
 					continue;
 				}
 			}
+		}
+
+		private void SaveButton_Click(object sender, EventArgs e) {
+			var res = saveFileDialog.ShowDialog(this);
+			if(res == DialogResult.Cancel) return;
+
+			using(var w=new StreamWriter(saveFileDialog.OpenFile())) {
+				foreach(string item in IgnoreListBox.Items) {
+					w.WriteLine(item);
+				}
+			}
+		}
+
+		private void LoadButton_Click(object sender, EventArgs e) {
+			var res = openFileDialog.ShowDialog(this);
+			if(res == DialogResult.Cancel) return;
+
+			IgnoreListBox.Items.Clear();
+
+			using(var r = new StreamReader(openFileDialog.OpenFile())) {
+				while(!r.EndOfStream) {
+					string line=r.ReadLine();
+					IgnoreListBox.Items.Add(line, true);
+				}
+			}
+			RebuildIgnoreLists();
+
+			saveFileDialog.FileName = openFileDialog.FileName;
 		}
 	}
 }
