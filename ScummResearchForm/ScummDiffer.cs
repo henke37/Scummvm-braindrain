@@ -7,12 +7,14 @@ namespace ScummResearchForm {
 
 		ScummState prevState;
 
-		Dictionary<int, bool> ignoredVars;
+		public Dictionary<int, bool> IgnoredVars;
+		public Dictionary<int, bool> IgnoredBitVars;
 
 		public event Action<string, object, object> DifferenceFound;
 
 		public ScummDiffer() {
-			ignoredVars = new Dictionary<int, bool>();
+			IgnoredVars = new Dictionary<int, bool>();
+			IgnoredBitVars = new Dictionary<int, bool>();
 		}
 
 		internal void diff(ScummState state) {
@@ -25,7 +27,7 @@ namespace ScummResearchForm {
 
 		private void diffInternal(ScummState state) {
 			for(var varIndex=0;varIndex<state.ScummVars.Length;++varIndex) {
-				if(ignoredVars.ContainsKey(varIndex)) continue;
+				if(IgnoredVars.ContainsKey(varIndex)) continue;
 				var newVal = state.ScummVars[varIndex];
 				var oldVal = prevState.ScummVars[varIndex];
 				if(newVal == oldVal) continue;
@@ -40,11 +42,13 @@ namespace ScummResearchForm {
 
 				//bit juggling to extract the actual changed bitvars
 				for(var bitIndex=0;bitIndex<8;++bitIndex) {
-					bool newBit = (newData & 1 << bitIndex) != 0;
-					bool oldBit = (oldData & 1 << bitIndex) != 0;
+					int varIndex = bitVarByte * 8 + bitIndex;
+					if(IgnoredBitVars.ContainsKey(varIndex)) continue;
+					bool newBit = (newData & (1 << bitIndex)) != 0;
+					bool oldBit = (oldData & (1 << bitIndex)) != 0;
 					if(newBit == oldBit) continue;
 
-					DifferenceFound?.Invoke($"bitvar{bitVarByte*8+bitIndex}", oldBit, newBit);
+					DifferenceFound?.Invoke($"bitvar{varIndex}", oldBit, newBit);
 				}
 			}
 		}

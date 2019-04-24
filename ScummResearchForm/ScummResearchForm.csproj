@@ -46,6 +46,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AddIgnoreForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AddIgnoreForm.Designer.cs">
+      <DependentUpon>AddIgnoreForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="ScummDiffer.cs" />
     <Compile Include="ScummResearchForm.cs">
       <SubType>Form</SubType>
@@ -55,6 +61,9 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="AddIgnoreForm.resx">
+      <DependentUpon>AddIgnoreForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
