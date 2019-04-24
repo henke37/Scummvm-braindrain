@@ -22,6 +22,10 @@ namespace ScummResearchForm {
 					e.Handled = true;
 					AddButton.PerformClick();
 					break;
+				case Keys.Escape:
+					e.Handled = true;
+					Close();
+					break;
 			}
 		}
 	}
