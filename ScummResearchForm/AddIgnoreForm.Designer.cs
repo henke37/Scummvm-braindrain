@@ -29,6 +29,7 @@
 			// 
 			// AddButton
 			// 
+			this.AddButton.DialogResult = System.Windows.Forms.DialogResult.OK;
 			this.AddButton.Location = new System.Drawing.Point(12, 39);
 			this.AddButton.Name = "AddButton";
 			this.AddButton.Size = new System.Drawing.Size(75, 23);
@@ -43,6 +44,7 @@
 			this.VarNameTxt.Name = "VarNameTxt";
 			this.VarNameTxt.Size = new System.Drawing.Size(128, 20);
 			this.VarNameTxt.TabIndex = 1;
+			this.VarNameTxt.KeyDown += new System.Windows.Forms.KeyEventHandler(this.VarNameTxt_KeyDown);
 			// 
 			// AddIgnoreForm
 			// 
