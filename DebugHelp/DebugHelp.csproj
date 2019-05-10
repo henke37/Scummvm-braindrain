@@ -51,11 +51,10 @@
   <ItemGroup>
     <Compile Include="IncompleteReadException.cs" />
     <Compile Include="IncompleteWriteException.cs" />
-    <Compile Include="LiveProcessMemoryReader.cs" />
-    <Compile Include="LiveProcessMemoryWriter.cs" />
+    <Compile Include="LiveProcessMemoryAccessor.cs" />
     <Compile Include="NameSearchOptions.cs" />
     <Compile Include="ProcessMemoryReader.cs" />
-    <Compile Include="ProcessMemoryWriter.cs" />
+    <Compile Include="ProcessMemoryAccessor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources.Designer.cs">
       <AutoGen>True</AutoGen>

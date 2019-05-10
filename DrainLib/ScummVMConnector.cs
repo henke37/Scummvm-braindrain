@@ -32,7 +32,7 @@ namespace DrainLib {
 				string pdbPath = process.MainModule.FileName.Replace(".exe", ".pdb");
 				resolver = new SymbolResolver(pdbPath);
 
-				memoryReader = new LiveProcessMemoryReader(process);
+				memoryReader = new LiveProcessMemoryAccessor(process);
 				rttiReader = new RTTIReader(memoryReader);
 
 				var g_engineSymb = resolver.FindGlobal("g_engine");

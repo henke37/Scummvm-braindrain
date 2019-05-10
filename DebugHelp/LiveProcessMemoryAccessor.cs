@@ -6,10 +6,10 @@ using System.Security;
 using System.Security.Permissions;
 
 namespace DebugHelp {
-	public sealed class LiveProcessMemoryReader : ProcessMemoryReader {
+	public sealed class LiveProcessMemoryAccessor : ProcessMemoryAccessor {
 		private Process process;
 
-		public LiveProcessMemoryReader(Process process) {
+		public LiveProcessMemoryAccessor(Process process) {
 			this.process = process;
 		}
 
@@ -42,6 +42,36 @@ namespace DebugHelp {
 				throw new IncompleteReadException(err);
 			}
 		}
+
+		public override unsafe void WriteBytes(byte[] srcBuff, uint dstAddr, uint size) {
+			try {
+				fixed (byte* buffP = srcBuff) {
+					bool success = WriteProcessMemory(process.Handle, (IntPtr)dstAddr, buffP, size, out var written);
+					if(!success) throw new Win32Exception();
+				}
+			} catch(Win32Exception err) when(err.NativeErrorCode == IncompleteWriteException.ErrorNumber) {
+				throw new IncompleteWriteException(err);
+			}
+		}
+
+		[SecurityCritical]
+		public override unsafe void WriteBytes(void* srcBuff, uint dstAddr, uint size) {
+			try {
+				bool success = WriteProcessMemory(process.Handle, (IntPtr)dstAddr, (byte*)srcBuff, size, out var written);
+				if(!success) throw new Win32Exception();
+			} catch(Win32Exception err) when(err.NativeErrorCode == IncompleteWriteException.ErrorNumber) {
+				throw new IncompleteWriteException(err);
+			}
+		}
+
+		[DllImport("kernel32.dll", SetLastError = true)]
+		public static unsafe extern bool WriteProcessMemory(
+		  IntPtr hProcess,
+		  IntPtr lpBaseAddress,
+		  byte* lpBuffer,
+		  UInt32 nSize,
+		  out IntPtr lpNumberOfBytesWritten
+		);
 
 		[DllImport("kernel32.dll", SetLastError = true)]
 		unsafe static extern private bool ReadProcessMemory(

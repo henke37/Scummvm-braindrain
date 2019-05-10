@@ -18,7 +18,7 @@ namespace DebugHelp {
 
 		[SecurityCritical]
 		public virtual unsafe void ReadBytes(uint addr, uint size, void* buff) {
-			Byte[] buffArr = GetReadBuff(size);
+			Byte[] buffArr = GetScratchBuff(size);
 			ReadBytes(addr, size, buffArr);
 			Marshal.Copy(buffArr, 0, (IntPtr)buff, (int)size);
 		}
@@ -90,7 +90,7 @@ namespace DebugHelp {
 
 		public void ReadInt16Array(uint addr, uint count, short[] arr) {
 			uint byteC = count * 2;
-			Byte[] buff = GetReadBuff(byteC);
+			Byte[] buff = GetScratchBuff(byteC);
 
 			ReadBytes(addr, byteC, buff);
 
@@ -107,7 +107,7 @@ namespace DebugHelp {
 
 		public void ReadUint16Array(uint addr, uint count, ushort[] arr) {
 			uint byteC = count * 2;
-			Byte[] buff = GetReadBuff(byteC);
+			Byte[] buff = GetScratchBuff(byteC);
 
 			ReadBytes(addr, byteC, buff);
 
@@ -124,7 +124,7 @@ namespace DebugHelp {
 
 		public void ReadInt32Array(uint addr, uint count, int[] arr) {
 			uint byteC = count * 4;
-			Byte[] buff = GetReadBuff(byteC);
+			Byte[] buff = GetScratchBuff(byteC);
 
 			ReadBytes(addr, byteC, buff);
 
@@ -141,7 +141,7 @@ namespace DebugHelp {
 
 		public void ReadUInt32Array(uint addr, uint count, uint[] arr) {
 			uint byteC = count * 4;
-			Byte[] buff = GetReadBuff(byteC);
+			Byte[] buff = GetScratchBuff(byteC);
 
 			ReadBytes(addr, byteC, buff);
 
@@ -152,7 +152,7 @@ namespace DebugHelp {
 
 		protected Byte[] scratchBuff = new Byte[16];
 
-		protected byte[] GetReadBuff(uint count) {
+		protected byte[] GetScratchBuff(uint count) {
 			return count <= scratchBuff.Length ? scratchBuff : new byte[count];
 		}
 	}
