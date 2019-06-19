@@ -1,4 +1,4 @@
-﻿using DebugHelp;
+﻿using Henke37.DebugHelp;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;

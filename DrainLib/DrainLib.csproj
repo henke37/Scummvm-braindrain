@@ -37,6 +37,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DebugHelp, Version=1.1.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Henke37.DebugHelp.Core.1.1.1-alpha\lib\net452\DebugHelp.dll</HintPath>
+    </Reference>
     <Reference Include="Managed.Reflection, Version=0.2.1.0, Culture=neutral, PublicKeyToken=bd86223e467623e0, processorArchitecture=MSIL">
       <HintPath>..\packages\Managed.Reflection.0.2.1\lib\netstandard1.3\Managed.Reflection.dll</HintPath>
     </Reference>
@@ -60,6 +63,9 @@
     </Reference>
     <Reference Include="Microsoft.Win32.Primitives, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Win32.Primitives.4.3.0\lib\net46\Microsoft.Win32.Primitives.dll</HintPath>
+    </Reference>
+    <Reference Include="MSVCRTTI, Version=1.0.4.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Henke37.DebugHelp.RTTI.MSVC.1.0.4-alpha\lib\net452\MSVCRTTI.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -191,6 +197,9 @@
     <Reference Include="System.Xml.XPath.XDocument, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Xml.XPath.XDocument.4.3.0\lib\net46\System.Xml.XPath.XDocument.dll</HintPath>
     </Reference>
+    <Reference Include="Win32ProcessAccess, Version=1.0.4.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Henke37.DebugHelp.Win32.1.0.4-alpha\lib\net452\Win32ProcessAccess.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DrasculaEngineAccessor.cs" />
@@ -214,12 +223,6 @@
     <Analyzer Include="..\packages\Microsoft.CodeAnalysis.Analyzers.2.6.3\analyzers\dotnet\cs\Microsoft.CodeAnalysis.CSharp.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DebugHelp\DebugHelp.csproj">
-      <Project>{F95563D3-569B-4D59-BD8B-C9E69CD62FB7}</Project>
-      <Name>DebugHelp</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <COMReference Include="Dia2Lib">
       <Guid>{106173A0-0173-4E5C-84E7-E915422BE997}</Guid>
       <VersionMajor>2</VersionMajor>
@@ -229,6 +232,12 @@
       <Isolated>False</Isolated>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </COMReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\DebugHelp\PdbAccess\PdbAccess.csproj">
+      <Project>{0d3f2eb3-aaba-47c9-bc6b-3b6f1d900e53}</Project>
+      <Name>PdbAccess</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

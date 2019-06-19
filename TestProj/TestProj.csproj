@@ -33,6 +33,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DebugHelp, Version=1.1.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Henke37.DebugHelp.Core.1.1.1-alpha\lib\net452\DebugHelp.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -67,6 +70,7 @@
     <EmbeddedResource Include="TestForm.resx">
       <DependentUpon>TestForm.cs</DependentUpon>
     </EmbeddedResource>
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -81,10 +85,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DebugHelp\DebugHelp.csproj">
-      <Project>{F95563D3-569B-4D59-BD8B-C9E69CD62FB7}</Project>
-      <Name>DebugHelp</Name>
-    </ProjectReference>
     <ProjectReference Include="..\DrainLib\DrainLib.csproj">
       <Project>{3FADAE26-5A97-4B46-9730-6BF8502633E8}</Project>
       <Name>DrainLib</Name>

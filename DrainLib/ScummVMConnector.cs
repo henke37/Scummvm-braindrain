@@ -1,6 +1,6 @@
 ﻿
-using DebugHelp;
-using DebugHelp.RTTI;
+using Henke37.DebugHelp;
+using Henke37.DebugHelp.RTTI;
 using DrainLib.Engines;
 using System;
 using System.Collections.Generic;
@@ -10,6 +10,9 @@ using System.IO;
 using System.Reflection.Metadata;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
+using Henke37.DebugHelp.RTTI.MSVC;
+using Henke37.DebugHelp.Win32;
+using Henke37.DebugHelp.PdbAccess;
 
 namespace DrainLib {
 	public class ScummVMConnector {

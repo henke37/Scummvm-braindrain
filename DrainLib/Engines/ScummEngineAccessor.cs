@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using DebugHelp;
+using Henke37.DebugHelp;
 using Dia2Lib;
+using Henke37.DebugHelp.PdbAccess;
 
 namespace DrainLib.Engines {
 	public class ScummEngineAccessor : BaseEngineAccessor {
