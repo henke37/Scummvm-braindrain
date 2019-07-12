@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace DrainLib.Engines {
-	public class BladeRunnerEnginerAccessor : BaseEngineAccessor {
+	public class BladeRunnerEngineAccessor : BaseEngineAccessor {
 
 		#region Symbol data
 		//Engine
@@ -48,7 +48,7 @@ namespace DrainLib.Engines {
 		private readonly GameInfo gameInfo;
 
 
-		public BladeRunnerEnginerAccessor(ScummVMConnector connector, uint engineAddr) : base(connector, engineAddr) {
+		public BladeRunnerEngineAccessor(ScummVMConnector connector, uint engineAddr) : base(connector, engineAddr) {
 			gameInfo = GetGameInfo();
 		}
 

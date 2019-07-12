@@ -76,6 +76,9 @@ namespace DrainLib {
 			if(rttiReader.HasBaseClass(enginePtrVal, ".?AVDrasculaEngine@Drascula@@")) {
 				return new DrasculaEngineAccessor(this, enginePtrVal);
 			}
+			if(rttiReader.HasBaseClass(enginePtrVal, ".?AVBladeRunnerEngine@BladeRunner@@")) {
+				return new BladeRunnerEngineAccessor(this, enginePtrVal);
+			}
 
 			return new UnknownEngineAccessor(this, enginePtrVal);
 		}
