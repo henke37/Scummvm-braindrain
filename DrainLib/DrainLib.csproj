@@ -202,7 +202,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DrasculaEngineAccessor.cs" />
+    <Compile Include="Engines\DrasculaEngineAccessor.cs" />
     <Compile Include="Engines\ADBaseEngineAccessor.cs" />
     <Compile Include="Engines\BaseEngineAccessor.cs" />
     <Compile Include="Engines\PinkEngineAccessor.cs" />
