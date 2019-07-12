@@ -12,6 +12,7 @@ namespace DrainLib.Engines {
 		//Engine
 		private uint actorsOffset;
 		private uint gameVarsOffset;
+		private uint gameFlagsOffset;
 		private uint gameInfoOffset;
 		private uint cutContentOffset;
 
@@ -37,6 +38,10 @@ namespace DrainLib.Engines {
 		private uint infoGlobalVarCountOffset;
 		private uint infoCrimeCountOffset;
 		private uint infoSuspectCountOffset;
+
+		//GameFlags
+		private uint flagsFlagsOffset;
+		private uint flagsFlagCountOffset;
 		#endregion
 
 
@@ -70,6 +75,7 @@ namespace DrainLib.Engines {
 			var engSymb = Connector.resolver.FindClass("BladeRunner::BladeRunnerEngine");
 			actorsOffset = Connector.resolver.FieldOffset(engSymb, "_actors");
 			gameVarsOffset = Connector.resolver.FieldOffset(engSymb, "_gameVars");
+			gameFlagsOffset = Connector.resolver.FieldOffset(engSymb, "_gameFlags");
 			gameInfoOffset = Connector.resolver.FieldOffset(engSymb, "_gameInfo");
 			cutContentOffset = Connector.resolver.FieldOffset(engSymb, "_cutContent");
 
@@ -88,6 +94,11 @@ namespace DrainLib.Engines {
 			actorCluesCountOffset = Connector.resolver.FieldOffset(actorCluesSymb, "_count");
 
 			var clueSymb = Connector.resolver.FindNestedClass(actorCluesSymb, "Clue");
+
+			var flagsSymb = Connector.resolver.FindClass("BladeRunner::GameFlags");
+			flagsFlagsOffset = Connector.resolver.FieldOffset(flagsSymb, "_flags");
+			flagsFlagCountOffset = Connector.resolver.FieldOffset(flagsSymb, "_flagCount");
+
 			LoadGameInfoSymbols();
 		}
 
@@ -105,11 +116,21 @@ namespace DrainLib.Engines {
 		public GameState GetState() {
 			var state = new GameState();
 			state.CutContent = Connector.memoryReader.ReadByte(EngineAddr+cutContentOffset) != 0;
+			state.flagData = readGameFlagData();
 			return state;
+		}
+
+		private byte[] readGameFlagData() {
+			uint flagsObjPtrAddr = EngineAddr + gameFlagsOffset;
+			uint flagsObjAddr = Connector.memoryReader.ReadUInt32(flagsObjPtrAddr);
+			uint flagCount = Connector.memoryReader.ReadUInt32(flagsObjAddr + flagsFlagCountOffset);
+			uint flagsArrPtrVal = Connector.memoryReader.ReadUInt32(flagsObjAddr + flagsFlagsOffset);
+			return Connector.memoryReader.ReadBytes(flagsArrPtrVal, flagCount / 8 + 1);
 		}
 
 		public class GameState {
 			public bool CutContent;
+			internal byte[] flagData;
 		}
 
 		private class GameInfo {
