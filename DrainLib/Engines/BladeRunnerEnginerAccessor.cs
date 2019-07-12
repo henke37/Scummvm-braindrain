@@ -69,7 +69,7 @@ namespace DrainLib.Engines {
 			return info;
 		}
 
-		public override string GameId => throw new NotImplementedException();
+		public override string GameId => "bladerunner";
 
 		internal override void LoadSymbols() {
 			var engSymb = Connector.resolver.FindClass("BladeRunner::BladeRunnerEngine");
