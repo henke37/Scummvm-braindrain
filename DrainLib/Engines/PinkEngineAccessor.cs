@@ -7,25 +7,25 @@ namespace DrainLib.Engines {
 	public class PinkEngineAccessor : ADBaseEngineAccessor {
 
 		#region Symbol data
-		private uint moduleOffset;
-		private uint gameVarsOffset;
-		private uint objNameOffset;
-		private uint pageOffset;
-		private uint pagesOffset;
-		private uint moduleVariablesOffset;
-		private uint pageVariablesOffset;
+		private int moduleOffset;
+		private int gameVarsOffset;
+		private int objNameOffset;
+		private int pageOffset;
+		private int pagesOffset;
+		private int moduleVariablesOffset;
+		private int pageVariablesOffset;
 
-		private uint stringMapStorageOffset;
-		private uint stringMapMaskOffset;
-		private const uint StringMapNodeDummyVal = 1;
-		private uint stringMapNodeKeyOffset;
-		private uint stringMapNodeValueOffset;
-		private uint pagesArrOffset;
-		private uint pagesArrSizeOffset;
-		private uint pagesArrStorageOffset;
+		private int stringMapStorageOffset;
+		private int stringMapMaskOffset;
+		private readonly IntPtr StringMapNodeDummyVal = (IntPtr)1;
+		private int stringMapNodeKeyOffset;
+		private int stringMapNodeValueOffset;
+		private int pagesArrOffset;
+		private int pagesArrSizeOffset;
+		private int pagesArrStorageOffset;
 		#endregion
 
-		internal PinkEngineAccessor(ScummVMConnector connector, uint engineAddr) : base(connector, engineAddr) {
+		internal PinkEngineAccessor(ScummVMConnector connector, IntPtr engineAddr) : base(connector, engineAddr) {
 		}
 
 		internal override void LoadSymbols() {
@@ -42,11 +42,11 @@ namespace DrainLib.Engines {
 			moduleVariablesOffset = Connector.resolver.FieldOffset(moduleSymb, "_variables");
 
 			var pagesSymb = Connector.resolver.FindField(moduleSymb, "_pages");
-			pagesOffset = (uint)pagesSymb.offset;
+			pagesOffset = pagesSymb.offset;
 			var pagesClSymb = pagesSymb.type;
 			var pagesBaseClSymb = Connector.resolver.GetBaseClass(pagesClSymb);
 			var pagesBaseName = pagesBaseClSymb.name;
-			pagesArrOffset=(uint)pagesBaseClSymb.offset;
+			pagesArrOffset=pagesBaseClSymb.offset;
 			pagesArrSizeOffset = Connector.resolver.FieldOffset(pagesBaseClSymb, "_size");
 			pagesArrStorageOffset = Connector.resolver.FieldOffset(pagesBaseClSymb, "_storage");
 
@@ -74,7 +74,7 @@ namespace DrainLib.Engines {
 		public PinkState GetPinkState() {
 			var state = new PinkState();
 
-			var modulePtrVal = Connector.memoryReader.ReadUInt32(EngineAddr + moduleOffset);
+			var modulePtrVal = Connector.memoryReader.ReadIntPtr(EngineAddr + moduleOffset);
 
 			var moduleNameAddr = modulePtrVal + objNameOffset;
 			state.Module = ReadComString(moduleNameAddr);
@@ -87,11 +87,11 @@ namespace DrainLib.Engines {
 			return state;
 		}
 
-		private Dictionary<string,Page> ReadPages(uint moduleAddr, out Page currentPage) {
+		private Dictionary<string,Page> ReadPages(IntPtr moduleAddr, out Page currentPage) {
 			var pagePtrs = ReadPagePointers(moduleAddr, out var pagesSize);
 			var pageMap = new Dictionary<string, Page>((int)pagesSize);
 
-			var currentPageAddr = Connector.memoryReader.ReadUInt32(moduleAddr + pageOffset);
+			var currentPageAddr = Connector.memoryReader.ReadIntPtr(moduleAddr + pageOffset);
 			currentPage = null;
 
 			foreach(var pagePtr in pagePtrs) {
@@ -108,23 +108,23 @@ namespace DrainLib.Engines {
 			return pageMap;
 		}
 
-		private UInt32[] ReadPagePointers(uint moduleAddr, out uint pagesSize) {
+		private IntPtr[] ReadPagePointers(IntPtr moduleAddr, out uint pagesSize) {
 			var pagesArrAddr = moduleAddr + pagesOffset + pagesArrOffset;
-			var pagesStorage = Connector.memoryReader.ReadUInt32(pagesArrAddr + pagesArrStorageOffset);
+			var pagesStorage = Connector.memoryReader.ReadIntPtr(pagesArrAddr + pagesArrStorageOffset);
 			pagesSize = Connector.memoryReader.ReadUInt32(pagesArrAddr + pagesArrSizeOffset);
-			Debug.Assert(pagesStorage >= 4000);
-			return Connector.memoryReader.ReadUInt32Array(pagesStorage, pagesSize);
+			Debug.Assert((int)pagesStorage >= 4000);
+			return Connector.memoryReader.ReadIntPtrArray(pagesStorage, pagesSize);
 		}
 
-		protected Dictionary<string,string> ReadStringMap(uint mapAddr) {
-			var storagePtrVal = Connector.memoryReader.ReadUInt32(mapAddr + stringMapStorageOffset);
+		protected Dictionary<string,string> ReadStringMap(IntPtr mapAddr) {
+			var storagePtrVal = Connector.memoryReader.ReadIntPtr(mapAddr + stringMapStorageOffset);
 			var size = Connector.memoryReader.ReadUInt32(mapAddr + stringMapMaskOffset) + 1;
 
 			Dictionary<string, string> mapContents = new Dictionary<string, string>();
 
-			var nodePtrVals = Connector.memoryReader.ReadUInt32Array(storagePtrVal, size);
+			var nodePtrVals = Connector.memoryReader.ReadIntPtrArray(storagePtrVal, size);
 			foreach(var nodeAddr in nodePtrVals) {
-				if(nodeAddr == 0 || nodeAddr == StringMapNodeDummyVal) continue;
+				if(nodeAddr == IntPtr.Zero || nodeAddr == StringMapNodeDummyVal) continue;
 				string key = ReadComString(nodeAddr + stringMapNodeKeyOffset);
 				string value = ReadComString(nodeAddr + stringMapNodeValueOffset);
 				mapContents.Add(key, value);

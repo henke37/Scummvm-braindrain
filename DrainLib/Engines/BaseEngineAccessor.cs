@@ -8,27 +8,27 @@ namespace DrainLib.Engines {
 	public abstract class BaseEngineAccessor {
 		protected ScummVMConnector Connector;
 
-		protected uint EngineAddr;
+		protected IntPtr EngineAddr;
 
 		#region Symbol data
 		//Engine
-		private uint mainMenuDialogOffset;
-		private uint guiVisibleOffset;
-		private uint pauseLevelOffset;
+		private int mainMenuDialogOffset;
+		private int guiVisibleOffset;
+		private int pauseLevelOffset;
 
 		//Com::String
-		private uint comStringSizeOffset;
-		private uint comStringStrOffset;
+		private int comStringSizeOffset;
+		private int comStringStrOffset;
 
 		//Com::File
-		private uint comFileNameOffset;
+		private int comFileNameOffset;
 
 		//Com::Rational
-		private uint comRationalNumOffset;
-		private uint comRationalDenomOffset;
+		private int comRationalNumOffset;
+		private int comRationalDenomOffset;
 		#endregion
 
-		internal BaseEngineAccessor(ScummVMConnector connector, uint engineAddr) {
+		internal BaseEngineAccessor(ScummVMConnector connector, IntPtr engineAddr) {
 			this.Connector = connector;
 			this.EngineAddr = engineAddr;
 
@@ -66,15 +66,15 @@ namespace DrainLib.Engines {
 
 		public bool IsActiveEngine {
 			get {
-				var liveEnginePtrVal=Connector.memoryReader.ReadUInt32(Connector.g_engineAddr);
+				var liveEnginePtrVal=Connector.memoryReader.ReadIntPtr(Connector.g_engineAddr);
 				return liveEnginePtrVal == EngineAddr;
 			}
 		}
 
 		public bool MainMenuOpen {
 			get {
-				uint mainMenuDialogPtrVal=Connector.memoryReader.ReadUInt32(EngineAddr + mainMenuDialogOffset);
-				if(mainMenuDialogPtrVal == 0) return false;
+				var mainMenuDialogPtrVal=Connector.memoryReader.ReadIntPtr(EngineAddr + mainMenuDialogOffset);
+				if(mainMenuDialogPtrVal == IntPtr.Zero) return false;
 				byte visibleVal = Connector.memoryReader.ReadByte(mainMenuDialogPtrVal + guiVisibleOffset);
 				return visibleVal != 0;
 			}
@@ -87,23 +87,23 @@ namespace DrainLib.Engines {
 			}
 		}
 
-		protected string ReadComString(uint addr) {
+		protected string ReadComString(IntPtr addr) {
 			uint size = Connector.memoryReader.ReadUInt32(addr + comStringSizeOffset);
-			uint strPtr = Connector.memoryReader.ReadUInt32(addr + comStringStrOffset);
+			IntPtr strPtr = Connector.memoryReader.ReadIntPtr(addr + comStringStrOffset);
 
 			var strBytes=Connector.memoryReader.ReadBytes(strPtr, size);
 			return new string(Encoding.UTF8.GetChars(strBytes));
 		}
 
-		protected string ReadFileName(uint streamAddr) {
+		protected string ReadFileName(IntPtr streamAddr) {
 			if(!Connector.rttiReader.TryDynamicCast(streamAddr, ".?AVFile@Common@@", out var fileAddr)) return null;
 			return ReadFileNameInternal(fileAddr);
 		}
-		protected string ReadFileNameInternal(uint fileAddr) {
+		protected string ReadFileNameInternal(IntPtr fileAddr) {
 			return ReadComString(fileAddr + comFileNameOffset);
 		}
 
-		protected Rational ReadRational(uint rationalAddr) {
+		protected Rational ReadRational(IntPtr rationalAddr) {
 			Rational r;
 			r.Numerator = Connector.memoryReader.ReadInt32(rationalAddr + comRationalNumOffset);
 			r.Denominator = Connector.memoryReader.ReadInt32(rationalAddr + comRationalDenomOffset);

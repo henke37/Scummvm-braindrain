@@ -8,56 +8,56 @@ namespace DrainLib.Engines {
 	public class ScummEngineAccessor : BaseEngineAccessor {
 		#region Symbol data
 		//GameSettings
-		private uint gameIdOffset;
-		private uint variantOffset;
-		private uint versionOffset;
-		private uint heVersionOffset;
+		private int gameIdOffset;
+		private int variantOffset;
+		private int versionOffset;
+		private int heVersionOffset;
 
 		//ScummEngine
-		private uint gameOffset;
-		private uint bootParamOffset;
-		private uint currentRoomOffset;
-		private uint numRoomsOffset;
-		private uint roomVarsOffset;
-		private uint scummVarsOffset;
-		private uint bitVarsOffset;
-		private uint inventoryOffset;
-		private uint classDataOffset;
-		private uint objectOwnerTableOffset;
-		private uint objectStateTableOffset;
-		private uint numVarsOffset;
-		private uint numRoomVarsOffset;
-		private uint numBitVarsOffset;
-		private uint numInventoryOffset;
-		private uint numGlobalObjectsOffset;
-		private uint resOffset;
-		private uint smushActiveOffset;
-		private uint smushPlayerOffset;
+		private int gameOffset;
+		private int bootParamOffset;
+		private int currentRoomOffset;
+		private int numRoomsOffset;
+		private int roomVarsOffset;
+		private int scummVarsOffset;
+		private int bitVarsOffset;
+		private int inventoryOffset;
+		private int classDataOffset;
+		private int objectOwnerTableOffset;
+		private int objectStateTableOffset;
+		private int numVarsOffset;
+		private int numRoomVarsOffset;
+		private int numBitVarsOffset;
+		private int numInventoryOffset;
+		private int numGlobalObjectsOffset;
+		private int resOffset;
+		private int smushActiveOffset;
+		private int smushPlayerOffset;
 
 		//SmushPlayer
-		private uint smushPlayerNBFramesOffset;
-		private uint smushPlayerFrameOffset;
-		private uint smushPlayerSpeedOffset;
-		private uint smushPlayerSeekFileOffset;
+		private int smushPlayerNBFramesOffset;
+		private int smushPlayerFrameOffset;
+		private int smushPlayerSpeedOffset;
+		private int smushPlayerSeekFileOffset;
 
 		//ResourceManager
-		private uint resTypesOffset;
-		private ulong resTypeDataSize;
-		private uint resArrStorageOffset;
-		private ulong resouceSize;
-		private uint resourceAddressOffset;
+		private int resTypesOffset;
+		private int resTypeDataSize;
+		private int resArrStorageOffset;
+		private int resouceSize;
+		private int resourceAddressOffset;
 
 		//ArrayHeader
-		private uint arrHeadDim1Offset;
-		private uint arrHeadDim2Offset;
-		private uint arrHeadTypeOffset;
-		private uint arrHeadDataOffset;
+		private int arrHeadDim1Offset;
+		private int arrHeadDim2Offset;
+		private int arrHeadTypeOffset;
+		private int arrHeadDataOffset;
 
 		#endregion
 
 		public readonly GameSettings GameSettings;
 
-		internal ScummEngineAccessor(ScummVMConnector connector, uint engineAddr) : base(connector, engineAddr) {
+		internal ScummEngineAccessor(ScummVMConnector connector, IntPtr engineAddr) : base(connector, engineAddr) {
 			GameSettings = GetGameSettings();
 
 			if(GameSettings.Version >= 7) {
@@ -96,11 +96,11 @@ namespace DrainLib.Engines {
 			var resManClSymb = Connector.resolver.FindClass("Scumm::ResourceManager");
 			resTypesOffset = Connector.resolver.FieldOffset(resManClSymb, "_types");
 			var resTypeClSymb = Connector.resolver.FindNestedClass(resManClSymb, "ResTypeData");
-			resTypeDataSize = resTypeClSymb.length;
+			resTypeDataSize = (int)resTypeClSymb.length;
 			var resTypeArrClSymb = Connector.resolver.GetBaseClass(resTypeClSymb);
 			resArrStorageOffset = Connector.resolver.FieldOffset(resTypeArrClSymb, "_storage");
 			var resouceClSymb = Connector.resolver.FindNestedClass(resManClSymb, "Resource");
-			resouceSize = resouceClSymb.length;
+			resouceSize = (int)resouceClSymb.length;
 			resourceAddressOffset = Connector.resolver.FieldOffset(resouceClSymb, "_address");
 
 			var arrayHeaderClSymb = Connector.resolver.FindClass("Scumm::ScummEngine_v6::ArrayHeader");
@@ -127,13 +127,13 @@ namespace DrainLib.Engines {
 		public Dictionary<string, byte> VarMap { get; }
 
 		private GameSettings GetGameSettings() {
-			uint addr = EngineAddr + gameOffset;
+			IntPtr addr = EngineAddr + gameOffset;
 
 			var settings = new GameSettings();
-			var gameIdPtrVal = Connector.memoryReader.ReadUInt32(addr + gameIdOffset);
-			settings.GameId = gameIdPtrVal == 0 ? "" : Connector.memoryReader.ReadNullTermString(gameIdPtrVal);
-			var variantPtrVal = Connector.memoryReader.ReadUInt32(addr + variantOffset);
-			settings.Variant = variantPtrVal == 0 ? "" : Connector.memoryReader.ReadNullTermString(variantPtrVal);
+			var gameIdPtrVal = Connector.memoryReader.ReadIntPtr(addr + gameIdOffset);
+			settings.GameId = gameIdPtrVal == IntPtr.Zero ? "" : Connector.memoryReader.ReadNullTermString(gameIdPtrVal);
+			var variantPtrVal = Connector.memoryReader.ReadIntPtr(addr + variantOffset);
+			settings.Variant = variantPtrVal == IntPtr.Zero ? "" : Connector.memoryReader.ReadNullTermString(variantPtrVal);
 			settings.Version = Connector.memoryReader.ReadByte(addr + versionOffset);
 			settings.HeVersion = Connector.memoryReader.ReadByte(addr + heVersionOffset);
 			return settings;
@@ -145,7 +145,7 @@ namespace DrainLib.Engines {
 			var active = Connector.memoryReader.ReadByte(EngineAddr + smushActiveOffset) != 0;
 			if(!active) return null;
 
-			var addr = Connector.memoryReader.ReadUInt32(EngineAddr + smushPlayerOffset);
+			var addr = Connector.memoryReader.ReadIntPtr(EngineAddr + smushPlayerOffset);
 
 			var state = new VideoState();
 			state.CurrentFrame = Connector.memoryReader.ReadUInt32(addr + smushPlayerFrameOffset);
@@ -163,39 +163,39 @@ namespace DrainLib.Engines {
 
 			if(GameSettings.HeVersion > 0) {
 				var roomVarCount = Connector.memoryReader.ReadInt32(EngineAddr + numRoomVarsOffset);
-				var roomVarsPtr = Connector.memoryReader.ReadUInt32(EngineAddr + roomVarsOffset);
+				var roomVarsPtr = Connector.memoryReader.ReadIntPtr(EngineAddr + roomVarsOffset);
 				state.RoomVars = Connector.memoryReader.ReadInt32Array(roomVarsPtr, (uint)roomVarCount);
 			}
 
 			{
 				var varCount = Connector.memoryReader.ReadInt32(EngineAddr + numVarsOffset);
-				var varsPtr = Connector.memoryReader.ReadUInt32(EngineAddr + scummVarsOffset);
+				var varsPtr = Connector.memoryReader.ReadIntPtr(EngineAddr + scummVarsOffset);
 				state.ScummVars = Connector.memoryReader.ReadInt32Array(varsPtr, (uint)varCount);
 			}
 
 			{
 				var bitVarByteCount = Connector.memoryReader.ReadInt32(EngineAddr + numBitVarsOffset) / 8;
-				var bitVarsPtr = Connector.memoryReader.ReadUInt32(EngineAddr + scummVarsOffset);
+				var bitVarsPtr = Connector.memoryReader.ReadIntPtr(EngineAddr + scummVarsOffset);
 				state.bitVarData = Connector.memoryReader.ReadBytes(bitVarsPtr, (uint)bitVarByteCount);
 			}
 
 			{
 				var inventoryCount = Connector.memoryReader.ReadInt32(EngineAddr + numInventoryOffset);
-				var inventoryPtr = Connector.memoryReader.ReadUInt32(EngineAddr + inventoryOffset);
+				var inventoryPtr = Connector.memoryReader.ReadIntPtr(EngineAddr + inventoryOffset);
 				state.Inventory = Connector.memoryReader.ReadInt16Array(inventoryPtr, (uint)inventoryCount);
 			}
 
 			uint numGlobalObjects = (uint)Connector.memoryReader.ReadInt32(EngineAddr + numGlobalObjectsOffset);
 			{
-				var classDataPtr = Connector.memoryReader.ReadUInt32(EngineAddr + classDataOffset);
+				var classDataPtr = Connector.memoryReader.ReadIntPtr(EngineAddr + classDataOffset);
 				state.GlobalObjectClasses = Connector.memoryReader.ReadUInt32Array(classDataPtr, numGlobalObjects);
 			}
 			{
-				var objectOwnerTablePtr = Connector.memoryReader.ReadUInt32(EngineAddr + objectOwnerTableOffset);
+				var objectOwnerTablePtr = Connector.memoryReader.ReadIntPtr(EngineAddr + objectOwnerTableOffset);
 				state.GlobalObjectOwners = Connector.memoryReader.ReadBytes(objectOwnerTablePtr, numGlobalObjects);
 			}
 			{
-				var objectStateTablePtr = Connector.memoryReader.ReadUInt32(EngineAddr + objectStateTableOffset);
+				var objectStateTablePtr = Connector.memoryReader.ReadIntPtr(EngineAddr + objectStateTableOffset);
 				state.GlobalObjectStates = Connector.memoryReader.ReadBytes(objectStateTablePtr, numGlobalObjects);
 			}
 
@@ -215,7 +215,7 @@ namespace DrainLib.Engines {
 
 			foreach(IDiaSymbol varSymb in varSymbols) {
 				string varName = varSymb.name;
-				byte varId = Connector.memoryReader.ReadByte(EngineAddr + (uint)varSymb.offset);
+				byte varId = Connector.memoryReader.ReadByte(EngineAddr + varSymb.offset);
 				if(varId == 0xFF) continue;
 				map.Add(varName, varId);
 			}
@@ -223,7 +223,7 @@ namespace DrainLib.Engines {
 			return map;
 		}
 
-		public void ReadArray(uint arrayId) {
+		public void ReadArray(int arrayId) {
 			if(GameSettings.Version < 6) throw new InvalidOperationException("Arrays aren't used in this game");
 			var arrayHeaderAddr = GetResourceAddr(ResourceType.String, arrayId);
 
@@ -233,7 +233,7 @@ namespace DrainLib.Engines {
 
 			uint numElements = (uint)(dim1 * dim2);
 
-			uint dataAddr = arrayHeaderAddr + arrHeadDataOffset;
+			var dataAddr = arrayHeaderAddr + arrHeadDataOffset;
 			if(type != ArrayType.IntArray) {
 				Connector.memoryReader.ReadBytes(dataAddr, numElements);
 			} else if(GameSettings.Version == 8) {
@@ -243,14 +243,14 @@ namespace DrainLib.Engines {
 			}
 		}
 
-		private uint GetResourceAddr(ResourceType type, uint index) {
-			var resManPtrVal = Connector.memoryReader.ReadUInt32(EngineAddr + resOffset);
+		private IntPtr GetResourceAddr(ResourceType type, int index) {
+			var resManPtrVal = Connector.memoryReader.ReadIntPtr(EngineAddr + resOffset);
 			var typesBase = resManPtrVal + resTypesOffset;
-			uint typeLocation = (uint)(typesBase + (uint)type * resTypeDataSize);
-			var resStorageBase = Connector.memoryReader.ReadUInt32(typeLocation + resArrStorageOffset);
-			uint resLocation = (uint)(resStorageBase + resouceSize * index);
+			IntPtr typeLocation = typesBase + (int)type * resTypeDataSize;
+			var resStorageBase = Connector.memoryReader.ReadIntPtr(typeLocation + resArrStorageOffset);
+			IntPtr resLocation = resStorageBase + resouceSize * index;
 
-			return Connector.memoryReader.ReadUInt32(resLocation + resourceAddressOffset);
+			return Connector.memoryReader.ReadIntPtr(resLocation + resourceAddressOffset);
 		}
 
 		private enum ResourceType {

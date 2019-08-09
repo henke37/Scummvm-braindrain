@@ -10,53 +10,53 @@ namespace DrainLib.Engines {
 
 		#region Symbol data
 		//Engine
-		private uint actorsOffset;
-		private uint gameVarsOffset;
-		private uint gameFlagsOffset;
-		private uint gameInfoOffset;
-		private uint cutContentOffset;
+		private int actorsOffset;
+		private int gameVarsOffset;
+		private int gameFlagsOffset;
+		private int gameInfoOffset;
+		private int cutContentOffset;
 
 		//Actor
-		private uint actorHonestyOffset;
-		private uint actorIntelligenceOffset;
-		private uint actorStabilityOffset;
-		private uint actorGoalNumberOffset;
-		private uint actorFriendlinessOffset;
-		private uint actorCurrentHpOffset;
-		private uint actorMaxHpOffset;
-		private uint actorCluesOffset;
+		private int actorHonestyOffset;
+		private int actorIntelligenceOffset;
+		private int actorStabilityOffset;
+		private int actorGoalNumberOffset;
+		private int actorFriendlinessOffset;
+		private int actorCurrentHpOffset;
+		private int actorMaxHpOffset;
+		private int actorCluesOffset;
 
 		//ActorClues
-		private uint actorCluesCluesOffset;
-		private uint actorCluesCountOffset;
+		private int actorCluesCluesOffset;
+		private int actorCluesCountOffset;
 
 		//GameInfo
-		private uint infoActorCountOffset;
-		private uint infoPlayerIdOffset;
-		private uint infoFlagCountOffset;
-		private uint infoClueCountOffset;
-		private uint infoGlobalVarCountOffset;
-		private uint infoCrimeCountOffset;
-		private uint infoSuspectCountOffset;
+		private int infoActorCountOffset;
+		private int infoPlayerIdOffset;
+		private int infoFlagCountOffset;
+		private int infoClueCountOffset;
+		private int infoGlobalVarCountOffset;
+		private int infoCrimeCountOffset;
+		private int infoSuspectCountOffset;
 
 		//GameFlags
-		private uint flagsFlagsOffset;
-		private uint flagsFlagCountOffset;
+		private int flagsFlagsOffset;
+		private int flagsFlagCountOffset;
 		#endregion
 
 
 		private readonly GameInfo gameInfo;
 
 
-		public BladeRunnerEngineAccessor(ScummVMConnector connector, uint engineAddr) : base(connector, engineAddr) {
+		public BladeRunnerEngineAccessor(ScummVMConnector connector, IntPtr engineAddr) : base(connector, engineAddr) {
 			gameInfo = GetGameInfo();
 		}
 
 		private GameInfo GetGameInfo() {
-			uint infoPtrAddr = EngineAddr + gameInfoOffset;
-			uint infoPtrVal = Connector.memoryReader.ReadUInt32(infoPtrAddr);
+			IntPtr infoPtrAddr = EngineAddr + gameInfoOffset;
+			IntPtr infoPtrVal = Connector.memoryReader.ReadIntPtr(infoPtrAddr);
 
-			Debug.Assert(infoPtrVal != 0);
+			Debug.Assert(infoPtrVal != IntPtr.Zero);
 
 			var info = new GameInfo();
 			info.ActorCount = Connector.memoryReader.ReadUInt32(infoPtrVal + infoActorCountOffset);
@@ -121,10 +121,10 @@ namespace DrainLib.Engines {
 		}
 
 		private byte[] readGameFlagData() {
-			uint flagsObjPtrAddr = EngineAddr + gameFlagsOffset;
-			uint flagsObjAddr = Connector.memoryReader.ReadUInt32(flagsObjPtrAddr);
+			IntPtr flagsObjPtrAddr = EngineAddr + gameFlagsOffset;
+			IntPtr flagsObjAddr = Connector.memoryReader.ReadIntPtr(flagsObjPtrAddr);
 			uint flagCount = Connector.memoryReader.ReadUInt32(flagsObjAddr + flagsFlagCountOffset);
-			uint flagsArrPtrVal = Connector.memoryReader.ReadUInt32(flagsObjAddr + flagsFlagsOffset);
+			IntPtr flagsArrPtrVal = Connector.memoryReader.ReadIntPtr(flagsObjAddr + flagsFlagsOffset);
 			return Connector.memoryReader.ReadBytes(flagsArrPtrVal, flagCount / 8 + 1);
 		}
 

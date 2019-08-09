@@ -22,7 +22,7 @@ namespace DrainLib {
 		internal RTTIReader rttiReader;
 		internal SymbolResolver resolver;
 
-		internal uint g_engineAddr;
+		internal IntPtr g_engineAddr;
 
 		public ScummVMConnector() { }
 
@@ -39,7 +39,7 @@ namespace DrainLib {
 				rttiReader = new RTTIReader(memoryReader);
 
 				var g_engineSymb = resolver.FindGlobal("g_engine");
-				g_engineAddr = g_engineSymb.relativeVirtualAddress + (uint)process.MainModule.BaseAddress;
+				g_engineAddr = process.MainModule.BaseAddress + (int)g_engineSymb.relativeVirtualAddress;
 			} catch(Win32Exception err) when(err.NativeErrorCode == IncompleteReadException.ErrorNumber) {
 				process = null;
 				throw new IncompleteReadException(err);
@@ -51,9 +51,9 @@ namespace DrainLib {
 		}
 
 		public BaseEngineAccessor GetEngine() {
-			var enginePtrVal = memoryReader.ReadUInt32(g_engineAddr);
+			IntPtr enginePtrVal = memoryReader.ReadIntPtr(g_engineAddr);
 
-			if(enginePtrVal == 0) return null;
+			if(enginePtrVal == IntPtr.Zero) return null;
 
 			string mangledName = rttiReader.GetMangledClassNameFromObjPtr(enginePtrVal);
 

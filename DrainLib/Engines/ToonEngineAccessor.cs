@@ -5,33 +5,33 @@ namespace DrainLib.Engines {
 	public class ToonEngineAccessor : BaseEngineAccessor {
 		#region Symbol Data
 		//Engine
-		private uint gameStateOffset;
-		private uint moviePlayerOffset;
+		private int gameStateOffset;
+		private int moviePlayerOffset;
 
 		//State
-		private uint gameGlobalDataOffset;
-		private uint gameFlagOffset;
-		private uint currentSceneOffset;
-		private uint inventoryOffset;
-		private uint confiscatedInventoryOffset;
-		private uint numInventoryItemsOffset;
-		private uint numConfiscatedInventoryItemsOffset;
+		private int gameGlobalDataOffset;
+		private int gameFlagOffset;
+		private int currentSceneOffset;
+		private int inventoryOffset;
+		private int confiscatedInventoryOffset;
+		private int numInventoryItemsOffset;
+		private int numConfiscatedInventoryItemsOffset;
 		private const uint GameGlobalDataSize = 256;
 		private const uint GameFlagDataSize = 256;
 
 		//Movie
-		private uint moviePlayingOffset;
-		private uint movieDecoderOffset;
+		private int moviePlayingOffset;
+		private int movieDecoderOffset;
 		//Decoder
-		private uint smkDecFileStreamOffset;
-		private uint videoDecNextVideoTrackOffset;
+		private int smkDecFileStreamOffset;
+		private int videoDecNextVideoTrackOffset;
 		//Video track
-		private uint smkTrackCurFrameOffset;
-		private uint smkTrackFrameCountOffset;
-		private uint smkTrackFrameRateOffset;
+		private int smkTrackCurFrameOffset;
+		private int smkTrackFrameCountOffset;
+		private int smkTrackFrameRateOffset;
 		#endregion
 
-		internal ToonEngineAccessor(ScummVMConnector connector, uint engineAddr) : base(connector, engineAddr) {
+		internal ToonEngineAccessor(ScummVMConnector connector, IntPtr engineAddr) : base(connector, engineAddr) {
 		}
 
 		public override string GameId => "toon";
@@ -67,7 +67,7 @@ namespace DrainLib.Engines {
 		}
 
 		public ToonState GetState() {
-			var statePtrVal = Connector.memoryReader.ReadUInt32(EngineAddr + gameStateOffset);
+			var statePtrVal = Connector.memoryReader.ReadIntPtr(EngineAddr + gameStateOffset);
 
 			var state = new ToonState();
 			state.GlobalData = Connector.memoryReader.ReadInt16Array(statePtrVal + gameGlobalDataOffset, GameGlobalDataSize);
@@ -81,12 +81,12 @@ namespace DrainLib.Engines {
 		}
 
 		public override VideoState GetVideoState() {
-			var moviePlayerPtrVal = Connector.memoryReader.ReadUInt32(EngineAddr + moviePlayerOffset);
+			var moviePlayerPtrVal = Connector.memoryReader.ReadIntPtr(EngineAddr + moviePlayerOffset);
 			bool playing = Connector.memoryReader.ReadByte(moviePlayerPtrVal + moviePlayingOffset)!=0;
 			if(!playing) return null;
-			var decoderPtrVal = Connector.memoryReader.ReadUInt32(moviePlayerPtrVal + movieDecoderOffset);
-			var fileStreamPtrVal = Connector.memoryReader.ReadUInt32(decoderPtrVal + smkDecFileStreamOffset);
-			var videoTrackPtrVal = Connector.memoryReader.ReadUInt32(decoderPtrVal + videoDecNextVideoTrackOffset);
+			var decoderPtrVal = Connector.memoryReader.ReadIntPtr(moviePlayerPtrVal + movieDecoderOffset);
+			var fileStreamPtrVal = Connector.memoryReader.ReadIntPtr(decoderPtrVal + smkDecFileStreamOffset);
+			var videoTrackPtrVal = Connector.memoryReader.ReadIntPtr(decoderPtrVal + videoDecNextVideoTrackOffset);
 
 			var state = new VideoState();
 			state.FileName = ReadFileName(fileStreamPtrVal);

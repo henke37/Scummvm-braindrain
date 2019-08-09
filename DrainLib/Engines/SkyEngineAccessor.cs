@@ -5,12 +5,12 @@ namespace DrainLib.Engines {
 	public class SkyEngineAccessor : BaseEngineAccessor {
 
 		#region Symbol data
-		private uint logicOffset;
-		private uint scriptVarsOffset;
+		private int logicOffset;
+		private int scriptVarsOffset;
 		private const uint numScriptVars = 838;
 		#endregion
 
-		internal SkyEngineAccessor(ScummVMConnector connector, uint engineAddr) : base(connector, engineAddr) {
+		internal SkyEngineAccessor(ScummVMConnector connector, IntPtr engineAddr) : base(connector, engineAddr) {
 		}
 
 		public override string GameId => "sky";
@@ -24,7 +24,7 @@ namespace DrainLib.Engines {
 		}
 
 		public SkyState GetState() {
-			var logicPtrVal = Connector.memoryReader.ReadUInt32(EngineAddr + logicOffset);
+			var logicPtrVal = Connector.memoryReader.ReadIntPtr(EngineAddr + logicOffset);
 
 			var state = new SkyState();
 

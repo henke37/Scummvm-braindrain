@@ -6,15 +6,15 @@ namespace DrainLib.Engines {
 	public class QueenEngineAccessor : BaseEngineAccessor {
 
 		#region Symbol data
-		private uint logicOffset;
-		private uint currentRoomOffset;
-		private uint gameStateOffset;
+		private int logicOffset;
+		private int currentRoomOffset;
+		private int gameStateOffset;
 		private const uint gameStateCount = 211;
-		private uint numItemsOffset;
-		private uint itemDataOffset;
+		private int numItemsOffset;
+		private int itemDataOffset;
 		#endregion
 
-		internal QueenEngineAccessor(ScummVMConnector connector, uint engineAddr) : base(connector, engineAddr) {
+		internal QueenEngineAccessor(ScummVMConnector connector, IntPtr engineAddr) : base(connector, engineAddr) {
 		}
 
 		public override string GameId => "queen";
@@ -33,7 +33,7 @@ namespace DrainLib.Engines {
 		public QueenState GetState() {
 			var state = new QueenState();
 
-			var logicPtrVal = Connector.memoryReader.ReadUInt32(EngineAddr + logicOffset);
+			var logicPtrVal = Connector.memoryReader.ReadIntPtr(EngineAddr + logicOffset);
 
 			string logicName=Connector.rttiReader.GetMangledClassNameFromObjPtr(logicPtrVal);
 			switch(logicName) {
@@ -58,9 +58,9 @@ namespace DrainLib.Engines {
 			return state;
 		}
 
-		private QueenState.ItemData[] ReadInventory(uint logicPtrVal) {
+		private QueenState.ItemData[] ReadInventory(IntPtr logicPtrVal) {
 			var numItems = Connector.memoryReader.ReadUInt16(logicPtrVal + numItemsOffset);
-			var itemDataPtrVal = Connector.memoryReader.ReadUInt32(logicPtrVal + itemDataOffset);
+			var itemDataPtrVal = Connector.memoryReader.ReadIntPtr(logicPtrVal + itemDataOffset);
 
 			return Connector.memoryReader.ReadStructArr<QueenState.ItemData>(itemDataPtrVal, numItems);
 		}

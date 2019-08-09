@@ -1,17 +1,18 @@
 ﻿using DrainLib.Engines;
+using System;
 
 namespace DrainLib {
 	public class DrasculaEngineAccessor : ADBaseEngineAccessor {
 		#region Symbol data
-		private uint roomNumberOffset;
-		private uint flagsOffset;
+		private int roomNumberOffset;
+		private int flagsOffset;
 		private const uint NumFlags = 50;
-		private uint currentChapterOffset;
-		private uint inventoryObjectsOffset;
+		private int currentChapterOffset;
+		private int inventoryObjectsOffset;
 		private const uint InventorySize = 43;
 		#endregion
 
-		public DrasculaEngineAccessor(ScummVMConnector connector, uint engineAddr) : base(connector, engineAddr) {
+		public DrasculaEngineAccessor(ScummVMConnector connector, IntPtr engineAddr) : base(connector, engineAddr) {
 		}
 
 		internal override void LoadSymbols() {
