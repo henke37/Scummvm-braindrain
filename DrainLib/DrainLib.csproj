@@ -206,8 +206,8 @@
     <Reference Include="System.Xml.XPath.XDocument, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Xml.XPath.XDocument.4.3.0\lib\net46\System.Xml.XPath.XDocument.dll</HintPath>
     </Reference>
-    <Reference Include="Win32ProcessAccess, Version=1.0.4.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Henke37.DebugHelp.Win32.1.0.4-alpha\lib\net452\Win32ProcessAccess.dll</HintPath>
+    <Reference Include="Win32ProcessAccess, Version=2.0.0.0, Culture=neutral, processorArchitecture=x86">
+      <HintPath>..\packages\Henke37.DebugHelp.Win32.2.0.0-alpha\lib\net452\Win32ProcessAccess.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
