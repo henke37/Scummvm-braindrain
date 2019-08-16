@@ -206,9 +206,6 @@
     <Reference Include="System.Xml.XPath.XDocument, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Xml.XPath.XDocument.4.3.0\lib\net46\System.Xml.XPath.XDocument.dll</HintPath>
     </Reference>
-    <Reference Include="Win32ProcessAccess, Version=2.0.0.0, Culture=neutral, processorArchitecture=x86">
-      <HintPath>..\packages\Henke37.DebugHelp.Win32.2.0.0-alpha\lib\net452\Win32ProcessAccess.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Engines\BladeRunnerEngineAccessor.cs" />
@@ -248,6 +245,10 @@
     <ProjectReference Include="..\..\..\DebugHelp\PdbAccess\PdbAccess.csproj">
       <Project>{3ac11c9e-164a-46a9-ba65-8336eb7202a9}</Project>
       <Name>PdbAccess</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\DebugHelp\Win32ProcessAccess\Win32ProcessAccess.csproj">
+      <Project>{e57bafa0-7748-4011-913d-1258e90af6c2}</Project>
+      <Name>Win32ProcessAccess</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
