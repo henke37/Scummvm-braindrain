@@ -4,20 +4,18 @@ using Henke37.DebugHelp.RTTI;
 using DrainLib.Engines;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Diagnostics;
+using System.Linq;
 using System.IO;
-using System.Reflection.Metadata;
-using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 using Henke37.DebugHelp.RTTI.MSVC;
 using Henke37.DebugHelp.Win32;
 using Henke37.DebugHelp.PdbAccess;
+using System.ComponentModel;
 
 namespace DrainLib {
 	public class ScummVMConnector {
 
-		private Process process;
+		private NativeProcess process;
 		internal ProcessMemoryReader memoryReader;
 		internal RTTIReader rttiReader;
 		internal SymbolResolver resolver;
@@ -27,19 +25,25 @@ namespace DrainLib {
 		public ScummVMConnector() { }
 
 		public void Connect() {
-			var procs = Process.GetProcessesByName("scummvm");
-			if(procs.Length == 0) throw new ProcessNotFoundException();
-
-			process = procs[0];
 			try {
-				string pdbPath = process.MainModule.FileName.Replace(".exe", ".pdb");
+				using(var snap = new Toolhelp32Snapshot(Toolhelp32SnapshotFlags.Process)) {
+					var procEntry = snap.GetProcesses().FirstOrDefault(p => p.Executable == "scummvm.exe");
+					if(procEntry == null) throw new ProcessNotFoundException();
+					process = procEntry.Open(ProcessAccessRights.VMOperation | ProcessAccessRights.VMRead | ProcessAccessRights.Synchronize | ProcessAccessRights.QueryLimitedInformation);
+				}
+				ModuleEntry mainModule;
+				using(var snap = new Toolhelp32Snapshot(Toolhelp32SnapshotFlags.Module, process.ProcessId)) {
+					mainModule = snap.GetModules().First(m => m.Name == "scummvm.exe");
+				}
+
+				string pdbPath = mainModule.Path.Replace(".exe", ".pdb");
 				resolver = new SymbolResolver(pdbPath);
 
 				memoryReader = new LiveProcessMemoryAccessor(process);
 				rttiReader = new RTTIReader(memoryReader);
 
 				var g_engineSymb = resolver.FindGlobal("g_engine");
-				g_engineAddr = process.MainModule.BaseAddress + (int)g_engineSymb.relativeVirtualAddress;
+				g_engineAddr = mainModule.BaseAddress + (int)g_engineSymb.relativeVirtualAddress;
 			} catch(Win32Exception err) when(err.NativeErrorCode == IncompleteReadException.ErrorNumber) {
 				process = null;
 				throw new IncompleteReadException(err);
