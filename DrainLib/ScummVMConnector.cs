@@ -27,7 +27,7 @@ namespace DrainLib {
 				using(var snap = new Toolhelp32Snapshot(Toolhelp32SnapshotFlags.Process)) {
 					var procEntry = snap.GetProcesses().FirstOrDefault(p => p.Executable == executableName);
 					if(procEntry == null) throw new ProcessNotFoundException();
-					process = procEntry.Open(ProcessAccessRights.VMOperation | ProcessAccessRights.VMRead | ProcessAccessRights.Synchronize | ProcessAccessRights.QueryLimitedInformation);
+					process = procEntry.Open(ProcessAccessRights.VMOperation | ProcessAccessRights.VMRead | ProcessAccessRights.Synchronize | ProcessAccessRights.QueryInformation);
 				}
 				ModuleEntry mainModule;
 				using(var snap = new Toolhelp32Snapshot(Toolhelp32SnapshotFlags.Module, process.ProcessId)) {
@@ -56,9 +56,6 @@ namespace DrainLib {
 			IntPtr enginePtrVal = memoryReader.ReadIntPtr(g_engineAddr);
 
 			if(enginePtrVal == IntPtr.Zero) return null;
-
-			string mangledName = rttiReader.GetMangledClassNameFromObjPtr(enginePtrVal);
-
 
 			if(rttiReader.HasBaseClass(enginePtrVal, ".?AVScummEngine@Scumm@@")) {
 				return new ScummEngineAccessor(this, enginePtrVal);
