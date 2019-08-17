@@ -1,11 +1,8 @@
 ﻿
 using Henke37.DebugHelp;
-using Henke37.DebugHelp.RTTI;
 using DrainLib.Engines;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.IO;
 using System.Runtime.Serialization;
 using Henke37.DebugHelp.RTTI.MSVC;
 using Henke37.DebugHelp.Win32;
@@ -14,6 +11,7 @@ using System.ComponentModel;
 
 namespace DrainLib {
 	public class ScummVMConnector {
+		private const string executableName = "scummvm.exe";
 
 		private NativeProcess process;
 		internal ProcessMemoryReader memoryReader;
@@ -27,13 +25,13 @@ namespace DrainLib {
 		public void Connect() {
 			try {
 				using(var snap = new Toolhelp32Snapshot(Toolhelp32SnapshotFlags.Process)) {
-					var procEntry = snap.GetProcesses().FirstOrDefault(p => p.Executable == "scummvm.exe");
+					var procEntry = snap.GetProcesses().FirstOrDefault(p => p.Executable == executableName);
 					if(procEntry == null) throw new ProcessNotFoundException();
 					process = procEntry.Open(ProcessAccessRights.VMOperation | ProcessAccessRights.VMRead | ProcessAccessRights.Synchronize | ProcessAccessRights.QueryLimitedInformation);
 				}
 				ModuleEntry mainModule;
 				using(var snap = new Toolhelp32Snapshot(Toolhelp32SnapshotFlags.Module, process.ProcessId)) {
-					mainModule = snap.GetModules().First(m => m.Name == "scummvm.exe");
+					mainModule = snap.GetModules().First(m => m.Name == executableName);
 				}
 
 				string pdbPath = mainModule.Path.Replace(".exe", ".pdb");
