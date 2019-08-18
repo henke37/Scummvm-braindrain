@@ -1,7 +1,7 @@
 ﻿using System;
 using DrainLib.Engines;
 
-namespace DrainLib {
+namespace DrainLib.Engines {
 	internal class TestBedEngineAccessor : BaseEngineAccessor {
 		public TestBedEngineAccessor(ScummVMConnector connector, IntPtr engineAddr) : base(connector, engineAddr) {
 		}
