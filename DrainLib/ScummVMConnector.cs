@@ -29,10 +29,7 @@ namespace DrainLib {
 					if(procEntry == null) throw new ProcessNotFoundException();
 					process = procEntry.Open(ProcessAccessRights.VMOperation | ProcessAccessRights.VMRead | ProcessAccessRights.Synchronize | ProcessAccessRights.QueryInformation);
 				}
-				ModuleEntry mainModule;
-				using(var snap = new Toolhelp32Snapshot(Toolhelp32SnapshotFlags.Module, process.ProcessId)) {
-					mainModule = snap.GetModules().First(m => m.Name == executableName);
-				}
+				ModuleEntry mainModule = process.GetModules().First(m => m.Name == executableName);
 
 				string pdbPath = mainModule.Path.Replace(".exe", ".pdb");
 				resolver = new SymbolResolver(pdbPath);
