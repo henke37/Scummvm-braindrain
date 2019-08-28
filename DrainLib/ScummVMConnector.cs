@@ -8,6 +8,7 @@ using Henke37.DebugHelp.RTTI.MSVC;
 using Henke37.DebugHelp.Win32;
 using Henke37.DebugHelp.PdbAccess;
 using System.ComponentModel;
+using Henke37.DebugHelp.Win32.AccessRights;
 
 namespace DrainLib {
 	public class ScummVMConnector {
