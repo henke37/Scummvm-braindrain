@@ -39,5 +39,13 @@ namespace DrainLib.Engines {
 				return Connector.memoryReader.ReadByte(EngineAddr + msPartOffset);
 			}
 		}
+
+		public int CurrentRoomId {
+			get {
+				IntPtr gmAddr = Connector.memoryReader.ReadIntPtr(EngineAddr + gmOffset);
+				IntPtr roomAddr = Connector.memoryReader.ReadIntPtr(gmAddr + currentRoomOffset);
+				return Connector.memoryReader.ReadInt32(roomAddr + roomIdOffset);
+			}
+		}
 	}
 }
