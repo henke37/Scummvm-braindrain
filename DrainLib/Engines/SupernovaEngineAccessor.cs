@@ -10,6 +10,11 @@ namespace DrainLib.Engines {
 		#region symbol data
 		//engine class
 		private int msPartOffset;
+		private int gmOffset;
+		//GameManager class
+		private int currentRoomOffset;
+		//Room class
+		private int roomIdOffset;
 		#endregion
 
 		public SupernovaEngineAccessor(ScummVMConnector connector, IntPtr engineAddr) : base(connector, engineAddr) {
@@ -20,6 +25,13 @@ namespace DrainLib.Engines {
 		internal override void LoadSymbols() {
 			var engineCl=this.Connector.resolver.FindClass("Supernova::SupernovaEngine");
 			msPartOffset = Connector.resolver.FieldOffset(engineCl,"_MSPart");
+			gmOffset = Connector.resolver.FieldOffset(engineCl, "_gm");
+
+			var gameManagerCl = Connector.resolver.FindClass("Supernova::GameManager");
+			currentRoomOffset = Connector.resolver.FieldOffset(gameManagerCl, "_currentRoom");
+
+			var roomCl = Connector.resolver.FindClass("Supernova::Room");
+			roomIdOffset = Connector.resolver.FieldOffset(roomCl, "_id");
 		}
 
 		public int Part {
