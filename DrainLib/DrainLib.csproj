@@ -216,6 +216,7 @@
     <Compile Include="Engines\QueenEngineAccessor.cs" />
     <Compile Include="Engines\ScummEngineAccessor.cs" />
     <Compile Include="Engines\SkyEngineAccessor.cs" />
+    <Compile Include="Engines\SupernovaEngineAccessor.cs" />
     <Compile Include="Engines\ToonEngineAccessor.cs" />
     <Compile Include="Engines\UnknownEngineAccessor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

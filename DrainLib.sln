@@ -15,6 +15,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Win32ProcessAccess", "..\..
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DebugHelp", "..\..\DebugHelp\DebugHelp\DebugHelp.csproj", "{F95563D3-569B-4D59-BD8B-C9E69CD62FB7}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Win32Base", "..\..\DebugHelp\Win32Base\Win32Base.csproj", "{5980FE6E-6E8D-4939-A86B-7345E7C1180D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -90,6 +92,16 @@ Global
 		{F95563D3-569B-4D59-BD8B-C9E69CD62FB7}.Release|x64.Build.0 = Release|x64
 		{F95563D3-569B-4D59-BD8B-C9E69CD62FB7}.Release|x86.ActiveCfg = Release|x86
 		{F95563D3-569B-4D59-BD8B-C9E69CD62FB7}.Release|x86.Build.0 = Release|x86
+		{5980FE6E-6E8D-4939-A86B-7345E7C1180D}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{5980FE6E-6E8D-4939-A86B-7345E7C1180D}.Debug|x64.ActiveCfg = Debug|x64
+		{5980FE6E-6E8D-4939-A86B-7345E7C1180D}.Debug|x64.Build.0 = Debug|x64
+		{5980FE6E-6E8D-4939-A86B-7345E7C1180D}.Debug|x86.ActiveCfg = Debug|x86
+		{5980FE6E-6E8D-4939-A86B-7345E7C1180D}.Debug|x86.Build.0 = Debug|x86
+		{5980FE6E-6E8D-4939-A86B-7345E7C1180D}.Release|Any CPU.ActiveCfg = Release|x86
+		{5980FE6E-6E8D-4939-A86B-7345E7C1180D}.Release|x64.ActiveCfg = Release|x64
+		{5980FE6E-6E8D-4939-A86B-7345E7C1180D}.Release|x64.Build.0 = Release|x64
+		{5980FE6E-6E8D-4939-A86B-7345E7C1180D}.Release|x86.ActiveCfg = Release|x86
+		{5980FE6E-6E8D-4939-A86B-7345E7C1180D}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
