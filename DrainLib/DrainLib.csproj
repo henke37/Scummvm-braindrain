@@ -218,6 +218,7 @@
     <Compile Include="Engines\SkyEngineAccessor.cs" />
     <Compile Include="Engines\SupernovaEngineAccessor.cs" />
     <Compile Include="Engines\ToonEngineAccessor.cs" />
+    <Compile Include="Engines\TuckerEngineAccessor.cs" />
     <Compile Include="Engines\UnknownEngineAccessor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ScummVMConnector.cs" />

@@ -79,6 +79,9 @@ namespace DrainLib {
 			if(rttiReader.HasBaseClass(enginePtrVal, ".?AVSupernovaEngine@Supernova@@")) {
 				return new SupernovaEngineAccessor(this, enginePtrVal);
 			}
+			if(rttiReader.HasBaseClass(enginePtrVal, ".?AVTuckerEngine@Tucker@@")) {
+				return new TuckerEngineAccessor(this, enginePtrVal);
+			}
 			if(rttiReader.HasBaseClass(enginePtrVal, ".?AVTestbedEngine@Testbed@@")) {
 				return new TestBedEngineAccessor(this, enginePtrVal);
 			}
