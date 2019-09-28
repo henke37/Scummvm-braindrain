@@ -66,6 +66,12 @@ namespace TestProj {
 				statusTxt.Text = $"{state.RoomNumber}";
 				return;
 			}
+			if(engine is TuckerEngineAccessor tuckerEngine) {
+				var state = tuckerEngine.GetState();
+
+				statusTxt.Text = $"{state.CurrentPart}/{state.Location}";
+				return;
+			}
 			statusTxt.Text = engine.GameId;
 		}
 
