@@ -212,6 +212,7 @@
     <Compile Include="Engines\DrasculaEngineAccessor.cs" />
     <Compile Include="Engines\ADBaseEngineAccessor.cs" />
     <Compile Include="Engines\BaseEngineAccessor.cs" />
+    <Compile Include="Engines\HyperspaceDeliveryBoyEngineAccessor.cs" />
     <Compile Include="Engines\PinkEngineAccessor.cs" />
     <Compile Include="Engines\QueenEngineAccessor.cs" />
     <Compile Include="Engines\ScummEngineAccessor.cs" />
