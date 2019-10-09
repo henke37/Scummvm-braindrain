@@ -72,14 +72,16 @@ namespace TestProj {
 				statusTxt.Text = $"{state.CurrentPart}/{state.Location}";
 				return;
 			}
-			if(engine is HyperspaceDeliveryBoyEngineAccessor hbdEngine) {
-				var state = hbdEngine.GetState();
+			if(engine is HyperspaceDeliveryBoyEngineAccessor hdbEngine) {
+				var state = hdbEngine.GetState();
 
 				switch(state.State) {
 					case HyperspaceDeliveryBoyEngineAccessor.GameState.Title:
-						break;
+						statusTxt.Text = "Title";
+						return;
 					case HyperspaceDeliveryBoyEngineAccessor.GameState.Menu:
-						break;
+						statusTxt.Text = "Menu";
+						return;
 					case HyperspaceDeliveryBoyEngineAccessor.GameState.Loading:
 						break;
 
