@@ -72,6 +72,22 @@ namespace TestProj {
 				statusTxt.Text = $"{state.CurrentPart}/{state.Location}";
 				return;
 			}
+			if(engine is HyperspaceDeliveryBoyEngineAccessor hbdEngine) {
+				var state = hbdEngine.GetState();
+
+				switch(state.State) {
+					case HyperspaceDeliveryBoyEngineAccessor.GameState.Title:
+						break;
+					case HyperspaceDeliveryBoyEngineAccessor.GameState.Menu:
+						break;
+					case HyperspaceDeliveryBoyEngineAccessor.GameState.Loading:
+						break;
+
+					case HyperspaceDeliveryBoyEngineAccessor.GameState.Play:
+						statusTxt.Text = state.CurrentMap;
+						return;
+				}
+			}
 			statusTxt.Text = engine.GameId;
 		}
 
