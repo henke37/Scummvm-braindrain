@@ -41,8 +41,8 @@ namespace DrainLib.Engines {
 			song2Offset = Connector.resolver.FieldOffset(sndCl, "_song2");
 
 			var songCl = Connector.resolver.FindClass("HDB::Song");
-			songPlayingOffset = Connector.resolver.FieldOffset(songCl, "playing");
-			songSongOffset = Connector.resolver.FieldOffset(songCl, "song");
+			songPlayingOffset = Connector.resolver.FieldOffset(songCl, "_playing");
+			songSongOffset = Connector.resolver.FieldOffset(songCl, "_song");
 		}
 
 		public HDBState GetState() {
