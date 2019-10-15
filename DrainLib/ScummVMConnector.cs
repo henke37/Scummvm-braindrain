@@ -91,7 +91,9 @@ namespace DrainLib {
 			if(rttiReader.HasBaseClass(enginePtrVal, ".?AVSherlockEngine@Sherlock@@")) {
 				return new SherlockEngineAccessor(this, enginePtrVal);
 			}
-
+			if(rttiReader.HasBaseClass(enginePtrVal, ".?AVSciEngine@Sci@@")) {
+				return new SciEngineAccessor(this, enginePtrVal);
+			}
 
 			if(rttiReader.HasBaseClass(enginePtrVal, ".?AVTestbedEngine@Testbed@@")) {
 				return new TestBedEngineAccessor(this, enginePtrVal);

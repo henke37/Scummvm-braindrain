@@ -215,6 +215,7 @@
     <Compile Include="Engines\HyperspaceDeliveryBoyEngineAccessor.cs" />
     <Compile Include="Engines\PinkEngineAccessor.cs" />
     <Compile Include="Engines\QueenEngineAccessor.cs" />
+    <Compile Include="Engines\SciEngineAccessor.cs" />
     <Compile Include="Engines\ScummEngineAccessor.cs" />
     <Compile Include="Engines\SherlockEngineAccessor.cs" />
     <Compile Include="Engines\SkyEngineAccessor.cs" />
