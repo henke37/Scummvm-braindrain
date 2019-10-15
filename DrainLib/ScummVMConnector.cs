@@ -88,6 +88,11 @@ namespace DrainLib {
 			if(rttiReader.HasBaseClass(enginePtrVal, ".?AVHDBGame@HDB@@")) {
 				return new HyperspaceDeliveryBoyEngineAccessor(this, enginePtrVal);
 			}
+			if(rttiReader.HasBaseClass(enginePtrVal, ".?AVSherlockEngine@Sherlock@@")) {
+				return new SherlockEngineAccessor(this, enginePtrVal);
+			}
+
+
 			if(rttiReader.HasBaseClass(enginePtrVal, ".?AVTestbedEngine@Testbed@@")) {
 				return new TestBedEngineAccessor(this, enginePtrVal);
 			}
