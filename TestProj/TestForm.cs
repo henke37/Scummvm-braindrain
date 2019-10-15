@@ -90,6 +90,11 @@ namespace TestProj {
 						return;
 				}
 			}
+			if(engine is PlumbersEngineAccessor plumbersEngine) {
+				var state = plumbersEngine.GetState();
+				statusTxt.Text = $"{state.CurrentScene}/{state.CurrentBitmapIndex}";
+				return;
+			}
 			statusTxt.Text = engine.GameId;
 		}
 
