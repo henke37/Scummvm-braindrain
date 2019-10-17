@@ -23,7 +23,10 @@ namespace DrainLib.Engines {
 		//
 		#endregion
 
+		private VideoAccessor videoAccessor;
+
 		public SciEngineAccessor(ScummVMConnector connector, IntPtr engineAddr) : base(connector, engineAddr) {
+			videoAccessor = new VideoAccessor(connector);
 		}
 
 		internal override void LoadSymbols() {
@@ -68,7 +71,7 @@ namespace DrainLib.Engines {
 			var decoderPtrVal = MemoryReader.ReadIntPtr(decoderPtrAddr);
 			if(decoderPtrVal == IntPtr.Zero) return null;
 
-			return null;
+			return videoAccessor.ReadDecoder(decoderPtrVal);
 		}
 	}
 }
