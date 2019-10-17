@@ -35,7 +35,7 @@ namespace TestProj {
 			{
 				var video = engine.GetVideoState();
 				if(video!=null) {
-					statusTxt.Text = $"{video.FileName} {video.CurrentFrame}/{video.FrameCount}";
+					statusTxt.Text = $"{video.FileName} {video.PlaybackPosition}/{video.Length}";
 					return;
 				}
 			}
