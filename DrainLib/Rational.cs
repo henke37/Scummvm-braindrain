@@ -51,5 +51,12 @@ namespace DrainLib {
 			}
 			return new Rational(a.Numerator, a.Denominator * b);
 		}
+
+		public static Rational operator /(int a, Rational b) {
+			if(b.Numerator == 0) {
+				throw new DivideByZeroException();
+			}
+			return new Rational(a * b.Denominator, b.Numerator);
+		}
 	}
 }

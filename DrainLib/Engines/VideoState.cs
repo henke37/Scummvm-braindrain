@@ -5,9 +5,9 @@
 		public Rational FrameRate;
 		public string FileName;
 
-		public float PlaybackPosition => (float)(new Rational((int)CurrentFrame) / FrameRate);
+		public float PlaybackPosition => (float)((int)CurrentFrame / FrameRate);
 
-		public float Length => (float)(new Rational((int)FrameCount) / FrameRate);
+		public float Length => (float)((int)FrameCount / FrameRate);
 
 		public float Progress => (float)CurrentFrame / FrameCount;
 	}
