@@ -107,7 +107,8 @@ namespace DrainLib {
 			var state = new VideoState();
 			state.CurrentFrame = (uint)curFrame;
 			state.FrameCount = MemoryReader.ReadUInt32(videoTrackPtrVal + aviTrackFrameCountOffset);
-			state.FileName = ReadFileName(decoderAddr + aviDecFileStreamOffset);
+			var fileStreamPtrVal = MemoryReader.ReadIntPtr(decoderAddr + aviDecFileStreamOffset);
+			state.FileName = ReadFileName(fileStreamPtrVal);
 
 			return state;
 		}

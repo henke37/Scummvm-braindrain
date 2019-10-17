@@ -64,9 +64,6 @@
     <Reference Include="Microsoft.Win32.Primitives, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Win32.Primitives.4.3.0\lib\net46\Microsoft.Win32.Primitives.dll</HintPath>
     </Reference>
-    <Reference Include="MSVCRTTI, Version=2.0.0.0, Culture=neutral, processorArchitecture=x86">
-      <HintPath>..\packages\Henke37.DebugHelp.RTTI.MSVC.2.0.0-alpha\lib\net452\MSVCRTTI.dll</HintPath>
-    </Reference>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -253,6 +250,10 @@
     <Analyzer Include="..\packages\Microsoft.CodeAnalysis.Analyzers.2.9.4\analyzers\dotnet\cs\Microsoft.CodeAnalysis.CSharp.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\DebugHelp\MSVCRTTI\MSVCRTTI.csproj">
+      <Project>{4582f35b-2dc0-411a-8a8b-1b8b982172cd}</Project>
+      <Name>MSVCRTTI</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\DebugHelp\PdbAccess\PdbAccess.csproj">
       <Project>{3ac11c9e-164a-46a9-ba65-8336eb7202a9}</Project>
       <Name>PdbAccess</Name>

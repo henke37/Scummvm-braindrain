@@ -17,6 +17,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DebugHelp", "..\..\DebugHel
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Win32Base", "..\..\DebugHelp\Win32Base\Win32Base.csproj", "{5980FE6E-6E8D-4939-A86B-7345E7C1180D}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MSVCRTTI", "..\..\DebugHelp\MSVCRTTI\MSVCRTTI.csproj", "{4582F35B-2DC0-411A-8A8B-1B8B982172CD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -102,6 +104,16 @@ Global
 		{5980FE6E-6E8D-4939-A86B-7345E7C1180D}.Release|x64.Build.0 = Release|x64
 		{5980FE6E-6E8D-4939-A86B-7345E7C1180D}.Release|x86.ActiveCfg = Release|x86
 		{5980FE6E-6E8D-4939-A86B-7345E7C1180D}.Release|x86.Build.0 = Release|x86
+		{4582F35B-2DC0-411A-8A8B-1B8B982172CD}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{4582F35B-2DC0-411A-8A8B-1B8B982172CD}.Debug|x64.ActiveCfg = Debug|x64
+		{4582F35B-2DC0-411A-8A8B-1B8B982172CD}.Debug|x64.Build.0 = Debug|x64
+		{4582F35B-2DC0-411A-8A8B-1B8B982172CD}.Debug|x86.ActiveCfg = Debug|x86
+		{4582F35B-2DC0-411A-8A8B-1B8B982172CD}.Debug|x86.Build.0 = Debug|x86
+		{4582F35B-2DC0-411A-8A8B-1B8B982172CD}.Release|Any CPU.ActiveCfg = Release|x86
+		{4582F35B-2DC0-411A-8A8B-1B8B982172CD}.Release|x64.ActiveCfg = Release|x64
+		{4582F35B-2DC0-411A-8A8B-1B8B982172CD}.Release|x64.Build.0 = Release|x64
+		{4582F35B-2DC0-411A-8A8B-1B8B982172CD}.Release|x86.ActiveCfg = Release|x86
+		{4582F35B-2DC0-411A-8A8B-1B8B982172CD}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
