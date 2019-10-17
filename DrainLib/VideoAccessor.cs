@@ -94,7 +94,7 @@ namespace DrainLib {
 
 			state.CurrentFrame = MemoryReader.ReadUInt32(videoTrackAddr + smkTrackCurFrameOffset);
 			state.FrameCount = (uint)MemoryReader.ReadInt32(videoTrackAddr + smkTrackFrameCountOffset);
-			state.FrameRate = (float)ReadRational(videoTrackAddr + smkTrackFrameRateOffset);
+			state.FrameRate = ReadRational(videoTrackAddr + smkTrackFrameRateOffset);
 
 			return state;
 		}
@@ -125,7 +125,7 @@ namespace DrainLib {
 			var state = new VideoState();
 			state.CurrentFrame = (uint)curFrame;
 			state.FrameCount = MemoryReader.ReadUInt32(coktelDecoderAddr + coktelDecoderFrameCountOffset);
-			state.FrameRate = (float)ReadRational(coktelDecoderAddr + coktelDecoderFrameRateOffset);
+			state.FrameRate = ReadRational(coktelDecoderAddr + coktelDecoderFrameRateOffset);
 
 			if(RttiReader.HasBaseClass(coktelDecoderAddr, ".?AVVMDDecoder@Video@@")) {
 				var streamPtrVal = MemoryReader.ReadIntPtr(coktelDecoderAddr + vmdDecoderStreamOffset);

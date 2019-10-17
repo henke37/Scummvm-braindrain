@@ -150,7 +150,7 @@ namespace DrainLib.Engines {
 			var state = new VideoState();
 			state.CurrentFrame = MemoryReader.ReadUInt32(addr + smushPlayerFrameOffset);
 			state.FrameCount = MemoryReader.ReadUInt32(addr + smushPlayerNBFramesOffset);
-			state.FrameRate = MemoryReader.ReadInt32(addr + smushPlayerSpeedOffset);
+			state.FrameRate = new Rational(MemoryReader.ReadInt32(addr + smushPlayerSpeedOffset));
 			state.FileName = ReadComString(addr + smushPlayerSeekFileOffset);
 			return state;
 		}

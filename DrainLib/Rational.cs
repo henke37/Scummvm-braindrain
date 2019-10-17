@@ -3,6 +3,11 @@
 		public int Numerator;
 		public int Denominator;
 
+		public Rational(int v) : this() {
+			Numerator = v;
+			Denominator = 1;
+		}
+
 		public float ToFloat() {
 			return (float)Numerator / Denominator;
 		}

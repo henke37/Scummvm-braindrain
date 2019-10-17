@@ -2,7 +2,7 @@
 	public class VideoState {
 		public uint CurrentFrame;
 		public uint FrameCount;
-		public float FrameRate;
+		public Rational FrameRate;
 		public string FileName;
 	}
 }
