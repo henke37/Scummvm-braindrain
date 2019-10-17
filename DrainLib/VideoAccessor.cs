@@ -101,8 +101,11 @@ namespace DrainLib {
 
 			if(videoTrackPtrVal == IntPtr.Zero) return null;
 
+			var curFrame = MemoryReader.ReadInt32(videoTrackPtrVal + aviTrackCurFrameOffset);
+			if(curFrame == -1) return null;
+
 			var state = new VideoState();
-			state.CurrentFrame = MemoryReader.ReadUInt32(videoTrackPtrVal + aviTrackCurFrameOffset);
+			state.CurrentFrame = (uint)curFrame;
 			state.FrameCount = MemoryReader.ReadUInt32(videoTrackPtrVal + aviTrackFrameCountOffset);
 			state.FileName = ReadFileName(decoderAddr + aviDecFileStreamOffset);
 
@@ -113,7 +116,7 @@ namespace DrainLib {
 			var coktelDecoderAddr = MemoryReader.ReadIntPtr(decoderAddr + vmdDecoderDecoderOffset);
 
 			var curFrame= MemoryReader.ReadInt32(coktelDecoderAddr + coktelDecoderCurFrameOffset);
-			if(curFrame == -1) return null;
+			if(curFrame <= -1) return null;
 
 			var state = new VideoState();
 			state.CurrentFrame = (uint)curFrame;
