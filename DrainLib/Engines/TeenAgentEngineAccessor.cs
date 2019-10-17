@@ -8,7 +8,7 @@ namespace DrainLib.Engines {
 		public override string GameId => "teenAgent";
 
 		internal override void LoadSymbols() {
-			var engineCl = Connector.resolver.FindClass("TeenAgent::TeenAgentEngine");
+			var engineCl = Resolver.FindClass("TeenAgent::TeenAgentEngine");
 		}
 	}
 }

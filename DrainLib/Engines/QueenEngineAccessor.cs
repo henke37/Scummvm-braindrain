@@ -20,22 +20,22 @@ namespace DrainLib.Engines {
 		public override string GameId => "queen";
 
 		internal override void LoadSymbols() {
-			var engineSymb = Connector.resolver.FindClass("Queen::QueenEngine");
-			logicOffset = Connector.resolver.FieldOffset(engineSymb, "_logic");
+			var engineSymb = Resolver.FindClass("Queen::QueenEngine");
+			logicOffset = Resolver.FieldOffset(engineSymb, "_logic");
 
-			var logicClSymb = Connector.resolver.FindClass("Queen::Logic");
-			currentRoomOffset = Connector.resolver.FieldOffset(logicClSymb, "_currentRoom");
-			gameStateOffset = Connector.resolver.FieldOffset(logicClSymb, "_gameState");
-			numItemsOffset = Connector.resolver.FieldOffset(logicClSymb, "_numItems");
-			itemDataOffset = Connector.resolver.FieldOffset(logicClSymb, "_itemData");
+			var logicClSymb = Resolver.FindClass("Queen::Logic");
+			currentRoomOffset = Resolver.FieldOffset(logicClSymb, "_currentRoom");
+			gameStateOffset = Resolver.FieldOffset(logicClSymb, "_gameState");
+			numItemsOffset = Resolver.FieldOffset(logicClSymb, "_numItems");
+			itemDataOffset = Resolver.FieldOffset(logicClSymb, "_itemData");
 		}
 
 		public QueenState GetState() {
 			var state = new QueenState();
 
-			var logicPtrVal = Connector.memoryReader.ReadIntPtr(EngineAddr + logicOffset);
+			var logicPtrVal = MemoryReader.ReadIntPtr(EngineAddr + logicOffset);
 
-			string logicName=Connector.rttiReader.GetMangledClassNameFromObjPtr(logicPtrVal);
+			string logicName=RttiReader.GetMangledClassNameFromObjPtr(logicPtrVal);
 			switch(logicName) {
 				case ".?AVLogicGame@Queen@@":
 					state.LogicMode = LogicMode.Game;
@@ -50,8 +50,8 @@ namespace DrainLib.Engines {
 					throw new InvalidDataException("Unrecognized logic type");
 			}
 
-			state.CurrentRoom = Connector.memoryReader.ReadUInt16(logicPtrVal + currentRoomOffset);
-			state.GameState = Connector.memoryReader.ReadInt16Array(logicPtrVal + gameStateOffset, gameStateCount);
+			state.CurrentRoom = MemoryReader.ReadUInt16(logicPtrVal + currentRoomOffset);
+			state.GameState = MemoryReader.ReadInt16Array(logicPtrVal + gameStateOffset, gameStateCount);
 
 			state.Inventory = ReadInventory(logicPtrVal);
 
@@ -59,10 +59,10 @@ namespace DrainLib.Engines {
 		}
 
 		private QueenState.ItemData[] ReadInventory(IntPtr logicPtrVal) {
-			var numItems = Connector.memoryReader.ReadUInt16(logicPtrVal + numItemsOffset);
-			var itemDataPtrVal = Connector.memoryReader.ReadIntPtr(logicPtrVal + itemDataOffset);
+			var numItems = MemoryReader.ReadUInt16(logicPtrVal + numItemsOffset);
+			var itemDataPtrVal = MemoryReader.ReadIntPtr(logicPtrVal + itemDataOffset);
 
-			return Connector.memoryReader.ReadStructArr<QueenState.ItemData>(itemDataPtrVal, numItems);
+			return MemoryReader.ReadStructArr<QueenState.ItemData>(itemDataPtrVal, numItems);
 		}
 	}
 

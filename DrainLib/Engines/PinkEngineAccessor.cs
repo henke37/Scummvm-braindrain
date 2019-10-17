@@ -29,30 +29,30 @@ namespace DrainLib.Engines {
 		}
 
 		internal override void LoadSymbols() {
-			var engineSymb = Connector.resolver.FindClass("Pink::PinkEngine");
-			var descOffset = Connector.resolver.FieldOffset(engineSymb, "_desc");
-			moduleOffset = Connector.resolver.FieldOffset(engineSymb, "_module");
-			gameVarsOffset = Connector.resolver.FieldOffset(engineSymb, "_variables");
+			var engineSymb = Resolver.FindClass("Pink::PinkEngine");
+			var descOffset = Resolver.FieldOffset(engineSymb, "_desc");
+			moduleOffset = Resolver.FieldOffset(engineSymb, "_module");
+			gameVarsOffset = Resolver.FieldOffset(engineSymb, "_variables");
 
-			var namedObjSymb = Connector.resolver.FindClass("Pink::NamedObject");
-			objNameOffset = Connector.resolver.FieldOffset(namedObjSymb, "_name");
+			var namedObjSymb = Resolver.FindClass("Pink::NamedObject");
+			objNameOffset = Resolver.FieldOffset(namedObjSymb, "_name");
 
-			var moduleSymb = Connector.resolver.FindClass("Pink::Module");
-			pageOffset = Connector.resolver.FieldOffset(moduleSymb,"_page");
-			moduleVariablesOffset = Connector.resolver.FieldOffset(moduleSymb, "_variables");
+			var moduleSymb = Resolver.FindClass("Pink::Module");
+			pageOffset = Resolver.FieldOffset(moduleSymb,"_page");
+			moduleVariablesOffset = Resolver.FieldOffset(moduleSymb, "_variables");
 
-			var pagesSymb = Connector.resolver.FindField(moduleSymb, "_pages");
+			var pagesSymb = Resolver.FindField(moduleSymb, "_pages");
 			pagesOffset = pagesSymb.offset;
 			var pagesClSymb = pagesSymb.type;
-			var pagesBaseClSymb = Connector.resolver.GetBaseClass(pagesClSymb);
+			var pagesBaseClSymb = Resolver.GetBaseClass(pagesClSymb);
 			var pagesBaseName = pagesBaseClSymb.name;
 			pagesArrOffset=pagesBaseClSymb.offset;
-			pagesArrSizeOffset = Connector.resolver.FieldOffset(pagesBaseClSymb, "_size");
-			pagesArrStorageOffset = Connector.resolver.FieldOffset(pagesBaseClSymb, "_storage");
+			pagesArrSizeOffset = Resolver.FieldOffset(pagesBaseClSymb, "_size");
+			pagesArrStorageOffset = Resolver.FieldOffset(pagesBaseClSymb, "_storage");
 
 
-			var pageSymb = Connector.resolver.FindClass("Pink::GamePage");
-			pageVariablesOffset = Connector.resolver.FieldOffset(pageSymb,"_variables");
+			var pageSymb = Resolver.FindClass("Pink::GamePage");
+			pageVariablesOffset = Resolver.FieldOffset(pageSymb,"_variables");
 
 			LoadADSymbols(descOffset, false);
 
@@ -60,25 +60,25 @@ namespace DrainLib.Engines {
 		}
 
 		private void LoadStringMapSymbols() {
-			var comStringMapClSymb = Connector.resolver.FindTypeDef("Common::StringMap");
+			var comStringMapClSymb = Resolver.FindTypeDef("Common::StringMap");
 			var hashMapSymb=comStringMapClSymb.type;
 
-			stringMapStorageOffset = Connector.resolver.FieldOffset(hashMapSymb, "_storage");
-			stringMapMaskOffset = Connector.resolver.FieldOffset(hashMapSymb, "_mask");
+			stringMapStorageOffset = Resolver.FieldOffset(hashMapSymb, "_storage");
+			stringMapMaskOffset = Resolver.FieldOffset(hashMapSymb, "_mask");
 
-			var nodeClSymb = Connector.resolver.FindNestedClass(hashMapSymb, "Node");
-			stringMapNodeKeyOffset = Connector.resolver.FieldOffset(nodeClSymb, "_key");
-			stringMapNodeValueOffset = Connector.resolver.FieldOffset(nodeClSymb, "_value");
+			var nodeClSymb = Resolver.FindNestedClass(hashMapSymb, "Node");
+			stringMapNodeKeyOffset = Resolver.FieldOffset(nodeClSymb, "_key");
+			stringMapNodeValueOffset = Resolver.FieldOffset(nodeClSymb, "_value");
 		}
 
 		public PinkState GetPinkState() {
 			var state = new PinkState();
 
-			var modulePtrVal = Connector.memoryReader.ReadIntPtr(EngineAddr + moduleOffset);
+			var modulePtrVal = MemoryReader.ReadIntPtr(EngineAddr + moduleOffset);
 
 			var moduleNameAddr = modulePtrVal + objNameOffset;
 			state.Module = ReadComString(moduleNameAddr);
-			var pagePtrVal = Connector.memoryReader.ReadUInt32(modulePtrVal + pageOffset);
+			var pagePtrVal = MemoryReader.ReadUInt32(modulePtrVal + pageOffset);
 
 			state.GameVars = ReadStringMap(EngineAddr + gameVarsOffset);
 			state.ModuleVars = ReadStringMap(modulePtrVal + moduleVariablesOffset);
@@ -91,7 +91,7 @@ namespace DrainLib.Engines {
 			var pagePtrs = ReadPagePointers(moduleAddr, out var pagesSize);
 			var pageMap = new Dictionary<string, Page>((int)pagesSize);
 
-			var currentPageAddr = Connector.memoryReader.ReadIntPtr(moduleAddr + pageOffset);
+			var currentPageAddr = MemoryReader.ReadIntPtr(moduleAddr + pageOffset);
 			currentPage = null;
 
 			foreach(var pagePtr in pagePtrs) {
@@ -110,19 +110,19 @@ namespace DrainLib.Engines {
 
 		private IntPtr[] ReadPagePointers(IntPtr moduleAddr, out uint pagesSize) {
 			var pagesArrAddr = moduleAddr + pagesOffset + pagesArrOffset;
-			var pagesStorage = Connector.memoryReader.ReadIntPtr(pagesArrAddr + pagesArrStorageOffset);
-			pagesSize = Connector.memoryReader.ReadUInt32(pagesArrAddr + pagesArrSizeOffset);
+			var pagesStorage = MemoryReader.ReadIntPtr(pagesArrAddr + pagesArrStorageOffset);
+			pagesSize = MemoryReader.ReadUInt32(pagesArrAddr + pagesArrSizeOffset);
 			Debug.Assert((int)pagesStorage >= 4000);
-			return Connector.memoryReader.ReadIntPtrArray(pagesStorage, pagesSize);
+			return MemoryReader.ReadIntPtrArray(pagesStorage, pagesSize);
 		}
 
 		protected Dictionary<string,string> ReadStringMap(IntPtr mapAddr) {
-			var storagePtrVal = Connector.memoryReader.ReadIntPtr(mapAddr + stringMapStorageOffset);
-			var size = Connector.memoryReader.ReadUInt32(mapAddr + stringMapMaskOffset) + 1;
+			var storagePtrVal = MemoryReader.ReadIntPtr(mapAddr + stringMapStorageOffset);
+			var size = MemoryReader.ReadUInt32(mapAddr + stringMapMaskOffset) + 1;
 
 			Dictionary<string, string> mapContents = new Dictionary<string, string>();
 
-			var nodePtrVals = Connector.memoryReader.ReadIntPtrArray(storagePtrVal, size);
+			var nodePtrVals = MemoryReader.ReadIntPtrArray(storagePtrVal, size);
 			foreach(var nodeAddr in nodePtrVals) {
 				if(nodeAddr == IntPtr.Zero || nodeAddr == StringMapNodeDummyVal) continue;
 				string key = ReadComString(nodeAddr + stringMapNodeKeyOffset);

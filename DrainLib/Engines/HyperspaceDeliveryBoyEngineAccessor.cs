@@ -30,36 +30,36 @@ namespace DrainLib.Engines {
 		public override string GameId => "hbd";
 
 		internal override void LoadSymbols() {
-			var engineCl = Connector.resolver.FindClass("HDB::HDBGame");
-			gameStateOffset = Connector.resolver.FieldOffset(engineCl, "_gameState");
-			actionModeOffset = Connector.resolver.FieldOffset(engineCl, "_actionMode");
-			currentMapnameOffset = Connector.resolver.FieldOffset(engineCl, "_currentMapname");
-			soundOffset = Connector.resolver.FieldOffset(engineCl, "_sound");
+			var engineCl = Resolver.FindClass("HDB::HDBGame");
+			gameStateOffset = Resolver.FieldOffset(engineCl, "_gameState");
+			actionModeOffset = Resolver.FieldOffset(engineCl, "_actionMode");
+			currentMapnameOffset = Resolver.FieldOffset(engineCl, "_currentMapname");
+			soundOffset = Resolver.FieldOffset(engineCl, "_sound");
 
-			var sndCl = Connector.resolver.FindClass("HDB::Sound");
-			song1Offset = Connector.resolver.FieldOffset(sndCl, "_song1");
-			song2Offset = Connector.resolver.FieldOffset(sndCl, "_song2");
+			var sndCl = Resolver.FindClass("HDB::Sound");
+			song1Offset = Resolver.FieldOffset(sndCl, "_song1");
+			song2Offset = Resolver.FieldOffset(sndCl, "_song2");
 
-			var songCl = Connector.resolver.FindClass("HDB::Song");
-			songPlayingOffset = Connector.resolver.FieldOffset(songCl, "_playing");
-			songSongOffset = Connector.resolver.FieldOffset(songCl, "_song");
+			var songCl = Resolver.FindClass("HDB::Song");
+			songPlayingOffset = Resolver.FieldOffset(songCl, "_playing");
+			songSongOffset = Resolver.FieldOffset(songCl, "_song");
 		}
 
 		public HDBState GetState() {
 			var state = new HDBState();
-			state.State = (GameState)Connector.memoryReader.ReadInt32(EngineAddr + gameStateOffset);
-			state.ActionMode = 1 == Connector.memoryReader.ReadInt32(EngineAddr + actionModeOffset);
-			state.CurrentMap = Connector.memoryReader.ReadNullTermString(EngineAddr + currentMapnameOffset);
+			state.State = (GameState)MemoryReader.ReadInt32(EngineAddr + gameStateOffset);
+			state.ActionMode = 1 == MemoryReader.ReadInt32(EngineAddr + actionModeOffset);
+			state.CurrentMap = MemoryReader.ReadNullTermString(EngineAddr + currentMapnameOffset);
 			return state;
 		}
 
 		public MusicState GetMusicState() {
-			var soundAddr = Connector.memoryReader.ReadIntPtr(EngineAddr + soundOffset);
+			var soundAddr = MemoryReader.ReadIntPtr(EngineAddr + soundOffset);
 
 			MusicState.Song GetSong(IntPtr songAddr) {
 				var song = new MusicState.Song();
-				song.Playing = Connector.memoryReader.ReadByte(songAddr + songPlayingOffset) != 0;
-				song.SongID = (SoundType)Connector.memoryReader.ReadInt16(songAddr + songSongOffset);
+				song.Playing = MemoryReader.ReadByte(songAddr + songPlayingOffset) != 0;
+				song.SongID = (SoundType)MemoryReader.ReadInt16(songAddr + songSongOffset);
 				return song;
 			}
 

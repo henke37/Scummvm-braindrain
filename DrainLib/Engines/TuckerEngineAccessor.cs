@@ -15,17 +15,17 @@ namespace DrainLib.Engines {
 		public override string GameId => "tucker";
 
 		internal override void LoadSymbols() {
-			var engineCl = Connector.resolver.FindClass("Tucker::TuckerEngine");
-			currentPartOffset = Connector.resolver.FieldOffset(engineCl, "_currentPart");
-			locationOffset = Connector.resolver.FieldOffset(engineCl, "_location");
-			flagsTableOffset = Connector.resolver.FieldOffset(engineCl, "_flagsTable");
+			var engineCl = Resolver.FindClass("Tucker::TuckerEngine");
+			currentPartOffset = Resolver.FieldOffset(engineCl, "_currentPart");
+			locationOffset = Resolver.FieldOffset(engineCl, "_location");
+			flagsTableOffset = Resolver.FieldOffset(engineCl, "_flagsTable");
 		}
 
 		public TuckerState GetState() {
 			var state = new TuckerState();
-			state.CurrentPart = (TuckerState.PartEnum)Connector.memoryReader.ReadUInt32(EngineAddr + currentPartOffset);
-			state.Location = Connector.memoryReader.ReadUInt32(EngineAddr + locationOffset);
-			state.Flags = Connector.memoryReader.ReadInt32Array(EngineAddr + flagsTableOffset, FlagCount);
+			state.CurrentPart = (TuckerState.PartEnum)MemoryReader.ReadUInt32(EngineAddr + currentPartOffset);
+			state.Location = MemoryReader.ReadUInt32(EngineAddr + locationOffset);
+			state.Flags = MemoryReader.ReadInt32Array(EngineAddr + flagsTableOffset, FlagCount);
 			return state;
 		}
 	}

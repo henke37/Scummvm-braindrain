@@ -27,26 +27,26 @@ namespace DrainLib.Engines {
 		}
 
 		internal override void LoadSymbols() {
-			var engineCl = Connector.resolver.FindClass("Sci::SciEngine");
-			video32Offset = Connector.resolver.FieldOffset(engineCl, "_video32");
+			var engineCl = Resolver.FindClass("Sci::SciEngine");
+			video32Offset = Resolver.FieldOffset(engineCl, "_video32");
 
-			var video32Cl = Connector.resolver.FindClass("Sci::Video32");
-			seqPlayerOffset = Connector.resolver.FieldOffset(video32Cl, "_SEQPlayer");
-			aviPlayerOffset = Connector.resolver.FieldOffset(video32Cl, "_AVIPlayer");
-			vmdPlayerOffset = Connector.resolver.FieldOffset(video32Cl, "_VMDPlayer");
-			duckPlayerOffset = Connector.resolver.FieldOffset(video32Cl, "_duckPlayer");
+			var video32Cl = Resolver.FindClass("Sci::Video32");
+			seqPlayerOffset = Resolver.FieldOffset(video32Cl, "_SEQPlayer");
+			aviPlayerOffset = Resolver.FieldOffset(video32Cl, "_AVIPlayer");
+			vmdPlayerOffset = Resolver.FieldOffset(video32Cl, "_VMDPlayer");
+			duckPlayerOffset = Resolver.FieldOffset(video32Cl, "_duckPlayer");
 
-			var videoPlayerCl = Connector.resolver.FindClass("Sci::VideoPlayer");
-			var decoderField = Connector.resolver.FindField(videoPlayerCl, "_decoder");
+			var videoPlayerCl = Resolver.FindClass("Sci::VideoPlayer");
+			var decoderField = Resolver.FindField(videoPlayerCl, "_decoder");
 			videoPlayerDecoderOffset = decoderField.offset;
-			videoPlayerDecoderPointerOffset=Connector.resolver.FieldOffset(decoderField.type,"_pointer");
+			videoPlayerDecoderPointerOffset=Resolver.FieldOffset(decoderField.type,"_pointer");
 
-			var gameDescriptionOffset = Connector.resolver.FieldOffset(engineCl, "_gameDescription");
+			var gameDescriptionOffset = Resolver.FieldOffset(engineCl, "_gameDescription");
 			LoadADSymbols(gameDescriptionOffset, true);
 		}
 
 		public override VideoState GetVideoState() {
-			var video32PtrVal = Connector.memoryReader.ReadIntPtr(EngineAddr + video32Offset);
+			var video32PtrVal = MemoryReader.ReadIntPtr(EngineAddr + video32Offset);
 			if(video32PtrVal == IntPtr.Zero) return null;
 
 			VideoState videoState;
@@ -65,7 +65,7 @@ namespace DrainLib.Engines {
 
 		private VideoState ReadVideoPlayer(IntPtr playerAddr) {
 			var decoderPtrAddr = playerAddr + videoPlayerDecoderOffset + videoPlayerDecoderPointerOffset;
-			var decoderPtrVal = Connector.memoryReader.ReadIntPtr(decoderPtrAddr);
+			var decoderPtrVal = MemoryReader.ReadIntPtr(decoderPtrAddr);
 			if(decoderPtrVal == IntPtr.Zero) return null;
 
 			return null;

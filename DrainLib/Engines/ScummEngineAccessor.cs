@@ -68,58 +68,58 @@ namespace DrainLib.Engines {
 		}
 
 		internal override void LoadSymbols() {
-			var engineClSymb = Connector.resolver.FindClass("Scumm::ScummEngine");
-			gameOffset = Connector.resolver.FieldOffset(engineClSymb, "_game");
-			bootParamOffset = Connector.resolver.FieldOffset(engineClSymb, "_bootParam");
-			currentRoomOffset = Connector.resolver.FieldOffset(engineClSymb, "_currentRoom");
-			numRoomsOffset = Connector.resolver.FieldOffset(engineClSymb, "_numRooms");
-			roomVarsOffset = Connector.resolver.FieldOffset(engineClSymb, "_roomVars");
-			scummVarsOffset = Connector.resolver.FieldOffset(engineClSymb, "_scummVars");
-			bitVarsOffset = Connector.resolver.FieldOffset(engineClSymb, "_bitVars");
-			inventoryOffset = Connector.resolver.FieldOffset(engineClSymb, "_inventory");
-			classDataOffset = Connector.resolver.FieldOffset(engineClSymb, "_classData");
-			objectOwnerTableOffset = Connector.resolver.FieldOffset(engineClSymb, "_objectOwnerTable");
-			objectStateTableOffset = Connector.resolver.FieldOffset(engineClSymb, "_objectStateTable");
-			numVarsOffset = Connector.resolver.FieldOffset(engineClSymb, "_numVariables");
-			numRoomVarsOffset = Connector.resolver.FieldOffset(engineClSymb, "_numRoomVariables");
-			numBitVarsOffset = Connector.resolver.FieldOffset(engineClSymb, "_numBitVariables");
-			numInventoryOffset = Connector.resolver.FieldOffset(engineClSymb, "_numInventory");
-			numGlobalObjectsOffset = Connector.resolver.FieldOffset(engineClSymb, "_numGlobalObjects");
-			resOffset = Connector.resolver.FieldOffset(engineClSymb, "_res");
+			var engineClSymb = Resolver.FindClass("Scumm::ScummEngine");
+			gameOffset = Resolver.FieldOffset(engineClSymb, "_game");
+			bootParamOffset = Resolver.FieldOffset(engineClSymb, "_bootParam");
+			currentRoomOffset = Resolver.FieldOffset(engineClSymb, "_currentRoom");
+			numRoomsOffset = Resolver.FieldOffset(engineClSymb, "_numRooms");
+			roomVarsOffset = Resolver.FieldOffset(engineClSymb, "_roomVars");
+			scummVarsOffset = Resolver.FieldOffset(engineClSymb, "_scummVars");
+			bitVarsOffset = Resolver.FieldOffset(engineClSymb, "_bitVars");
+			inventoryOffset = Resolver.FieldOffset(engineClSymb, "_inventory");
+			classDataOffset = Resolver.FieldOffset(engineClSymb, "_classData");
+			objectOwnerTableOffset = Resolver.FieldOffset(engineClSymb, "_objectOwnerTable");
+			objectStateTableOffset = Resolver.FieldOffset(engineClSymb, "_objectStateTable");
+			numVarsOffset = Resolver.FieldOffset(engineClSymb, "_numVariables");
+			numRoomVarsOffset = Resolver.FieldOffset(engineClSymb, "_numRoomVariables");
+			numBitVarsOffset = Resolver.FieldOffset(engineClSymb, "_numBitVariables");
+			numInventoryOffset = Resolver.FieldOffset(engineClSymb, "_numInventory");
+			numGlobalObjectsOffset = Resolver.FieldOffset(engineClSymb, "_numGlobalObjects");
+			resOffset = Resolver.FieldOffset(engineClSymb, "_res");
 
-			var gameSettingsSymb = Connector.resolver.FindClass("Scumm::GameSettings");
-			gameIdOffset = Connector.resolver.FieldOffset(gameSettingsSymb, "gameid");
-			variantOffset = Connector.resolver.FieldOffset(gameSettingsSymb, "variant");
-			versionOffset = Connector.resolver.FieldOffset(gameSettingsSymb, "version");
-			heVersionOffset = Connector.resolver.FieldOffset(gameSettingsSymb, "heversion");
+			var gameSettingsSymb = Resolver.FindClass("Scumm::GameSettings");
+			gameIdOffset = Resolver.FieldOffset(gameSettingsSymb, "gameid");
+			variantOffset = Resolver.FieldOffset(gameSettingsSymb, "variant");
+			versionOffset = Resolver.FieldOffset(gameSettingsSymb, "version");
+			heVersionOffset = Resolver.FieldOffset(gameSettingsSymb, "heversion");
 
-			var resManClSymb = Connector.resolver.FindClass("Scumm::ResourceManager");
-			resTypesOffset = Connector.resolver.FieldOffset(resManClSymb, "_types");
-			var resTypeClSymb = Connector.resolver.FindNestedClass(resManClSymb, "ResTypeData");
+			var resManClSymb = Resolver.FindClass("Scumm::ResourceManager");
+			resTypesOffset = Resolver.FieldOffset(resManClSymb, "_types");
+			var resTypeClSymb = Resolver.FindNestedClass(resManClSymb, "ResTypeData");
 			resTypeDataSize = (int)resTypeClSymb.length;
-			var resTypeArrClSymb = Connector.resolver.GetBaseClass(resTypeClSymb);
-			resArrStorageOffset = Connector.resolver.FieldOffset(resTypeArrClSymb, "_storage");
-			var resouceClSymb = Connector.resolver.FindNestedClass(resManClSymb, "Resource");
+			var resTypeArrClSymb = Resolver.GetBaseClass(resTypeClSymb);
+			resArrStorageOffset = Resolver.FieldOffset(resTypeArrClSymb, "_storage");
+			var resouceClSymb = Resolver.FindNestedClass(resManClSymb, "Resource");
 			resouceSize = (int)resouceClSymb.length;
-			resourceAddressOffset = Connector.resolver.FieldOffset(resouceClSymb, "_address");
+			resourceAddressOffset = Resolver.FieldOffset(resouceClSymb, "_address");
 
-			var arrayHeaderClSymb = Connector.resolver.FindClass("Scumm::ScummEngine_v6::ArrayHeader");
-			arrHeadDim1Offset = Connector.resolver.FieldOffset(arrayHeaderClSymb, "dim1");
-			arrHeadDim2Offset = Connector.resolver.FieldOffset(arrayHeaderClSymb, "dim2");
-			arrHeadTypeOffset = Connector.resolver.FieldOffset(arrayHeaderClSymb, "type");
-			arrHeadDataOffset = Connector.resolver.FieldOffset(arrayHeaderClSymb, "data");
+			var arrayHeaderClSymb = Resolver.FindClass("Scumm::ScummEngine_v6::ArrayHeader");
+			arrHeadDim1Offset = Resolver.FieldOffset(arrayHeaderClSymb, "dim1");
+			arrHeadDim2Offset = Resolver.FieldOffset(arrayHeaderClSymb, "dim2");
+			arrHeadTypeOffset = Resolver.FieldOffset(arrayHeaderClSymb, "type");
+			arrHeadDataOffset = Resolver.FieldOffset(arrayHeaderClSymb, "data");
 		}
 
 		private void LoadSmushSymbols() {
-			var engine7ClSymb = Connector.resolver.FindClass("Scumm::ScummEngine_v7");
-			smushActiveOffset = Connector.resolver.FieldOffset(engine7ClSymb, "_smushActive");
-			smushPlayerOffset = Connector.resolver.FieldOffset(engine7ClSymb, "_splayer");
+			var engine7ClSymb = Resolver.FindClass("Scumm::ScummEngine_v7");
+			smushActiveOffset = Resolver.FieldOffset(engine7ClSymb, "_smushActive");
+			smushPlayerOffset = Resolver.FieldOffset(engine7ClSymb, "_splayer");
 
-			var smushPlayerClSymb = Connector.resolver.FindClass("Scumm::SmushPlayer");
-			smushPlayerNBFramesOffset = Connector.resolver.FieldOffset(smushPlayerClSymb, "_nbframes");
-			smushPlayerFrameOffset = Connector.resolver.FieldOffset(smushPlayerClSymb, "_frame");
-			smushPlayerSpeedOffset = Connector.resolver.FieldOffset(smushPlayerClSymb, "_speed");
-			smushPlayerSeekFileOffset = Connector.resolver.FieldOffset(smushPlayerClSymb, "_seekFile");
+			var smushPlayerClSymb = Resolver.FindClass("Scumm::SmushPlayer");
+			smushPlayerNBFramesOffset = Resolver.FieldOffset(smushPlayerClSymb, "_nbframes");
+			smushPlayerFrameOffset = Resolver.FieldOffset(smushPlayerClSymb, "_frame");
+			smushPlayerSpeedOffset = Resolver.FieldOffset(smushPlayerClSymb, "_speed");
+			smushPlayerSeekFileOffset = Resolver.FieldOffset(smushPlayerClSymb, "_seekFile");
 		}
 
 		public override string GameId => GameSettings.GameId;
@@ -130,80 +130,80 @@ namespace DrainLib.Engines {
 			IntPtr addr = EngineAddr + gameOffset;
 
 			var settings = new GameSettings();
-			var gameIdPtrVal = Connector.memoryReader.ReadIntPtr(addr + gameIdOffset);
-			settings.GameId = gameIdPtrVal == IntPtr.Zero ? "" : Connector.memoryReader.ReadNullTermString(gameIdPtrVal);
-			var variantPtrVal = Connector.memoryReader.ReadIntPtr(addr + variantOffset);
-			settings.Variant = variantPtrVal == IntPtr.Zero ? "" : Connector.memoryReader.ReadNullTermString(variantPtrVal);
-			settings.Version = Connector.memoryReader.ReadByte(addr + versionOffset);
-			settings.HeVersion = Connector.memoryReader.ReadByte(addr + heVersionOffset);
+			var gameIdPtrVal = MemoryReader.ReadIntPtr(addr + gameIdOffset);
+			settings.GameId = gameIdPtrVal == IntPtr.Zero ? "" : MemoryReader.ReadNullTermString(gameIdPtrVal);
+			var variantPtrVal = MemoryReader.ReadIntPtr(addr + variantOffset);
+			settings.Variant = variantPtrVal == IntPtr.Zero ? "" : MemoryReader.ReadNullTermString(variantPtrVal);
+			settings.Version = MemoryReader.ReadByte(addr + versionOffset);
+			settings.HeVersion = MemoryReader.ReadByte(addr + heVersionOffset);
 			return settings;
 		}
 
 		public override VideoState GetVideoState() {
 			if(GameSettings.Version < 7) return null;
 
-			var active = Connector.memoryReader.ReadByte(EngineAddr + smushActiveOffset) != 0;
+			var active = MemoryReader.ReadByte(EngineAddr + smushActiveOffset) != 0;
 			if(!active) return null;
 
-			var addr = Connector.memoryReader.ReadIntPtr(EngineAddr + smushPlayerOffset);
+			var addr = MemoryReader.ReadIntPtr(EngineAddr + smushPlayerOffset);
 
 			var state = new VideoState();
-			state.CurrentFrame = Connector.memoryReader.ReadUInt32(addr + smushPlayerFrameOffset);
-			state.FrameCount = Connector.memoryReader.ReadUInt32(addr + smushPlayerNBFramesOffset);
-			state.FrameRate = Connector.memoryReader.ReadInt32(addr + smushPlayerSpeedOffset);
+			state.CurrentFrame = MemoryReader.ReadUInt32(addr + smushPlayerFrameOffset);
+			state.FrameCount = MemoryReader.ReadUInt32(addr + smushPlayerNBFramesOffset);
+			state.FrameRate = MemoryReader.ReadInt32(addr + smushPlayerSpeedOffset);
 			state.FileName = ReadComString(addr + smushPlayerSeekFileOffset);
 			return state;
 		}
 
 		public ScummState GetScummState() {
 			var state = new ScummState();
-			state.CurrentRoom = Connector.memoryReader.ReadByte(EngineAddr + currentRoomOffset);
-			state.RoomCount = Connector.memoryReader.ReadByte(EngineAddr + numRoomsOffset);
-			state.BootParam = Connector.memoryReader.ReadInt32(EngineAddr + bootParamOffset);
+			state.CurrentRoom = MemoryReader.ReadByte(EngineAddr + currentRoomOffset);
+			state.RoomCount = MemoryReader.ReadByte(EngineAddr + numRoomsOffset);
+			state.BootParam = MemoryReader.ReadInt32(EngineAddr + bootParamOffset);
 
 			if(GameSettings.HeVersion > 0) {
-				var roomVarCount = Connector.memoryReader.ReadInt32(EngineAddr + numRoomVarsOffset);
-				var roomVarsPtr = Connector.memoryReader.ReadIntPtr(EngineAddr + roomVarsOffset);
-				state.RoomVars = Connector.memoryReader.ReadInt32Array(roomVarsPtr, (uint)roomVarCount);
+				var roomVarCount = MemoryReader.ReadInt32(EngineAddr + numRoomVarsOffset);
+				var roomVarsPtr = MemoryReader.ReadIntPtr(EngineAddr + roomVarsOffset);
+				state.RoomVars = MemoryReader.ReadInt32Array(roomVarsPtr, (uint)roomVarCount);
 			}
 
 			{
-				var varCount = Connector.memoryReader.ReadInt32(EngineAddr + numVarsOffset);
-				var varsPtr = Connector.memoryReader.ReadIntPtr(EngineAddr + scummVarsOffset);
-				state.ScummVars = Connector.memoryReader.ReadInt32Array(varsPtr, (uint)varCount);
+				var varCount = MemoryReader.ReadInt32(EngineAddr + numVarsOffset);
+				var varsPtr = MemoryReader.ReadIntPtr(EngineAddr + scummVarsOffset);
+				state.ScummVars = MemoryReader.ReadInt32Array(varsPtr, (uint)varCount);
 			}
 
 			{
-				var bitVarByteCount = Connector.memoryReader.ReadInt32(EngineAddr + numBitVarsOffset) / 8;
-				var bitVarsPtr = Connector.memoryReader.ReadIntPtr(EngineAddr + scummVarsOffset);
-				state.bitVarData = Connector.memoryReader.ReadBytes(bitVarsPtr, (uint)bitVarByteCount);
+				var bitVarByteCount = MemoryReader.ReadInt32(EngineAddr + numBitVarsOffset) / 8;
+				var bitVarsPtr = MemoryReader.ReadIntPtr(EngineAddr + scummVarsOffset);
+				state.bitVarData = MemoryReader.ReadBytes(bitVarsPtr, (uint)bitVarByteCount);
 			}
 
 			{
-				var inventoryCount = Connector.memoryReader.ReadInt32(EngineAddr + numInventoryOffset);
-				var inventoryPtr = Connector.memoryReader.ReadIntPtr(EngineAddr + inventoryOffset);
-				state.Inventory = Connector.memoryReader.ReadInt16Array(inventoryPtr, (uint)inventoryCount);
+				var inventoryCount = MemoryReader.ReadInt32(EngineAddr + numInventoryOffset);
+				var inventoryPtr = MemoryReader.ReadIntPtr(EngineAddr + inventoryOffset);
+				state.Inventory = MemoryReader.ReadInt16Array(inventoryPtr, (uint)inventoryCount);
 			}
 
-			uint numGlobalObjects = (uint)Connector.memoryReader.ReadInt32(EngineAddr + numGlobalObjectsOffset);
+			uint numGlobalObjects = (uint)MemoryReader.ReadInt32(EngineAddr + numGlobalObjectsOffset);
 			{
-				var classDataPtr = Connector.memoryReader.ReadIntPtr(EngineAddr + classDataOffset);
-				state.GlobalObjectClasses = Connector.memoryReader.ReadUInt32Array(classDataPtr, numGlobalObjects);
+				var classDataPtr = MemoryReader.ReadIntPtr(EngineAddr + classDataOffset);
+				state.GlobalObjectClasses = MemoryReader.ReadUInt32Array(classDataPtr, numGlobalObjects);
 			}
 			{
-				var objectOwnerTablePtr = Connector.memoryReader.ReadIntPtr(EngineAddr + objectOwnerTableOffset);
-				state.GlobalObjectOwners = Connector.memoryReader.ReadBytes(objectOwnerTablePtr, numGlobalObjects);
+				var objectOwnerTablePtr = MemoryReader.ReadIntPtr(EngineAddr + objectOwnerTableOffset);
+				state.GlobalObjectOwners = MemoryReader.ReadBytes(objectOwnerTablePtr, numGlobalObjects);
 			}
 			{
-				var objectStateTablePtr = Connector.memoryReader.ReadIntPtr(EngineAddr + objectStateTableOffset);
-				state.GlobalObjectStates = Connector.memoryReader.ReadBytes(objectStateTablePtr, numGlobalObjects);
+				var objectStateTablePtr = MemoryReader.ReadIntPtr(EngineAddr + objectStateTableOffset);
+				state.GlobalObjectStates = MemoryReader.ReadBytes(objectStateTablePtr, numGlobalObjects);
 			}
 
 			return state;
 		}
 
 		private Dictionary<string, byte> BuildVarMap() {
-			var engineClSymb = Connector.resolver.FindClass("Scumm::ScummEngine");
+			var engineClSymb = Resolver.FindClass("Scumm::ScummEngine");
 			engineClSymb.findChildren(
 				Dia2Lib.SymTagEnum.SymTagData,
 				"VAR_*",
@@ -215,7 +215,7 @@ namespace DrainLib.Engines {
 
 			foreach(IDiaSymbol varSymb in varSymbols) {
 				string varName = varSymb.name;
-				byte varId = Connector.memoryReader.ReadByte(EngineAddr + varSymb.offset);
+				byte varId = MemoryReader.ReadByte(EngineAddr + varSymb.offset);
 				if(varId == 0xFF) continue;
 				map.Add(varName, varId);
 			}
@@ -227,30 +227,30 @@ namespace DrainLib.Engines {
 			if(GameSettings.Version < 6) throw new InvalidOperationException("Arrays aren't used in this game");
 			var arrayHeaderAddr = GetResourceAddr(ResourceType.String, arrayId);
 
-			short dim1 = Connector.memoryReader.ReadInt16(arrayHeaderAddr + arrHeadDim1Offset);
-			short dim2 = Connector.memoryReader.ReadInt16(arrayHeaderAddr + arrHeadDim2Offset);
-			ArrayType type = (ArrayType)Connector.memoryReader.ReadInt16(arrayHeaderAddr + arrHeadTypeOffset);
+			short dim1 = MemoryReader.ReadInt16(arrayHeaderAddr + arrHeadDim1Offset);
+			short dim2 = MemoryReader.ReadInt16(arrayHeaderAddr + arrHeadDim2Offset);
+			ArrayType type = (ArrayType)MemoryReader.ReadInt16(arrayHeaderAddr + arrHeadTypeOffset);
 
 			uint numElements = (uint)(dim1 * dim2);
 
 			var dataAddr = arrayHeaderAddr + arrHeadDataOffset;
 			if(type != ArrayType.IntArray) {
-				Connector.memoryReader.ReadBytes(dataAddr, numElements);
+				MemoryReader.ReadBytes(dataAddr, numElements);
 			} else if(GameSettings.Version == 8) {
-				Connector.memoryReader.ReadUInt32Array(dataAddr, numElements);
+				MemoryReader.ReadUInt32Array(dataAddr, numElements);
 			} else {
-				Connector.memoryReader.ReadUInt16Array(dataAddr, numElements);
+				MemoryReader.ReadUInt16Array(dataAddr, numElements);
 			}
 		}
 
 		private IntPtr GetResourceAddr(ResourceType type, int index) {
-			var resManPtrVal = Connector.memoryReader.ReadIntPtr(EngineAddr + resOffset);
+			var resManPtrVal = MemoryReader.ReadIntPtr(EngineAddr + resOffset);
 			var typesBase = resManPtrVal + resTypesOffset;
 			IntPtr typeLocation = typesBase + (int)type * resTypeDataSize;
-			var resStorageBase = Connector.memoryReader.ReadIntPtr(typeLocation + resArrStorageOffset);
+			var resStorageBase = MemoryReader.ReadIntPtr(typeLocation + resArrStorageOffset);
 			IntPtr resLocation = resStorageBase + resouceSize * index;
 
-			return Connector.memoryReader.ReadIntPtr(resLocation + resourceAddressOffset);
+			return MemoryReader.ReadIntPtr(resLocation + resourceAddressOffset);
 		}
 
 		private enum ResourceType {

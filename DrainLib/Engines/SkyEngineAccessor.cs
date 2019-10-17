@@ -16,19 +16,19 @@ namespace DrainLib.Engines {
 		public override string GameId => "sky";
 
 		internal override void LoadSymbols() {
-			var engineClSymb = Connector.resolver.FindClass("Sky::SkyEngine");
-			logicOffset = Connector.resolver.FieldOffset(engineClSymb, "_logic");
+			var engineClSymb = Resolver.FindClass("Sky::SkyEngine");
+			logicOffset = Resolver.FieldOffset(engineClSymb, "_logic");
 
-			var logicClSymb = Connector.resolver.FindClass("Sky::Logic");
-			scriptVarsOffset = Connector.resolver.FieldOffset(logicClSymb, "_scriptVariables");
+			var logicClSymb = Resolver.FindClass("Sky::Logic");
+			scriptVarsOffset = Resolver.FieldOffset(logicClSymb, "_scriptVariables");
 		}
 
 		public SkyState GetState() {
-			var logicPtrVal = Connector.memoryReader.ReadIntPtr(EngineAddr + logicOffset);
+			var logicPtrVal = MemoryReader.ReadIntPtr(EngineAddr + logicOffset);
 
 			var state = new SkyState();
 
-			state.Vars = Connector.memoryReader.ReadUInt32Array(logicPtrVal + scriptVarsOffset, numScriptVars);
+			state.Vars = MemoryReader.ReadUInt32Array(logicPtrVal + scriptVarsOffset, numScriptVars);
 
 			return state;
 		}

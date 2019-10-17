@@ -54,78 +54,78 @@ namespace DrainLib.Engines {
 
 		private GameInfo GetGameInfo() {
 			IntPtr infoPtrAddr = EngineAddr + gameInfoOffset;
-			IntPtr infoPtrVal = Connector.memoryReader.ReadIntPtr(infoPtrAddr);
+			IntPtr infoPtrVal = MemoryReader.ReadIntPtr(infoPtrAddr);
 
 			Debug.Assert(infoPtrVal != IntPtr.Zero);
 
 			var info = new GameInfo();
-			info.ActorCount = Connector.memoryReader.ReadUInt32(infoPtrVal + infoActorCountOffset);
-			info.PlayerId = Connector.memoryReader.ReadUInt32(infoPtrVal + infoPlayerIdOffset);
-			info.FlagCount = Connector.memoryReader.ReadUInt32(infoPtrVal + infoFlagCountOffset);
-			info.ClueCount = Connector.memoryReader.ReadUInt32(infoPtrVal + infoClueCountOffset);
-			info.GlobalVarCount = Connector.memoryReader.ReadUInt32(infoPtrVal + infoGlobalVarCountOffset);
-			info.CrimeCount = Connector.memoryReader.ReadUInt32(infoPtrVal + infoCrimeCountOffset);
-			info.SuspectCount = Connector.memoryReader.ReadUInt32(infoPtrVal + infoSuspectCountOffset);
+			info.ActorCount = MemoryReader.ReadUInt32(infoPtrVal + infoActorCountOffset);
+			info.PlayerId = MemoryReader.ReadUInt32(infoPtrVal + infoPlayerIdOffset);
+			info.FlagCount = MemoryReader.ReadUInt32(infoPtrVal + infoFlagCountOffset);
+			info.ClueCount = MemoryReader.ReadUInt32(infoPtrVal + infoClueCountOffset);
+			info.GlobalVarCount = MemoryReader.ReadUInt32(infoPtrVal + infoGlobalVarCountOffset);
+			info.CrimeCount = MemoryReader.ReadUInt32(infoPtrVal + infoCrimeCountOffset);
+			info.SuspectCount = MemoryReader.ReadUInt32(infoPtrVal + infoSuspectCountOffset);
 			return info;
 		}
 
 		public override string GameId => "bladerunner";
 
 		internal override void LoadSymbols() {
-			var engSymb = Connector.resolver.FindClass("BladeRunner::BladeRunnerEngine");
-			actorsOffset = Connector.resolver.FieldOffset(engSymb, "_actors");
-			gameVarsOffset = Connector.resolver.FieldOffset(engSymb, "_gameVars");
-			gameFlagsOffset = Connector.resolver.FieldOffset(engSymb, "_gameFlags");
-			gameInfoOffset = Connector.resolver.FieldOffset(engSymb, "_gameInfo");
-			cutContentOffset = Connector.resolver.FieldOffset(engSymb, "_cutContent");
+			var engSymb = Resolver.FindClass("BladeRunner::BladeRunnerEngine");
+			actorsOffset = Resolver.FieldOffset(engSymb, "_actors");
+			gameVarsOffset = Resolver.FieldOffset(engSymb, "_gameVars");
+			gameFlagsOffset = Resolver.FieldOffset(engSymb, "_gameFlags");
+			gameInfoOffset = Resolver.FieldOffset(engSymb, "_gameInfo");
+			cutContentOffset = Resolver.FieldOffset(engSymb, "_cutContent");
 
-			var actorSymb = Connector.resolver.FindClass("BladeRunner::Actor");
-			actorHonestyOffset = Connector.resolver.FieldOffset(actorSymb, "_honesty");
-			actorIntelligenceOffset = Connector.resolver.FieldOffset(actorSymb, "_intelligence");
-			actorStabilityOffset = Connector.resolver.FieldOffset(actorSymb, "_stability");
-			actorGoalNumberOffset = Connector.resolver.FieldOffset(actorSymb, "_goalNumber");
-			actorFriendlinessOffset = Connector.resolver.FieldOffset(actorSymb, "_friendlinessToOther");
-			actorCurrentHpOffset = Connector.resolver.FieldOffset(actorSymb, "_currentHP");
-			actorMaxHpOffset = Connector.resolver.FieldOffset(actorSymb, "_maxHP");
-			actorCluesOffset = Connector.resolver.FieldOffset(actorSymb, "_clues");
+			var actorSymb = Resolver.FindClass("BladeRunner::Actor");
+			actorHonestyOffset = Resolver.FieldOffset(actorSymb, "_honesty");
+			actorIntelligenceOffset = Resolver.FieldOffset(actorSymb, "_intelligence");
+			actorStabilityOffset = Resolver.FieldOffset(actorSymb, "_stability");
+			actorGoalNumberOffset = Resolver.FieldOffset(actorSymb, "_goalNumber");
+			actorFriendlinessOffset = Resolver.FieldOffset(actorSymb, "_friendlinessToOther");
+			actorCurrentHpOffset = Resolver.FieldOffset(actorSymb, "_currentHP");
+			actorMaxHpOffset = Resolver.FieldOffset(actorSymb, "_maxHP");
+			actorCluesOffset = Resolver.FieldOffset(actorSymb, "_clues");
 
-			var actorCluesSymb = Connector.resolver.FindClass("BladeRunner::ActorClues");
-			actorCluesCluesOffset = Connector.resolver.FieldOffset(actorCluesSymb, "_clues");
-			actorCluesCountOffset = Connector.resolver.FieldOffset(actorCluesSymb, "_count");
+			var actorCluesSymb = Resolver.FindClass("BladeRunner::ActorClues");
+			actorCluesCluesOffset = Resolver.FieldOffset(actorCluesSymb, "_clues");
+			actorCluesCountOffset = Resolver.FieldOffset(actorCluesSymb, "_count");
 
-			var clueSymb = Connector.resolver.FindNestedClass(actorCluesSymb, "Clue");
+			var clueSymb = Resolver.FindNestedClass(actorCluesSymb, "Clue");
 
-			var flagsSymb = Connector.resolver.FindClass("BladeRunner::GameFlags");
-			flagsFlagsOffset = Connector.resolver.FieldOffset(flagsSymb, "_flags");
-			flagsFlagCountOffset = Connector.resolver.FieldOffset(flagsSymb, "_flagCount");
+			var flagsSymb = Resolver.FindClass("BladeRunner::GameFlags");
+			flagsFlagsOffset = Resolver.FieldOffset(flagsSymb, "_flags");
+			flagsFlagCountOffset = Resolver.FieldOffset(flagsSymb, "_flagCount");
 
 			LoadGameInfoSymbols();
 		}
 
 		private void LoadGameInfoSymbols() {
-			var infoSymb = Connector.resolver.FindClass("BladeRunner::GameInfo");
-			infoActorCountOffset = Connector.resolver.FieldOffset(infoSymb, "_actorCount");
-			infoPlayerIdOffset = Connector.resolver.FieldOffset(infoSymb, "_playerId");
-			infoFlagCountOffset = Connector.resolver.FieldOffset(infoSymb, "_flagCount");
-			infoClueCountOffset = Connector.resolver.FieldOffset(infoSymb, "_clueCount");
-			infoGlobalVarCountOffset = Connector.resolver.FieldOffset(infoSymb, "_globalVarCount");
-			infoCrimeCountOffset = Connector.resolver.FieldOffset(infoSymb, "_crimeCount");
-			infoSuspectCountOffset = Connector.resolver.FieldOffset(infoSymb, "_suspectCount");
+			var infoSymb = Resolver.FindClass("BladeRunner::GameInfo");
+			infoActorCountOffset = Resolver.FieldOffset(infoSymb, "_actorCount");
+			infoPlayerIdOffset = Resolver.FieldOffset(infoSymb, "_playerId");
+			infoFlagCountOffset = Resolver.FieldOffset(infoSymb, "_flagCount");
+			infoClueCountOffset = Resolver.FieldOffset(infoSymb, "_clueCount");
+			infoGlobalVarCountOffset = Resolver.FieldOffset(infoSymb, "_globalVarCount");
+			infoCrimeCountOffset = Resolver.FieldOffset(infoSymb, "_crimeCount");
+			infoSuspectCountOffset = Resolver.FieldOffset(infoSymb, "_suspectCount");
 		}
 
 		public GameState GetState() {
 			var state = new GameState();
-			state.CutContent = Connector.memoryReader.ReadByte(EngineAddr+cutContentOffset) != 0;
+			state.CutContent = MemoryReader.ReadByte(EngineAddr+cutContentOffset) != 0;
 			state.flagData = readGameFlagData();
 			return state;
 		}
 
 		private byte[] readGameFlagData() {
 			IntPtr flagsObjPtrAddr = EngineAddr + gameFlagsOffset;
-			IntPtr flagsObjAddr = Connector.memoryReader.ReadIntPtr(flagsObjPtrAddr);
-			uint flagCount = Connector.memoryReader.ReadUInt32(flagsObjAddr + flagsFlagCountOffset);
-			IntPtr flagsArrPtrVal = Connector.memoryReader.ReadIntPtr(flagsObjAddr + flagsFlagsOffset);
-			return Connector.memoryReader.ReadBytes(flagsArrPtrVal, flagCount / 8 + 1);
+			IntPtr flagsObjAddr = MemoryReader.ReadIntPtr(flagsObjPtrAddr);
+			uint flagCount = MemoryReader.ReadUInt32(flagsObjAddr + flagsFlagCountOffset);
+			IntPtr flagsArrPtrVal = MemoryReader.ReadIntPtr(flagsObjAddr + flagsFlagsOffset);
+			return MemoryReader.ReadBytes(flagsArrPtrVal, flagCount / 8 + 1);
 		}
 
 		public class GameState {

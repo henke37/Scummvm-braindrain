@@ -19,17 +19,17 @@ namespace DrainLib.Engines {
 		public override string GameId => "plumbers";
 
 		internal override void LoadSymbols() {
-			var engineCl=Connector.resolver.FindClass("Plumbers::PlumbersGame");
-			curSceneIdxOffset = Connector.resolver.FieldOffset(engineCl, "_curSceneIdx");
-			prevSceneIdxOffset = Connector.resolver.FieldOffset(engineCl, "_prvSceneIdx");
-			curBitmapIdxOffset = Connector.resolver.FieldOffset(engineCl, "_curBitmapIdx");
+			var engineCl=Resolver.FindClass("Plumbers::PlumbersGame");
+			curSceneIdxOffset = Resolver.FieldOffset(engineCl, "_curSceneIdx");
+			prevSceneIdxOffset = Resolver.FieldOffset(engineCl, "_prvSceneIdx");
+			curBitmapIdxOffset = Resolver.FieldOffset(engineCl, "_curBitmapIdx");
 		}
 
 		public PlumbersState GetState() {
 			var state = new PlumbersState();
-			state.CurrentScene = Connector.memoryReader.ReadInt32(EngineAddr + curSceneIdxOffset);
-			state.PrevScene = Connector.memoryReader.ReadInt32(EngineAddr + prevSceneIdxOffset);
-			state.CurrentBitmapIndex = Connector.memoryReader.ReadInt32(EngineAddr + curBitmapIdxOffset);
+			state.CurrentScene = MemoryReader.ReadInt32(EngineAddr + curSceneIdxOffset);
+			state.PrevScene = MemoryReader.ReadInt32(EngineAddr + prevSceneIdxOffset);
+			state.CurrentBitmapIndex = MemoryReader.ReadInt32(EngineAddr + curBitmapIdxOffset);
 			return state;
 		}
 	}

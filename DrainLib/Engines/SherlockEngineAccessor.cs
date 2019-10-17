@@ -10,8 +10,8 @@ namespace DrainLib.Engines {
 		}
 
 		internal override void LoadSymbols() {
-			var engineCl = Connector.resolver.FindClass("Sherlock::SherlockEngine");
-			var gameDescriptionOffset = Connector.resolver.FieldOffset(engineCl, "_gameDescription");
+			var engineCl = Resolver.FindClass("Sherlock::SherlockEngine");
+			var gameDescriptionOffset = Resolver.FieldOffset(engineCl, "_gameDescription");
 
 			this.LoadADSymbols(gameDescriptionOffset,true);
 		}

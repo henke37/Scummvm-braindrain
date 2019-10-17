@@ -208,6 +208,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BaseAccessor.cs" />
     <Compile Include="Engines\BladeRunnerEngineAccessor.cs" />
     <Compile Include="Engines\DrasculaEngineAccessor.cs" />
     <Compile Include="Engines\ADBaseEngineAccessor.cs" />
@@ -216,6 +217,8 @@
     <Compile Include="Engines\PinkEngineAccessor.cs" />
     <Compile Include="Engines\PlumbersEngineAccessor.cs" />
     <Compile Include="Engines\QueenEngineAccessor.cs" />
+    <Compile Include="Engines\VideoState.cs" />
+    <Compile Include="Rational.cs" />
     <Compile Include="Engines\SciEngineAccessor.cs" />
     <Compile Include="Engines\ScummEngineAccessor.cs" />
     <Compile Include="Engines\SherlockEngineAccessor.cs" />
@@ -228,6 +231,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ScummVMConnector.cs" />
     <Compile Include="Engines\TestBedEngineAccessor.cs" />
+    <Compile Include="VideoAccessor.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

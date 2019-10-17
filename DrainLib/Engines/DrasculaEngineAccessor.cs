@@ -16,22 +16,22 @@ namespace DrainLib {
 		}
 
 		internal override void LoadSymbols() {
-			var engineClSymb = Connector.resolver.FindClass("Drascula::DrasculaEngine");
-			var descOffset = Connector.resolver.FieldOffset(engineClSymb, "_gameDescription");
-			roomNumberOffset = Connector.resolver.FieldOffset(engineClSymb, "_roomNumber");
-			flagsOffset = Connector.resolver.FieldOffset(engineClSymb, "flags");
-			currentChapterOffset = Connector.resolver.FieldOffset(engineClSymb, "currentChapter");
-			inventoryObjectsOffset = Connector.resolver.FieldOffset(engineClSymb, "inventoryObjects");
+			var engineClSymb = Resolver.FindClass("Drascula::DrasculaEngine");
+			var descOffset = Resolver.FieldOffset(engineClSymb, "_gameDescription");
+			roomNumberOffset = Resolver.FieldOffset(engineClSymb, "_roomNumber");
+			flagsOffset = Resolver.FieldOffset(engineClSymb, "flags");
+			currentChapterOffset = Resolver.FieldOffset(engineClSymb, "currentChapter");
+			inventoryObjectsOffset = Resolver.FieldOffset(engineClSymb, "inventoryObjects");
 
 			LoadADSymbols(descOffset, true);
 		}
 
 		public DrasculaState GetState() {
 			var state = new DrasculaState();
-			state.RoomNumber = Connector.memoryReader.ReadInt32(EngineAddr + roomNumberOffset);
-			state.Flags = Connector.memoryReader.ReadInt32Array(EngineAddr + flagsOffset, NumFlags);
-			state.CurrentChapter = Connector.memoryReader.ReadInt32(EngineAddr + currentChapterOffset);
-			state.Inventory = Connector.memoryReader.ReadInt32Array(EngineAddr + inventoryObjectsOffset, InventorySize);
+			state.RoomNumber = MemoryReader.ReadInt32(EngineAddr + roomNumberOffset);
+			state.Flags = MemoryReader.ReadInt32Array(EngineAddr + flagsOffset, NumFlags);
+			state.CurrentChapter = MemoryReader.ReadInt32(EngineAddr + currentChapterOffset);
+			state.Inventory = MemoryReader.ReadInt32Array(EngineAddr + inventoryObjectsOffset, InventorySize);
 			return state;
 		}
 	}

@@ -17,10 +17,10 @@ namespace DrainLib.Engines {
 			this.descOffset = descOffset;
 			this.descIsPointer = descIsPointer;
 
-			var descSymb = Connector.resolver.FindClass("ADGameDescription");
-			adGameIdOffset = Connector.resolver.FieldOffset(descSymb, "gameId");
-			adExtraOffset = Connector.resolver.FieldOffset(descSymb, "extra");
-			adFlagsOffset = Connector.resolver.FieldOffset(descSymb, "flags");
+			var descSymb = Resolver.FindClass("ADGameDescription");
+			adGameIdOffset = Resolver.FieldOffset(descSymb, "gameId");
+			adExtraOffset = Resolver.FieldOffset(descSymb, "extra");
+			adFlagsOffset = Resolver.FieldOffset(descSymb, "flags");
 		}
 
 		public override string GameId => GetGameDescriptor().GameId;
@@ -28,16 +28,16 @@ namespace DrainLib.Engines {
 		protected ADGameDescriptor GetGameDescriptor() {
 			var addr = EngineAddr + descOffset;
 			if(descIsPointer) {
-				addr = Connector.memoryReader.ReadIntPtr(addr);
+				addr = MemoryReader.ReadIntPtr(addr);
 			}
 
 			var gameDesc = new ADGameDescriptor();
 
-			IntPtr gameIdVal = Connector.memoryReader.ReadIntPtr(addr + adGameIdOffset);
-			gameDesc.GameId = gameIdVal == IntPtr.Zero ? "" : Connector.memoryReader.ReadNullTermString(gameIdVal);
-			IntPtr extraVal = Connector.memoryReader.ReadIntPtr(addr + adExtraOffset);
-			gameDesc.Extra = extraVal == IntPtr.Zero ? "" : Connector.memoryReader.ReadNullTermString(extraVal);
-			uint flagsVal = Connector.memoryReader.ReadUInt32(addr + adFlagsOffset);
+			IntPtr gameIdVal = MemoryReader.ReadIntPtr(addr + adGameIdOffset);
+			gameDesc.GameId = gameIdVal == IntPtr.Zero ? "" : MemoryReader.ReadNullTermString(gameIdVal);
+			IntPtr extraVal = MemoryReader.ReadIntPtr(addr + adExtraOffset);
+			gameDesc.Extra = extraVal == IntPtr.Zero ? "" : MemoryReader.ReadNullTermString(extraVal);
+			uint flagsVal = MemoryReader.ReadUInt32(addr + adFlagsOffset);
 			gameDesc.GameFlags = (GameFlags)flagsVal;
 
 			return gameDesc;
