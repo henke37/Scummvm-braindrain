@@ -25,10 +25,11 @@ namespace DrainLib {
 		private int aviTrackFrameCountOffset;
 		private int aviTrackVidsHeaderOffset;
 		//VMD Decoder
-		private int vmdDecoderDecoderOffset;
+		private int vmdAdvancedDecoderDecoderOffset;
 		private int coktelDecoderCurFrameOffset;
 		private int coktelDecoderFrameCountOffset;
 		private int coktelDecoderFrameRateOffset;
+		private int vmdDecoderStreamOffset;
 		#endregion
 
 		public VideoAccessor(ScummVMConnector connector) : base(connector) {
@@ -54,12 +55,14 @@ namespace DrainLib {
 			aviTrackCurFrameOffset = Resolver.FieldOffset(aviTrackCl, "_curFrame");
 			aviTrackFrameCountOffset = Resolver.FieldOffset(aviTrackCl, "_frameCount");
 
-			var vmdDecoderCl = Resolver.FindClass("Video::AdvancedVMDDecoder");
-			vmdDecoderDecoderOffset = Resolver.FieldOffset(vmdDecoderCl, "_decoder");
+			var vmdAdvancedDecoderCl = Resolver.FindClass("Video::AdvancedVMDDecoder");
+			vmdAdvancedDecoderDecoderOffset = Resolver.FieldOffset(vmdAdvancedDecoderCl, "_decoder");
 			var coktelDecoderCl = Resolver.FindClass("Video::CoktelDecoder");
 			coktelDecoderCurFrameOffset = Resolver.FieldOffset(coktelDecoderCl, "_curFrame");
 			coktelDecoderFrameCountOffset = Resolver.FieldOffset(coktelDecoderCl, "_frameCount");
 			coktelDecoderFrameRateOffset = Resolver.FieldOffset(coktelDecoderCl, "_frameRate");
+			var vmdDecoderCl = Resolver.FindClass("Video::VMDDecoder");
+			vmdDecoderStreamOffset = Resolver.FieldOffset(vmdDecoderCl, "_stream");
 		}
 
 		public VideoState ReadDecoder(IntPtr decoderAddr) {
@@ -114,7 +117,7 @@ namespace DrainLib {
 		}
 
 		private VideoState ReadVmdDecoder(IntPtr decoderAddr) {
-			var coktelDecoderAddr = MemoryReader.ReadIntPtr(decoderAddr + vmdDecoderDecoderOffset);
+			var coktelDecoderAddr = MemoryReader.ReadIntPtr(decoderAddr + vmdAdvancedDecoderDecoderOffset);
 
 			var curFrame= MemoryReader.ReadInt32(coktelDecoderAddr + coktelDecoderCurFrameOffset);
 			if(curFrame <= -1) return null;
@@ -123,6 +126,12 @@ namespace DrainLib {
 			state.CurrentFrame = (uint)curFrame;
 			state.FrameCount = MemoryReader.ReadUInt32(coktelDecoderAddr + coktelDecoderFrameCountOffset);
 			state.FrameRate = (float)ReadRational(coktelDecoderAddr + coktelDecoderFrameRateOffset);
+
+			if(RttiReader.HasBaseClass(coktelDecoderAddr, ".?AVVMDDecoder@Video@@")) {
+				var streamPtrVal = MemoryReader.ReadIntPtr(coktelDecoderAddr + vmdDecoderStreamOffset);
+				state.FileName = ReadFileName(streamPtrVal);
+			}
+
 			return state;
 		}
 	}
