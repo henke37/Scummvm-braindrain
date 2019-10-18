@@ -4,6 +4,7 @@ using DrainLib.Engines;
 using System;
 using System.Windows.Forms;
 using TestProj.Properties;
+using System.Text;
 
 namespace TestProj {
 	public partial class TestForm : Form {
@@ -35,7 +36,21 @@ namespace TestProj {
 			{
 				var video = engine.GetVideoState();
 				if(video!=null) {
-					statusTxt.Text = $"{video.FileName} {video.PlaybackPosition}/{video.Length}";
+					var sb = new StringBuilder();
+					if(!string.IsNullOrEmpty(video.FileName)) {
+						sb.Append(video.FileName);
+						sb.Append(' ');
+					}
+					if(video.FrameRate.Denominator != 0) {
+						sb.AppendFormat("{0}/{1}",video.PlaybackPosition,video.Length);
+					} else if(video.FrameCount!=0) {
+						sb.AppendFormat("{0}/{1}", video.CurrentFrame, video.FrameCount);
+					}
+					if(sb.Length == 0) {
+						statusTxt.Text = "Video";
+					} else {
+						statusTxt.Text = sb.ToString();
+					}
 					return;
 				}
 			}

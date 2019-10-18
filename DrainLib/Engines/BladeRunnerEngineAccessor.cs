@@ -15,6 +15,7 @@ namespace DrainLib.Engines {
 		private int gameFlagsOffset;
 		private int gameInfoOffset;
 		private int cutContentOffset;
+		private int vqaIsPlayingOffset;
 
 		//Actor
 		private int actorHonestyOffset;
@@ -78,6 +79,7 @@ namespace DrainLib.Engines {
 			gameFlagsOffset = Resolver.FieldOffset(engSymb, "_gameFlags");
 			gameInfoOffset = Resolver.FieldOffset(engSymb, "_gameInfo");
 			cutContentOffset = Resolver.FieldOffset(engSymb, "_cutContent");
+			vqaIsPlayingOffset = Resolver.FieldOffset(engSymb, "_vqaIsPlaying");
 
 			var actorSymb = Resolver.FindClass("BladeRunner::Actor");
 			actorHonestyOffset = Resolver.FieldOffset(actorSymb, "_honesty");
@@ -111,6 +113,15 @@ namespace DrainLib.Engines {
 			infoGlobalVarCountOffset = Resolver.FieldOffset(infoSymb, "_globalVarCount");
 			infoCrimeCountOffset = Resolver.FieldOffset(infoSymb, "_crimeCount");
 			infoSuspectCountOffset = Resolver.FieldOffset(infoSymb, "_suspectCount");
+		}
+
+		public override VideoState GetVideoState() {
+			var playing = MemoryReader.ReadByte(EngineAddr + vqaIsPlayingOffset)!=0;
+			if(!playing) return null;
+
+			var state = new VideoState();
+
+			return state;
 		}
 
 		public GameState GetState() {
