@@ -24,6 +24,8 @@ namespace DrainLib {
 		private int aviTrackCurFrameOffset;
 		private int aviTrackFrameCountOffset;
 		private int aviTrackVidsHeaderOffset;
+		private int aviStreamHeadScaleOffset;
+		private int aviStreamHeadRateOffset;
 		//VMD Decoder
 		private int vmdAdvancedDecoderDecoderOffset;
 		private int coktelDecoderCurFrameOffset;
@@ -54,6 +56,11 @@ namespace DrainLib {
 			var aviTrackCl = Resolver.FindNestedClass(aviDecoderCl, "AVIVideoTrack");
 			aviTrackCurFrameOffset = Resolver.FieldOffset(aviTrackCl, "_curFrame");
 			aviTrackFrameCountOffset = Resolver.FieldOffset(aviTrackCl, "_frameCount");
+			aviTrackVidsHeaderOffset = Resolver.FieldOffset(aviTrackCl, "_vidsHeader");
+
+			var streamHeadCl = Resolver.FindNestedClass(aviDecoderCl, "AVIStreamHeader");
+			aviStreamHeadScaleOffset = Resolver.FieldOffset(streamHeadCl, "scale");
+			aviStreamHeadRateOffset = Resolver.FieldOffset(streamHeadCl, "rate");
 
 			var vmdAdvancedDecoderCl = Resolver.FindClass("Video::AdvancedVMDDecoder");
 			vmdAdvancedDecoderDecoderOffset = Resolver.FieldOffset(vmdAdvancedDecoderCl, "_decoder");
@@ -107,11 +114,18 @@ namespace DrainLib {
 			var curFrame = MemoryReader.ReadInt32(videoTrackPtrVal + aviTrackCurFrameOffset);
 			if(curFrame == -1) return null;
 
+			var streamHeaderAddr =videoTrackPtrVal+aviTrackVidsHeaderOffset;
+
 			var state = new VideoState();
 			state.CurrentFrame = (uint)curFrame;
 			state.FrameCount = MemoryReader.ReadUInt32(videoTrackPtrVal + aviTrackFrameCountOffset);
 			var fileStreamPtrVal = MemoryReader.ReadIntPtr(decoderAddr + aviDecFileStreamOffset);
 			state.FileName = ReadFileName(fileStreamPtrVal);
+
+			state.FrameRate = new Rational() {
+				Numerator=(int)MemoryReader.ReadUInt32(streamHeaderAddr+aviStreamHeadRateOffset),
+				Denominator=(int)MemoryReader.ReadUInt32(streamHeaderAddr+aviStreamHeadScaleOffset)
+			};
 
 			return state;
 		}
