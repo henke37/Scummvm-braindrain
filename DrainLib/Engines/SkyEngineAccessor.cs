@@ -17,7 +17,7 @@ namespace DrainLib.Engines {
 
 		internal override void LoadSymbols() {
 			var engineClSymb = Resolver.FindClass("Sky::SkyEngine");
-			logicOffset = Resolver.FieldOffset(engineClSymb, "_logic");
+			logicOffset = Resolver.FieldOffset(engineClSymb, "_skyLogic");
 
 			var logicClSymb = Resolver.FindClass("Sky::Logic");
 			scriptVarsOffset = Resolver.FieldOffset(logicClSymb, "_scriptVariables");
