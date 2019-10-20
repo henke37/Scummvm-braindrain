@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using Henke37.DebugHelp;
-using Dia2Lib;
 using Henke37.DebugHelp.PdbAccess;
+using DIA;
 
 namespace DrainLib.Engines {
 	public class ScummEngineAccessor : BaseEngineAccessor {
@@ -204,11 +204,10 @@ namespace DrainLib.Engines {
 
 		private Dictionary<string, byte> BuildVarMap() {
 			var engineClSymb = Resolver.FindClass("Scumm::ScummEngine");
-			engineClSymb.findChildren(
-				Dia2Lib.SymTagEnum.SymTagData,
+			var varSymbols=engineClSymb.findChildren(
+				SymTagEnum.Data,
 				"VAR_*",
-				(uint)NameSearchOptions.Glob,
-				out var varSymbols
+				NameSearchOptions.RegularExpression
 			);
 
 			var map = new Dictionary<string, byte>(varSymbols.count);
