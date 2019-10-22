@@ -31,16 +31,16 @@ namespace DrainLib.Engines {
 				addr = MemoryReader.ReadIntPtr(addr);
 			}
 
-			var gameDesc = new ADGameDescriptor();
+			
 
 			IntPtr gameIdVal = MemoryReader.ReadIntPtr(addr + adGameIdOffset);
-			gameDesc.GameId = gameIdVal == IntPtr.Zero ? "" : MemoryReader.ReadNullTermString(gameIdVal);
+			var GameId = gameIdVal == IntPtr.Zero ? "" : MemoryReader.ReadNullTermString(gameIdVal);
 			IntPtr extraVal = MemoryReader.ReadIntPtr(addr + adExtraOffset);
-			gameDesc.Extra = extraVal == IntPtr.Zero ? "" : MemoryReader.ReadNullTermString(extraVal);
+			var Extra = extraVal == IntPtr.Zero ? "" : MemoryReader.ReadNullTermString(extraVal);
 			uint flagsVal = MemoryReader.ReadUInt32(addr + adFlagsOffset);
-			gameDesc.GameFlags = (GameFlags)flagsVal;
+			var GameFlags = (GameFlags)flagsVal;
 
-			return gameDesc;
+			return new ADGameDescriptor(GameId, Extra, GameFlags);
 		}
 
 		public class ADGameDescriptor {
@@ -48,6 +48,12 @@ namespace DrainLib.Engines {
 			public string Extra;
 
 			public GameFlags GameFlags;
+
+			public ADGameDescriptor(string gameId, string extra, GameFlags gameFlags) {
+				GameId = gameId ?? throw new ArgumentNullException(nameof(gameId));
+				Extra = extra ?? throw new ArgumentNullException(nameof(extra));
+				GameFlags = gameFlags;
+			}
 		}
 
 		[Flags]
