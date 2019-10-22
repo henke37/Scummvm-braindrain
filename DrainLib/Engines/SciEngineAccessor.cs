@@ -48,11 +48,11 @@ namespace DrainLib.Engines {
 			LoadADSymbols(gameDescriptionOffset, true);
 		}
 
-		public override VideoState GetVideoState() {
+		public override VideoState? GetVideoState() {
 			var video32PtrVal = MemoryReader.ReadIntPtr(EngineAddr + video32Offset);
 			if(video32PtrVal == IntPtr.Zero) return null;
 
-			VideoState videoState;
+			VideoState? videoState;
 			
 			videoState = ReadVideoPlayer(video32PtrVal + seqPlayerOffset);
 			if(videoState!=null) return videoState;
@@ -66,7 +66,7 @@ namespace DrainLib.Engines {
 			return null;
 		}
 
-		private VideoState ReadVideoPlayer(IntPtr playerAddr) {
+		private VideoState? ReadVideoPlayer(IntPtr playerAddr) {
 			var decoderPtrAddr = playerAddr + videoPlayerDecoderOffset + videoPlayerDecoderPointerOffset;
 			var decoderPtrVal = MemoryReader.ReadIntPtr(decoderPtrAddr);
 			if(decoderPtrVal == IntPtr.Zero) return null;

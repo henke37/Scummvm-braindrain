@@ -72,7 +72,7 @@ namespace DrainLib {
 			vmdDecoderStreamOffset = Resolver.FieldOffset(vmdDecoderCl, "_stream");
 		}
 
-		public VideoState ReadDecoder(IntPtr decoderAddr) {
+		public VideoState? ReadDecoder(IntPtr decoderAddr) {
 			if(decoderAddr == IntPtr.Zero) return null;
 
 			if(RttiReader.HasBaseClass(decoderAddr, ".?AVSmackerDecoder@Video@@")) {
@@ -87,7 +87,7 @@ namespace DrainLib {
 			throw new NotSupportedException("No support for the decoder");
 		}
 
-		private VideoState ReadSmkDecoder(IntPtr decoderAddr) {
+		private VideoState? ReadSmkDecoder(IntPtr decoderAddr) {
 			var videoTrackPtrVal = MemoryReader.ReadIntPtr(decoderAddr + videoDecNextVideoTrackOffset);
 			var fileStreamPtrVal = MemoryReader.ReadIntPtr(decoderAddr + smkDecFileStreamOffset);
 
@@ -106,7 +106,7 @@ namespace DrainLib {
 			return state;
 		}
 
-		private VideoState ReadAviDecoder(IntPtr decoderAddr) {
+		private VideoState? ReadAviDecoder(IntPtr decoderAddr) {
 			var videoTrackPtrVal = MemoryReader.ReadIntPtr(decoderAddr + videoDecNextVideoTrackOffset);
 
 			if(videoTrackPtrVal == IntPtr.Zero) return null;
@@ -130,7 +130,7 @@ namespace DrainLib {
 			return state;
 		}
 
-		private VideoState ReadVmdDecoder(IntPtr decoderAddr) {
+		private VideoState? ReadVmdDecoder(IntPtr decoderAddr) {
 			var coktelDecoderAddr = MemoryReader.ReadIntPtr(decoderAddr + vmdAdvancedDecoderDecoderOffset);
 
 			var curFrame= MemoryReader.ReadInt32(coktelDecoderAddr + coktelDecoderCurFrameOffset);

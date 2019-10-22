@@ -65,7 +65,7 @@ namespace DrainLib.Engines {
 			return state;
 		}
 
-		public override VideoState GetVideoState() {
+		public override VideoState? GetVideoState() {
 			var moviePlayerPtrVal = MemoryReader.ReadIntPtr(EngineAddr + moviePlayerOffset);
 			bool playing = MemoryReader.ReadByte(moviePlayerPtrVal + moviePlayingOffset)!=0;
 			if(!playing) return null;

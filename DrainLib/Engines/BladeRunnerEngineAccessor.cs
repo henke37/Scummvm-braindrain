@@ -115,7 +115,7 @@ namespace DrainLib.Engines {
 			infoSuspectCountOffset = Resolver.FieldOffset(infoSymb, "_suspectCount");
 		}
 
-		public override VideoState GetVideoState() {
+		public override VideoState? GetVideoState() {
 			var playing = MemoryReader.ReadByte(EngineAddr + vqaIsPlayingOffset)!=0;
 			if(!playing) return null;
 

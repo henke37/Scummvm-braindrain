@@ -58,7 +58,7 @@ namespace DrainLib {
 			return new string(Encoding.UTF8.GetChars(strBytes));
 		}
 
-		protected string ReadFileName(IntPtr streamAddr) {
+		protected string? ReadFileName(IntPtr streamAddr) {
 			if(!RttiReader.TryDynamicCast(streamAddr, ".?AVFile@Common@@", out var fileAddr)) return null;
 			return ReadFileNameInternal(fileAddr);
 		}

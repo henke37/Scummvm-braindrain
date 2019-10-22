@@ -139,7 +139,7 @@ namespace DrainLib.Engines {
 			return settings;
 		}
 
-		public override VideoState GetVideoState() {
+		public override VideoState? GetVideoState() {
 			if(GameSettings.Version < 7) return null;
 
 			var active = MemoryReader.ReadByte(EngineAddr + smushActiveOffset) != 0;
