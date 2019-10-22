@@ -56,6 +56,7 @@ namespace DrainLib {
 
 			if(enginePtrVal == IntPtr.Zero) return null;
 
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
 			if(rttiReader.HasBaseClass(enginePtrVal, ".?AVScummEngine@Scumm@@")) {
 				return new ScummEngineAccessor(this, enginePtrVal);
 			}
@@ -103,6 +104,8 @@ namespace DrainLib {
 				return new TestBedEngineAccessor(this, enginePtrVal);
 			}
 
+
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
 			return new UnknownEngineAccessor(this, enginePtrVal);
 		}
 	}
