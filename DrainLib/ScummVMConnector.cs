@@ -15,9 +15,9 @@ namespace DrainLib {
 		private const string executableName = "scummvm.exe";
 
 		private NativeProcess? process;
-		internal ProcessMemoryReader memoryReader;
-		internal RTTIReader rttiReader;
-		internal SymbolResolver resolver;
+		internal ProcessMemoryReader? memoryReader;
+		internal RTTIReader? rttiReader;
+		internal SymbolResolver? resolver;
 
 		internal IntPtr g_engineAddr;
 
@@ -51,7 +51,8 @@ namespace DrainLib {
 		}
 
 		public BaseEngineAccessor? GetEngine() {
-			IntPtr enginePtrVal = memoryReader.ReadIntPtr(g_engineAddr);
+			if(!Connected) return null;
+			IntPtr enginePtrVal = memoryReader!.ReadIntPtr(g_engineAddr);
 
 			if(enginePtrVal == IntPtr.Zero) return null;
 

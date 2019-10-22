@@ -25,9 +25,9 @@ namespace DrainLib {
 		private int comRationalDenomOffset;
 		#endregion
 
-		protected ProcessMemoryReader MemoryReader => Connector.memoryReader;
-		protected RTTIReader RttiReader => Connector.rttiReader;
-		protected SymbolResolver Resolver => Connector.resolver;
+		protected ProcessMemoryReader MemoryReader => Connector.memoryReader!;
+		protected RTTIReader RttiReader => Connector.rttiReader!;
+		protected SymbolResolver Resolver => Connector.resolver!;
 
 		protected BaseAccessor(ScummVMConnector connector) {
 			if(connector==null) throw new ArgumentNullException(nameof(connector));
