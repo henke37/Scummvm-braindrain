@@ -306,6 +306,10 @@ namespace DrainLib.Engines {
 			return (bitVarData[varNum / 8] >> ((int)(varNum % 8))) != 0;
 		}
 
+		public bool HasItem(short item) {
+			return Array.IndexOf(Inventory, item) != -1;
+		}
+
 		public byte[] bitVarData;
 	}
 

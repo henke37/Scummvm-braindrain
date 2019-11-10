@@ -99,8 +99,14 @@ namespace DrainLib {
 			if(rttiReader.HasBaseClass(enginePtrVal, ".?AVPlumbersGame@Plumbers@@")) {
 				return new PlumbersEngineAccessor(this, enginePtrVal);
 			}
+			if(rttiReader.HasBaseClass(enginePtrVal, ".?AVHopkinsEngine@Hopkins@@")) {
+				return new HopkinsEngineAccessor(this, enginePtrVal);
+			}
 			if(rttiReader.HasBaseClass(enginePtrVal, ".?AVSludgeEngine@Sludge@@")) {
 				return new SludgeEngineAccessor(this, enginePtrVal);
+			}
+			if(rttiReader.HasBaseClass(enginePtrVal, ".?AVSagaEngine@Saga@@")) {
+				return new SagaEngineAccessor(this, enginePtrVal);
 			}
 
 			if(rttiReader.HasBaseClass(enginePtrVal, ".?AVTestbedEngine@Testbed@@")) {
