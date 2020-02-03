@@ -31,6 +31,7 @@ namespace DrainLib.Engines {
 		private int numInventoryOffset;
 		private int numGlobalObjectsOffset;
 		private int resOffset;
+		private int varWatchOffset;
 		private int smushActiveOffset;
 		private int smushPlayerOffset;
 
@@ -86,6 +87,7 @@ namespace DrainLib.Engines {
 			numInventoryOffset = Resolver.FieldOffset(engineClSymb, "_numInventory");
 			numGlobalObjectsOffset = Resolver.FieldOffset(engineClSymb, "_numGlobalObjects");
 			resOffset = Resolver.FieldOffset(engineClSymb, "_res");
+			varWatchOffset = Resolver.FieldOffset(engineClSymb, "_varwatch");
 
 			var gameSettingsSymb = Resolver.FindClass("Scumm::GameSettings");
 			gameIdOffset = Resolver.FieldOffset(gameSettingsSymb, "gameid");
@@ -250,6 +252,12 @@ namespace DrainLib.Engines {
 			IntPtr resLocation = resStorageBase + resouceSize * index;
 
 			return MemoryReader.ReadIntPtr(resLocation + resourceAddressOffset);
+		}
+
+		public short VarWatch {
+			get {
+				return MemoryReader.ReadInt16(EngineAddr + varWatchOffset);
+			}
 		}
 
 		private enum ResourceType {
