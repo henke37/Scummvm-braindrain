@@ -256,6 +256,9 @@ namespace DrainLib.Engines {
 			get {
 				return MemoryReader.ReadInt16(EngineAddr + varWatchOffset);
 			}
+			set {
+				MemoryReader.WriteInt16(EngineAddr + varWatchOffset, value);
+			}
 		}
 
 		public int BootParam => MemoryReader.ReadInt32(EngineAddr + bootParamOffset);

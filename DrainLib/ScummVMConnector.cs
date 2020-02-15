@@ -15,7 +15,7 @@ namespace DrainLib {
 		private const string executableName = "scummvm.exe";
 
 		private NativeProcess? process;
-		internal ProcessMemoryReader? memoryReader;
+		internal ProcessMemoryAccessor? memoryReader;
 		internal RTTIReader? rttiReader;
 		internal SymbolResolver? resolver;
 
