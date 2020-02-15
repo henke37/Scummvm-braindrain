@@ -161,7 +161,6 @@ namespace DrainLib.Engines {
 			var state = new ScummState();
 			state.CurrentRoom = MemoryReader.ReadByte(EngineAddr + currentRoomOffset);
 			state.RoomCount = MemoryReader.ReadByte(EngineAddr + numRoomsOffset);
-			state.BootParam = MemoryReader.ReadInt32(EngineAddr + bootParamOffset);
 
 			if(GameSettings.HeVersion > 0) {
 				var roomVarCount = MemoryReader.ReadInt32(EngineAddr + numRoomVarsOffset);
@@ -260,6 +259,12 @@ namespace DrainLib.Engines {
 			}
 		}
 
+		public int BootParam {
+			get {
+				return MemoryReader.ReadInt32(EngineAddr + bootParamOffset);
+			}
+		}
+
 		private enum ResourceType {
 			Invalid = 0,
 			First = 1,
@@ -300,8 +305,6 @@ namespace DrainLib.Engines {
 	public class ScummState {
 		public byte CurrentRoom;
 		public byte RoomCount;
-
-		public int BootParam;
 
 		public int[] RoomVars;
 		public int[] ScummVars;
