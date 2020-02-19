@@ -56,9 +56,30 @@ namespace DrainLib.Engines {
 
 		#endregion
 
+	#region Semistatic data
 		public readonly GameSettings GameSettings;
 
-		internal ScummEngineAccessor(ScummVMConnector connector, IntPtr engineAddr) : base(connector, engineAddr) {
+		private uint roomVarCount;
+		private IntPtr roomVarsPtr;
+
+		private uint varCount;
+		private IntPtr varsPtr;
+
+		private uint bitVarByteCount;
+		private IntPtr bitVarsPtr;
+
+		private uint inventoryCount;
+		private IntPtr inventoryPtr;
+
+		private uint numGlobalObjects;
+
+		private IntPtr classDataPtr;
+		private IntPtr objectOwnerTablePtr;
+		private IntPtr objectStateTablePtr;
+	#endregion
+
+
+	internal ScummEngineAccessor(ScummVMConnector connector, IntPtr engineAddr) : base(connector, engineAddr) {
 			GameSettings = GetGameSettings();
 
 			if(GameSettings.Version >= 7) {
@@ -66,6 +87,30 @@ namespace DrainLib.Engines {
 			}
 
 			VarMap = BuildVarMap();
+
+			LoadSemiStaticData();
+		}
+
+		private void LoadSemiStaticData() {
+			if(GameSettings.HeVersion > 0) {
+				roomVarCount = MemoryReader.ReadUInt32(EngineAddr + numRoomVarsOffset);
+				roomVarsPtr = MemoryReader.ReadIntPtr(EngineAddr + roomVarsOffset);
+			}
+
+			varCount = MemoryReader.ReadUInt32(EngineAddr + numVarsOffset);
+			varsPtr = MemoryReader.ReadIntPtr(EngineAddr + scummVarsOffset);
+
+			bitVarByteCount = MemoryReader.ReadUInt32(EngineAddr + numBitVarsOffset) / 8;
+			bitVarsPtr = MemoryReader.ReadIntPtr(EngineAddr + scummVarsOffset);
+
+			inventoryCount = MemoryReader.ReadUInt32(EngineAddr + numInventoryOffset);
+			inventoryPtr = MemoryReader.ReadIntPtr(EngineAddr + inventoryOffset);
+
+			numGlobalObjects = MemoryReader.ReadUInt32(EngineAddr + numGlobalObjectsOffset);
+
+			classDataPtr = MemoryReader.ReadIntPtr(EngineAddr + classDataOffset);
+			objectOwnerTablePtr = MemoryReader.ReadIntPtr(EngineAddr + objectOwnerTableOffset);
+			objectStateTablePtr = MemoryReader.ReadIntPtr(EngineAddr + objectStateTableOffset);
 		}
 
 		internal override void LoadSymbols() {
@@ -162,42 +207,17 @@ namespace DrainLib.Engines {
 			state.CurrentRoom = MemoryReader.ReadByte(EngineAddr + currentRoomOffset);
 
 			if(GameSettings.HeVersion > 0) {
-				var roomVarCount = MemoryReader.ReadInt32(EngineAddr + numRoomVarsOffset);
-				var roomVarsPtr = MemoryReader.ReadIntPtr(EngineAddr + roomVarsOffset);
-				state.RoomVars = MemoryReader.ReadInt32Array(roomVarsPtr, (uint)roomVarCount);
+				state.RoomVars = MemoryReader.ReadInt32Array(roomVarsPtr, roomVarCount);
 			}
-
-			{
-				var varCount = MemoryReader.ReadInt32(EngineAddr + numVarsOffset);
-				var varsPtr = MemoryReader.ReadIntPtr(EngineAddr + scummVarsOffset);
-				state.ScummVars = MemoryReader.ReadInt32Array(varsPtr, (uint)varCount);
-			}
-
-			{
-				var bitVarByteCount = MemoryReader.ReadInt32(EngineAddr + numBitVarsOffset) / 8;
-				var bitVarsPtr = MemoryReader.ReadIntPtr(EngineAddr + scummVarsOffset);
-				state.bitVarData = MemoryReader.ReadBytes(bitVarsPtr, (uint)bitVarByteCount);
-			}
-
-			{
-				var inventoryCount = MemoryReader.ReadInt32(EngineAddr + numInventoryOffset);
-				var inventoryPtr = MemoryReader.ReadIntPtr(EngineAddr + inventoryOffset);
-				state.Inventory = MemoryReader.ReadInt16Array(inventoryPtr, (uint)inventoryCount);
-			}
-
-			uint numGlobalObjects = (uint)MemoryReader.ReadInt32(EngineAddr + numGlobalObjectsOffset);
-			{
-				var classDataPtr = MemoryReader.ReadIntPtr(EngineAddr + classDataOffset);
-				state.GlobalObjectClasses = MemoryReader.ReadUInt32Array(classDataPtr, numGlobalObjects);
-			}
-			{
-				var objectOwnerTablePtr = MemoryReader.ReadIntPtr(EngineAddr + objectOwnerTableOffset);
-				state.GlobalObjectOwners = MemoryReader.ReadBytes(objectOwnerTablePtr, numGlobalObjects);
-			}
-			{
-				var objectStateTablePtr = MemoryReader.ReadIntPtr(EngineAddr + objectStateTableOffset);
-				state.GlobalObjectStates = MemoryReader.ReadBytes(objectStateTablePtr, numGlobalObjects);
-			}
+			
+			state.ScummVars = MemoryReader.ReadInt32Array(varsPtr, varCount);
+			state.bitVarData = MemoryReader.ReadBytes(bitVarsPtr, bitVarByteCount);
+			
+			state.Inventory = MemoryReader.ReadInt16Array(inventoryPtr, inventoryCount);
+			
+			state.GlobalObjectClasses = MemoryReader.ReadUInt32Array(classDataPtr, numGlobalObjects);
+			state.GlobalObjectOwners = MemoryReader.ReadBytes(objectOwnerTablePtr, numGlobalObjects);
+			state.GlobalObjectStates = MemoryReader.ReadBytes(objectStateTablePtr, numGlobalObjects);
 
 			return state;
 		}
@@ -313,7 +333,7 @@ namespace DrainLib.Engines {
 		public byte[] GlobalObjectStates;
 
 		public bool GetBitVar(uint varNum) {
-			return (bitVarData[varNum / 8] >> ((int)(varNum % 8))) != 0;
+			return (bitVarData[varNum >> 3] & (1 << (int)(varNum & 7))) != 0;
 		}
 
 		public bool HasItem(short item) {
