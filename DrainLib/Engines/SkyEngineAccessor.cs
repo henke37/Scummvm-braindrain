@@ -10,7 +10,14 @@ namespace DrainLib.Engines {
 		private const uint numScriptVars = 838;
 		#endregion
 
+		private IntPtr logicPtrVal;
+
 		internal SkyEngineAccessor(ScummVMConnector connector, IntPtr engineAddr) : base(connector, engineAddr) {
+			LoadSemiStaticData();
+		}
+
+		private void LoadSemiStaticData() {
+			logicPtrVal = MemoryReader.ReadIntPtr(EngineAddr + logicOffset);
 		}
 
 		public override string GameId => "sky";
@@ -24,8 +31,6 @@ namespace DrainLib.Engines {
 		}
 
 		public SkyState GetState() {
-			var logicPtrVal = MemoryReader.ReadIntPtr(EngineAddr + logicOffset);
-
 			var state = new SkyState();
 
 			state.Vars = MemoryReader.ReadUInt32Array(logicPtrVal + scriptVarsOffset, numScriptVars);
