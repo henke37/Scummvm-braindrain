@@ -14,10 +14,16 @@ namespace DrainLib.Engines {
 		private int itemDataOffset;
 		#endregion
 
+		private IntPtr logicPtrVal;
+
+		public LogicMode logicMode;
+
 		internal QueenEngineAccessor(ScummVMConnector connector, IntPtr engineAddr) : base(connector, engineAddr) {
+			LoadSemiStaticData();
 		}
 
 		public override string GameId => "queen";
+		public override bool IsDemo => logicMode!=LogicMode.Game;
 
 		internal override void LoadSymbols() {
 			var engineSymb = Resolver.FindClass("Queen::QueenEngine");
@@ -33,23 +39,6 @@ namespace DrainLib.Engines {
 		public QueenState GetState() {
 			var state = new QueenState();
 
-			var logicPtrVal = MemoryReader.ReadIntPtr(EngineAddr + logicOffset);
-
-			string logicName=RttiReader.GetMangledClassNameFromObjPtr(logicPtrVal);
-			switch(logicName) {
-				case ".?AVLogicGame@Queen@@":
-					state.LogicMode = LogicMode.Game;
-					break;
-				case ".?AVLogicDemo@Queen@@":
-					state.LogicMode = LogicMode.Demo;
-					break;
-				case ".?AVLogicInterview@Queen@@":
-					state.LogicMode = LogicMode.Interview;
-					break;
-				default:
-					throw new InvalidDataException("Unrecognized logic type");
-			}
-
 			state.CurrentRoom = MemoryReader.ReadUInt16(logicPtrVal + currentRoomOffset);
 			state.GameState = MemoryReader.ReadInt16Array(logicPtrVal + gameStateOffset, gameStateCount);
 
@@ -58,18 +47,42 @@ namespace DrainLib.Engines {
 			return state;
 		}
 
+		private void LoadSemiStaticData() {
+			logicPtrVal = MemoryReader.ReadIntPtr(EngineAddr + logicOffset);
+
+			string logicName = RttiReader.GetMangledClassNameFromObjPtr(logicPtrVal);
+			switch(logicName) {
+				case ".?AVLogicGame@Queen@@":
+					logicMode = LogicMode.Game;
+					break;
+				case ".?AVLogicDemo@Queen@@":
+					logicMode = LogicMode.Demo;
+					break;
+				case ".?AVLogicInterview@Queen@@":
+					logicMode = LogicMode.Interview;
+					break;
+				default:
+					throw new InvalidDataException("Unrecognized logic type");
+			}
+		}
+
 		private QueenState.ItemData[] ReadInventory(IntPtr logicPtrVal) {
 			var numItems = MemoryReader.ReadUInt16(logicPtrVal + numItemsOffset);
 			var itemDataPtrVal = MemoryReader.ReadIntPtr(logicPtrVal + itemDataOffset);
 
 			return MemoryReader.ReadStructArr<QueenState.ItemData>(itemDataPtrVal, numItems);
 		}
+
+		public enum LogicMode {
+			Game,
+			Demo,
+			Interview
+		}
 	}
 
 	public class QueenState {
 		public uint CurrentRoom;
 		public short[] GameState;
-		public LogicMode LogicMode;
 		public ItemData[] Inventory;
 
 
@@ -109,9 +122,5 @@ namespace DrainLib.Engines {
 		}
 	}
 
-	public enum LogicMode {
-		Game,
-		Demo,
-		Interview
-	}
+	
 }

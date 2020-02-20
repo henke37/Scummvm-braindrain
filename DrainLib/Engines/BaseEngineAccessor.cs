@@ -67,5 +67,7 @@ namespace DrainLib.Engines {
 		public virtual VideoState? GetVideoState() { return null; }
 
 		public abstract string GameId { get; }
+
+		public virtual bool IsDemo => false;
 	}
 }

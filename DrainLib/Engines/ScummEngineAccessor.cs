@@ -57,7 +57,7 @@ namespace DrainLib.Engines {
 		#endregion
 
 	#region Semistatic data
-		public readonly GameSettings GameSettings;
+		public readonly GameSettings gameSettings;
 
 		private uint roomVarCount;
 		private IntPtr roomVarsPtr;
@@ -80,9 +80,9 @@ namespace DrainLib.Engines {
 
 
 	internal ScummEngineAccessor(ScummVMConnector connector, IntPtr engineAddr) : base(connector, engineAddr) {
-			GameSettings = GetGameSettings();
+			gameSettings = GetGameSettings();
 
-			if(GameSettings.Version >= 7) {
+			if(gameSettings.Version >= 7) {
 				LoadSmushSymbols();
 			}
 
@@ -92,7 +92,7 @@ namespace DrainLib.Engines {
 		}
 
 		private void LoadSemiStaticData() {
-			if(GameSettings.HeVersion > 0) {
+			if(gameSettings.HeVersion > 0) {
 				roomVarCount = MemoryReader.ReadUInt32(EngineAddr + numRoomVarsOffset);
 				roomVarsPtr = MemoryReader.ReadIntPtr(EngineAddr + roomVarsOffset);
 			}
@@ -169,7 +169,8 @@ namespace DrainLib.Engines {
 			smushPlayerSeekFileOffset = Resolver.FieldOffset(smushPlayerClSymb, "_seekFile");
 		}
 
-		public override string GameId => GameSettings.GameId;
+		public override string GameId => gameSettings.GameId;
+		public override bool IsDemo => (gameSettings.GameFeatures & GameFeatures.Demo)!=0;
 
 		public Dictionary<string, byte> VarMap { get; }
 
@@ -187,7 +188,7 @@ namespace DrainLib.Engines {
 		}
 
 		public override VideoState? GetVideoState() {
-			if(GameSettings.Version < 7) return null;
+			if(gameSettings.Version < 7) return null;
 
 			var active = MemoryReader.ReadByte(EngineAddr + smushActiveOffset) != 0;
 			if(!active) return null;
@@ -206,7 +207,7 @@ namespace DrainLib.Engines {
 			var state = new ScummState();
 			state.CurrentRoom = MemoryReader.ReadByte(EngineAddr + currentRoomOffset);
 
-			if(GameSettings.HeVersion > 0) {
+			if(gameSettings.HeVersion > 0) {
 				state.RoomVars = MemoryReader.ReadInt32Array(roomVarsPtr, roomVarCount);
 			}
 			
@@ -243,7 +244,7 @@ namespace DrainLib.Engines {
 		}
 
 		public void ReadArray(int arrayId) {
-			if(GameSettings.Version < 6) throw new InvalidOperationException("Arrays aren't used in this game");
+			if(gameSettings.Version < 6) throw new InvalidOperationException("Arrays aren't used in this game");
 			var arrayHeaderAddr = GetResourceAddr(ResourceType.String, arrayId);
 
 			short dim1 = MemoryReader.ReadInt16(arrayHeaderAddr + arrHeadDim1Offset);
@@ -255,7 +256,7 @@ namespace DrainLib.Engines {
 			var dataAddr = arrayHeaderAddr + arrHeadDataOffset;
 			if(type != ArrayType.IntArray) {
 				MemoryReader.ReadBytes(dataAddr, numElements);
-			} else if(GameSettings.Version == 8) {
+			} else if(gameSettings.Version == 8) {
 				MemoryReader.ReadUInt32Array(dataAddr, numElements);
 			} else {
 				MemoryReader.ReadUInt16Array(dataAddr, numElements);
@@ -319,6 +320,32 @@ namespace DrainLib.Engines {
 			IntArray=5,
 			DWordArray=6
 		}
+
+		[Serializable]
+		public class GameSettings {
+			public string GameId;
+			public string Variant;
+			public int Version;
+			public int HeVersion;
+			public GameFeatures GameFeatures;
+		}
+
+		[Flags]
+		public enum GameFeatures {
+			Demo = 1 << 0,
+			NewCostumes = 1 << 2,
+			UseKey = 1 << 4,
+			SmallHeader = 1 << 5,
+			OldBundle = 1 << 6,
+			Color16 = 1 << 7,
+			Old256 = 1 << 8,
+			AudioTracks = 1 << 9,
+			FewLocals = 1 << 11,
+			HELocalized = 1 << 13,
+			HE985 = 1 << 14,
+			Color16Bit = 1 << 15,
+			MacContainer = 1 << 16
+		}
 	}
 
 	[Serializable]
@@ -343,11 +370,5 @@ namespace DrainLib.Engines {
 		public byte[] bitVarData;
 	}
 
-	[Serializable]
-	public class GameSettings {
-		public string GameId;
-		public string Variant;
-		public int Version;
-		public int HeVersion;
-	}
+
 }

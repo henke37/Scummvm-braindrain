@@ -24,6 +24,7 @@ namespace DrainLib.Engines {
 		}
 
 		public override string GameId => GetGameDescriptor().GameId;
+		public override bool IsDemo => (GetGameDescriptor().GameFlags & GameFlags.Demo)!=0;
 
 		protected ADGameDescriptor GetGameDescriptor() {
 			var addr = EngineAddr + descOffset;
