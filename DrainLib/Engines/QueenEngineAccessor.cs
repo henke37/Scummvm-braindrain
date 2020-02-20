@@ -49,6 +49,7 @@ namespace DrainLib.Engines {
 
 		private void LoadSemiStaticData() {
 			logicPtrVal = MemoryReader.ReadIntPtr(EngineAddr + logicOffset);
+			if(logicPtrVal == IntPtr.Zero) throw new InconsistentDataException();
 
 			string logicName = RttiReader.GetMangledClassNameFromObjPtr(logicPtrVal);
 			switch(logicName) {
@@ -69,6 +70,7 @@ namespace DrainLib.Engines {
 		private QueenState.ItemData[] ReadInventory(IntPtr logicPtrVal) {
 			var numItems = MemoryReader.ReadUInt16(logicPtrVal + numItemsOffset);
 			var itemDataPtrVal = MemoryReader.ReadIntPtr(logicPtrVal + itemDataOffset);
+			if(itemDataPtrVal == IntPtr.Zero) throw new InconsistentDataException();
 
 			return MemoryReader.ReadStructArr<QueenState.ItemData>(itemDataPtrVal, numItems);
 		}

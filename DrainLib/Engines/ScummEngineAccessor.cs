@@ -76,10 +76,12 @@ namespace DrainLib.Engines {
 		private IntPtr classDataPtr;
 		private IntPtr objectOwnerTablePtr;
 		private IntPtr objectStateTablePtr;
+
+		private IntPtr resManPtrVal;
 	#endregion
 
 
-	internal ScummEngineAccessor(ScummVMConnector connector, IntPtr engineAddr) : base(connector, engineAddr) {
+		internal ScummEngineAccessor(ScummVMConnector connector, IntPtr engineAddr) : base(connector, engineAddr) {
 			gameSettings = GetGameSettings();
 
 			if(gameSettings.Version >= 7) {
@@ -95,22 +97,32 @@ namespace DrainLib.Engines {
 			if(gameSettings.HeVersion > 0) {
 				roomVarCount = MemoryReader.ReadUInt32(EngineAddr + numRoomVarsOffset);
 				roomVarsPtr = MemoryReader.ReadIntPtr(EngineAddr + roomVarsOffset);
+				if(roomVarsPtr == IntPtr.Zero) throw new InconsistentDataException();
 			}
 
 			varCount = MemoryReader.ReadUInt32(EngineAddr + numVarsOffset);
 			varsPtr = MemoryReader.ReadIntPtr(EngineAddr + scummVarsOffset);
+			if(varsPtr == IntPtr.Zero) throw new InconsistentDataException();
 
 			bitVarByteCount = MemoryReader.ReadUInt32(EngineAddr + numBitVarsOffset) / 8;
 			bitVarsPtr = MemoryReader.ReadIntPtr(EngineAddr + scummVarsOffset);
+			if(bitVarsPtr == IntPtr.Zero) throw new InconsistentDataException();
 
 			inventoryCount = MemoryReader.ReadUInt32(EngineAddr + numInventoryOffset);
 			inventoryPtr = MemoryReader.ReadIntPtr(EngineAddr + inventoryOffset);
+			if(inventoryPtr == IntPtr.Zero) throw new InconsistentDataException();
 
 			numGlobalObjects = MemoryReader.ReadUInt32(EngineAddr + numGlobalObjectsOffset);
 
 			classDataPtr = MemoryReader.ReadIntPtr(EngineAddr + classDataOffset);
+			if(classDataPtr == IntPtr.Zero) throw new InconsistentDataException();
 			objectOwnerTablePtr = MemoryReader.ReadIntPtr(EngineAddr + objectOwnerTableOffset);
+			if(objectOwnerTablePtr == IntPtr.Zero) throw new InconsistentDataException();
 			objectStateTablePtr = MemoryReader.ReadIntPtr(EngineAddr + objectStateTableOffset);
+			if(objectStateTablePtr == IntPtr.Zero) throw new InconsistentDataException();
+
+			resManPtrVal = MemoryReader.ReadIntPtr(EngineAddr + resOffset);
+			if(resManPtrVal == IntPtr.Zero) throw new InconsistentDataException();
 		}
 
 		internal override void LoadSymbols() {
@@ -194,6 +206,7 @@ namespace DrainLib.Engines {
 			if(!active) return null;
 
 			var addr = MemoryReader.ReadIntPtr(EngineAddr + smushPlayerOffset);
+			if(addr == IntPtr.Zero) throw new InconsistentDataException();
 
 			var state = new VideoState();
 			state.CurrentFrame = MemoryReader.ReadUInt32(addr + smushPlayerFrameOffset);
@@ -264,10 +277,10 @@ namespace DrainLib.Engines {
 		}
 
 		private IntPtr GetResourceAddr(ResourceType type, int index) {
-			var resManPtrVal = MemoryReader.ReadIntPtr(EngineAddr + resOffset);
 			var typesBase = resManPtrVal + resTypesOffset;
 			IntPtr typeLocation = typesBase + (int)type * resTypeDataSize;
 			var resStorageBase = MemoryReader.ReadIntPtr(typeLocation + resArrStorageOffset);
+			if(resStorageBase == IntPtr.Zero) throw new InconsistentDataException();
 			IntPtr resLocation = resStorageBase + resouceSize * index;
 
 			return MemoryReader.ReadIntPtr(resLocation + resourceAddressOffset);

@@ -32,6 +32,7 @@ namespace DrainLib.Engines {
 
 		private void LoadSemiStaticData() {
 			soundAddr = MemoryReader.ReadIntPtr(EngineAddr + soundOffset);
+			if(soundAddr == IntPtr.Zero) throw new InconsistentDataException();
 		}
 
 		public override string GameId => "hbd";

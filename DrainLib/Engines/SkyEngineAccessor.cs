@@ -18,6 +18,7 @@ namespace DrainLib.Engines {
 
 		private void LoadSemiStaticData() {
 			logicPtrVal = MemoryReader.ReadIntPtr(EngineAddr + logicOffset);
+			if(logicPtrVal == IntPtr.Zero) throw new InconsistentDataException();
 		}
 
 		public override string GameId => "sky";
