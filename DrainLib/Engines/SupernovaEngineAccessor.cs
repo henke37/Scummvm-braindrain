@@ -17,7 +17,14 @@ namespace DrainLib.Engines {
 		private int roomIdOffset;
 		#endregion
 
+		IntPtr gmAddr;
+
 		public SupernovaEngineAccessor(ScummVMConnector connector, IntPtr engineAddr) : base(connector, engineAddr) {
+			LoadSemiStaticData();
+		}
+
+		private void LoadSemiStaticData() {
+			gmAddr = MemoryReader.ReadIntPtr(EngineAddr + gmOffset);
 		}
 
 		public override string GameId => "supernova"+Part;
@@ -42,7 +49,6 @@ namespace DrainLib.Engines {
 
 		public int CurrentRoomId {
 			get {
-				IntPtr gmAddr = MemoryReader.ReadIntPtr(EngineAddr + gmOffset);
 				IntPtr roomAddr = MemoryReader.ReadIntPtr(gmAddr + currentRoomOffset);
 				return MemoryReader.ReadInt32(roomAddr + roomIdOffset);
 			}
