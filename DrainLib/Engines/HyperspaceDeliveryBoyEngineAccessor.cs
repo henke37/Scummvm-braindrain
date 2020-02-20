@@ -24,7 +24,14 @@ namespace DrainLib.Engines {
 		int songSongOffset;
 		#endregion
 
+		private IntPtr soundAddr;
+
 		public HyperspaceDeliveryBoyEngineAccessor(ScummVMConnector connector, IntPtr engineAddr) : base(connector, engineAddr) {
+			LoadSemiStaticData();
+		}
+
+		private void LoadSemiStaticData() {
+			soundAddr = MemoryReader.ReadIntPtr(EngineAddr + soundOffset);
 		}
 
 		public override string GameId => "hbd";
@@ -54,7 +61,6 @@ namespace DrainLib.Engines {
 		}
 
 		public MusicState GetMusicState() {
-			var soundAddr = MemoryReader.ReadIntPtr(EngineAddr + soundOffset);
 
 			MusicState.Song GetSong(IntPtr songAddr) {
 				var song = new MusicState.Song();
