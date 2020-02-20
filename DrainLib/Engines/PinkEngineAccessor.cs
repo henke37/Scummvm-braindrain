@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Diagnostics;
+using static DrainLib.Engines.PinkState;
 
 namespace DrainLib.Engines {
 	public class PinkEngineAccessor : ADBaseEngineAccessor {
@@ -141,10 +142,12 @@ namespace DrainLib.Engines {
 		public Dictionary<string, string> GameVars;
 		public Dictionary<string, string> ModuleVars;
 		public Dictionary<string, Page> Pages;
+
+		public class Page {
+			public string Name;
+			public Dictionary<string, string> Vars;
+		}
 	}
 
-	public class Page {
-		public string Name;
-		public Dictionary<string, string> Vars;
-	}
+	
 }
