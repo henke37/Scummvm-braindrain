@@ -38,11 +38,11 @@ namespace DrainLib.Engines {
 			svoyOffset = Resolver.FieldOffset(engineCl, "_voy");
 			gameHourOffset = Resolver.FieldOffset(engineCl, "_gameHour");
 			gameMinuteOffset = Resolver.FieldOffset(engineCl, "_gameMinute");
-			isAMOffset = Resolver.FieldOffset(engineCl, "_isAM");
 			iForceDeathOffset = Resolver.FieldOffset(engineCl, "_iForceDeath");
 			var descriptorOffset = Resolver.FieldOffset(engineCl, "_gameDescription");
 
 			var svoyCl = Resolver.FindClass("Voyeur::SVoy");
+			isAMOffset = Resolver.FieldOffset(svoyCl, "_isAM");
 			victimMurderedOffset = Resolver.FieldOffset(svoyCl,"_victimMurdered");
 			victimNumberOffset = Resolver.FieldOffset(svoyCl, "_victimNumber");
 			incriminatedVictimNumberOffset = Resolver.FieldOffset(svoyCl, "_incriminatedVictimNumber");
@@ -53,7 +53,7 @@ namespace DrainLib.Engines {
 
 		public VoyeurState GetState() {
 			var st = new VoyeurState();
-			bool isAM = MemoryReader.ReadByte(EngineAddr + isAMOffset)!=0;
+			bool isAM = MemoryReader.ReadByte(svoyAddr + isAMOffset)!=0;
 			st.GameHour = MemoryReader.ReadInt32(EngineAddr + gameHourOffset) + (isAM?0:12);
 			st.GameMinute = MemoryReader.ReadInt32(EngineAddr + gameMinuteOffset);
 
