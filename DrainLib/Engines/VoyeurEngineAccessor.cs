@@ -20,6 +20,8 @@ namespace DrainLib.Engines {
 		private int victimNumberOffset;
 		private int incriminatedVictimNumberOffset;
 		private int eventFlagsOffset;
+		private int RTVNumOffset;
+		private int RTVLimitOffset;
 		#endregion
 
 		private IntPtr svoyAddr;
@@ -47,6 +49,8 @@ namespace DrainLib.Engines {
 			victimNumberOffset = Resolver.FieldOffset(svoyCl, "_victimNumber");
 			incriminatedVictimNumberOffset = Resolver.FieldOffset(svoyCl, "_incriminatedVictimNumber");
 			eventFlagsOffset = Resolver.FieldOffset(svoyCl, "_eventFlags");
+			RTVNumOffset = Resolver.FieldOffset(svoyCl, "_RTVNum");
+			RTVLimitOffset = Resolver.FieldOffset(svoyCl, "_RTVLimit");
 
 			LoadADSymbols(descriptorOffset, true);
 		}
@@ -61,6 +65,8 @@ namespace DrainLib.Engines {
 			st.VictimNumber = MemoryReader.ReadInt32(svoyAddr + victimNumberOffset);
 			st.IncriminatedVictimNumber = MemoryReader.ReadInt32(svoyAddr + incriminatedVictimNumberOffset);
 			st.EventFlags = MemoryReader.ReadInt32(svoyAddr + eventFlagsOffset);
+			st.RTVNum = MemoryReader.ReadInt32(svoyAddr + RTVNumOffset);
+			st.RTVLimit = MemoryReader.ReadInt32(svoyAddr + RTVLimitOffset);
 			return st;
 		}
 
@@ -74,6 +80,11 @@ namespace DrainLib.Engines {
 
 			public int GameHour;
 			public int GameMinute;
+
+			internal int RTVNum;
+			internal int RTVLimit;
+
+			public float RTVCharge => (float)RTVNum / RTVLimit;
 		}
 	}
 }

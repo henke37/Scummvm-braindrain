@@ -112,7 +112,7 @@ namespace TestProj {
 			}
 			if(engine is VoyeurEngineAccessor voyeurEngine) {
 				var state = voyeurEngine.GetState();
-				statusTxt.Text = $"{state.GameHour:2}:{state.GameMinute:2}";
+				statusTxt.Text = $"{state.GameHour:D2}:{state.GameMinute:D2} {state.RTVCharge*100} %";
 				return;
 			}
 			statusTxt.Text = engine.GameId;
