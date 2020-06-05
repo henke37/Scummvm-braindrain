@@ -110,6 +110,11 @@ namespace TestProj {
 				statusTxt.Text = $"{state.CurrentScene}/{state.CurrentBitmapIndex}";
 				return;
 			}
+			if(engine is VoyeurEngineAccessor voyeurEngine) {
+				var state = voyeurEngine.GetState();
+				statusTxt.Text = $"{state.GameHour:2}:{state.GameMinute:2}";
+				return;
+			}
 			statusTxt.Text = engine.GameId;
 		}
 
