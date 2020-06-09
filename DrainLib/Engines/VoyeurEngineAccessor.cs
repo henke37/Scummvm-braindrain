@@ -14,17 +14,26 @@ namespace DrainLib.Engines {
 		private int gameMinuteOffset;
 		private int iForceDeathOffset;
 		private int isAMOffset;
+		private int controlPtrOffset;
 
 		//svoy
 		private int victimMurderedOffset;
-		private int victimNumberOffset;
 		private int incriminatedVictimNumberOffset;
 		private int eventFlagsOffset;
 		private int RTVNumOffset;
 		private int RTVLimitOffset;
+
+		//ControlResource
+		private int stateOffset;
+
+		//StateResource
+		private int victimIndexOffset;
 		#endregion
 
 		private IntPtr svoyAddr;
+		private IntPtr ctrlAddr;
+		private IntPtr stateAddr;
+		private IntPtr victimIndexPtrVal;
 
 		public VoyeurEngineAccessor(ScummVMConnector connector, IntPtr engineAddr) : base(connector, engineAddr) {
 			LoadSemiStaticData();
@@ -33,6 +42,14 @@ namespace DrainLib.Engines {
 		private void LoadSemiStaticData() {
 			svoyAddr = MemoryReader.ReadIntPtr(EngineAddr + svoyOffset);
 			if(svoyAddr == IntPtr.Zero) throw new InconsistentDataException();
+
+			ctrlAddr = MemoryReader.ReadIntPtr(EngineAddr + controlPtrOffset);
+			if(ctrlAddr == IntPtr.Zero) throw new InconsistentDataException();
+
+			stateAddr = MemoryReader.ReadIntPtr(ctrlAddr + stateOffset);
+			if(stateAddr == IntPtr.Zero) throw new InconsistentDataException();
+
+			victimIndexPtrVal = MemoryReader.ReadIntPtr(stateAddr + victimIndexOffset);
 		}
 
 		internal override void LoadSymbols() {
@@ -42,15 +59,21 @@ namespace DrainLib.Engines {
 			gameMinuteOffset = Resolver.FieldOffset(engineCl, "_gameMinute");
 			iForceDeathOffset = Resolver.FieldOffset(engineCl, "_iForceDeath");
 			var descriptorOffset = Resolver.FieldOffset(engineCl, "_gameDescription");
+			controlPtrOffset = Resolver.FieldOffset(engineCl, "_controlPtr");
 
 			var svoyCl = Resolver.FindClass("Voyeur::SVoy");
 			isAMOffset = Resolver.FieldOffset(svoyCl, "_isAM");
 			victimMurderedOffset = Resolver.FieldOffset(svoyCl,"_victimMurdered");
-			victimNumberOffset = Resolver.FieldOffset(svoyCl, "_victimNumber");
 			incriminatedVictimNumberOffset = Resolver.FieldOffset(svoyCl, "_incriminatedVictimNumber");
 			eventFlagsOffset = Resolver.FieldOffset(svoyCl, "_eventFlags");
 			RTVNumOffset = Resolver.FieldOffset(svoyCl, "_RTVNum");
 			RTVLimitOffset = Resolver.FieldOffset(svoyCl, "_RTVLimit");
+
+			var ctrlCl = Resolver.FindClass("Voyeur::ControlResource");
+			stateOffset = Resolver.FieldOffset(ctrlCl, "_state");
+
+			var stateCl = Resolver.FindClass("Voyeur::StateResource");
+			victimIndexOffset = Resolver.FieldOffset(stateCl, "_victimIndex");
 
 			LoadADSymbols(descriptorOffset, true);
 		}
@@ -60,9 +83,8 @@ namespace DrainLib.Engines {
 			bool isAM = MemoryReader.ReadByte(svoyAddr + isAMOffset)!=0;
 			st.GameHour = MemoryReader.ReadInt32(EngineAddr + gameHourOffset) + (isAM?0:12);
 			st.GameMinute = MemoryReader.ReadInt32(EngineAddr + gameMinuteOffset);
-
+			st.VictimNumber = MemoryReader.ReadInt32(victimIndexPtrVal);
 			st.VictimMurdered = MemoryReader.ReadByte(svoyAddr + victimMurderedOffset) != 0;
-			st.VictimNumber = MemoryReader.ReadInt32(svoyAddr + victimNumberOffset);
 			st.IncriminatedVictimNumber = MemoryReader.ReadInt32(svoyAddr + incriminatedVictimNumberOffset);
 			st.EventFlags = MemoryReader.ReadInt32(svoyAddr + eventFlagsOffset);
 			st.RTVNum = MemoryReader.ReadInt32(svoyAddr + RTVNumOffset);
