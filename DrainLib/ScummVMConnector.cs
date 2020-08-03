@@ -5,10 +5,12 @@ using System;
 using System.Linq;
 using System.Runtime.Serialization;
 using Henke37.DebugHelp.RTTI.MSVC;
-using Henke37.DebugHelp.Win32;
 using Henke37.DebugHelp.PdbAccess;
 using System.ComponentModel;
-using Henke37.DebugHelp.Win32.AccessRights;
+using Henke37.Win32.AccessRights;
+using Henke37.Win32.Processes;
+using Henke37.Win32.Snapshots;
+using Henke37.Win32.Memory;
 
 namespace DrainLib {
 	public class ScummVMConnector {
