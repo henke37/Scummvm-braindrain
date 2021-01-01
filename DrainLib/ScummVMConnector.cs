@@ -35,7 +35,9 @@ namespace DrainLib {
 				ModuleEntry mainModule = process.GetModules().First(m => m.Name == executableName);
 
 				string pdbPath = mainModule.Path.Replace(".exe", ".pdb");
-				resolver = new SymbolResolver(pdbPath);
+
+				resolver = new SymbolResolver();
+				resolver.AddPdb(pdbPath, mainModule.BaseAddress);
 
 				memoryReader = new LiveProcessMemoryAccessor(process);
 				rttiReader = new RTTIReader(memoryReader);
