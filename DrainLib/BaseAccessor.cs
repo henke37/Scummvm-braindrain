@@ -38,8 +38,9 @@ namespace DrainLib {
 
 		protected void LoadBaseSymbols() {
 			var comStringSymb = Resolver.FindClass("Common::String");
-			comStringSizeOffset = Resolver.FieldOffset(comStringSymb, "_size");
-			comStringStrOffset = Resolver.FieldOffset(comStringSymb, "_str");
+			var comBaseStringSymb = Resolver.GetBaseClass(comStringSymb);
+			comStringSizeOffset = Resolver.FieldOffset(comBaseStringSymb, "_size");
+			comStringStrOffset = Resolver.FieldOffset(comBaseStringSymb, "_str");
 
 			var comFileClSymb = Resolver.FindClass("Common::File");
 			comFileNameOffset = Resolver.FieldOffset(comFileClSymb, "_name");
