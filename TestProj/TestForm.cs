@@ -115,6 +115,11 @@ namespace TestProj {
 				statusTxt.Text = $"{state.GameHour:D2}:{state.GameMinute:D2} {state.RTVCharge*100} %";
 				return;
 			}
+			if(engine is HadesChEngineAccessor hadesEngine) {
+				var pers = hadesEngine.ReadPersistent();
+				statusTxt.Text = $"{pers.Quest} - {pers.CurrentRoomId}";
+				return;
+			}
 			statusTxt.Text = engine.GameId;
 		}
 
