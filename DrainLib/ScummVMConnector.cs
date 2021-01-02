@@ -131,13 +131,4 @@ namespace DrainLib {
 			return new UnknownEngineAccessor(this, enginePtrVal);
 		}
 	}
-
-	[Serializable]
-	public class ProcessNotFoundException : Exception {
-		internal ProcessNotFoundException() : base("Target process not found") {
-
-		}
-		protected ProcessNotFoundException(SerializationInfo info, StreamingContext context) : base(info, context) {
-		}
-	}
 }
