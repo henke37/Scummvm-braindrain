@@ -33,9 +33,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DebugHelp, Version=2.0.0.0, Culture=neutral, processorArchitecture=x86">
-      <HintPath>..\packages\Henke37.DebugHelp.Core.2.0.0-alpha\lib\net452\DebugHelp.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -85,8 +82,12 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\DebugHelp\DebugHelp\DebugHelp.csproj">
+      <Project>{f95563d3-569b-4d59-bd8b-c9e69cd62fb7}</Project>
+      <Name>DebugHelp</Name>
+    </ProjectReference>
     <ProjectReference Include="..\DrainLib\DrainLib.csproj">
-      <Project>{3FADAE26-5A97-4B46-9730-6BF8502633E8}</Project>
+      <Project>{3fadae26-5a97-4b46-9730-6bf8502633e8}</Project>
       <Name>DrainLib</Name>
     </ProjectReference>
   </ItemGroup>
