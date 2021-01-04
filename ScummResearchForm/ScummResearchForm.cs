@@ -48,6 +48,8 @@ namespace ScummResearchForm {
 				}
 			}
 
+			connector.ClearCache();
+
 			if(engine != null && !engine.IsActiveEngine) engine = null;
 			if(engine == null) {
 				engine = connector.GetEngine();

@@ -17,7 +17,8 @@ namespace DrainLib {
 		private const string executableName = "scummvm.exe";
 
 		private NativeProcess? process;
-		internal ProcessMemoryAccessor? memoryReader;
+		internal LiveProcessMemoryAccessor? rawMemoryReader;
+		internal CachedProcessMemoryAccessor? cachedMemoryReader;
 		internal RTTIReader? rttiReader;
 		internal SymbolResolver? resolver;
 
@@ -39,8 +40,9 @@ namespace DrainLib {
 				resolver = new SymbolResolver();
 				resolver.AddPdb(pdbPath, mainModule.BaseAddress);
 
-				memoryReader = new LiveProcessMemoryAccessor(process);
-				rttiReader = new RTTIReader(memoryReader);
+				rawMemoryReader = new LiveProcessMemoryAccessor(process);
+				cachedMemoryReader = new CachedProcessMemoryAccessor(rawMemoryReader);
+				rttiReader = new RTTIReader(cachedMemoryReader);
 
 				var g_engineSymb = resolver.FindGlobal("g_engine");
 				g_engineAddr = mainModule.BaseAddress + (int)g_engineSymb.relativeVirtualAddress;
@@ -56,7 +58,7 @@ namespace DrainLib {
 
 		public BaseEngineAccessor? GetEngine() {
 			if(!Connected) return null;
-			IntPtr enginePtrVal = memoryReader!.ReadIntPtr(g_engineAddr);
+			IntPtr enginePtrVal = cachedMemoryReader!.ReadIntPtr(g_engineAddr);
 
 			if(enginePtrVal == IntPtr.Zero) return null;
 
@@ -129,6 +131,10 @@ namespace DrainLib {
 
 #pragma warning restore CS8602 // Dereference of a possibly null reference.
 			return new UnknownEngineAccessor(this, enginePtrVal);
+		}
+
+		public void ClearCache() {
+			cachedMemoryReader!.ClearCache();
 		}
 	}
 }

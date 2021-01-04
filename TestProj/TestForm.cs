@@ -134,6 +134,8 @@ namespace TestProj {
 				}
 			}
 
+			connector.ClearCache();
+
 			if(engine != null && !engine.IsActiveEngine) engine = null;
 			if(engine == null) {
 				engine = connector.GetEngine();
