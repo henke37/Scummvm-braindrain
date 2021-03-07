@@ -19,6 +19,7 @@ namespace DrainLib {
 		private NativeProcess? process;
 		internal LiveProcessMemoryAccessor? rawMemoryReader;
 		internal CachedProcessMemoryAccessor? cachedMemoryReader;
+		internal ReadOnlyCachedProcessMemoryAccessor? readOnlyCachedMemoryReader;
 		internal RTTIReader? rttiReader;
 		internal SymbolResolver? resolver;
 
@@ -42,6 +43,7 @@ namespace DrainLib {
 
 				rawMemoryReader = new LiveProcessMemoryAccessor(process);
 				cachedMemoryReader = new CachedProcessMemoryAccessor(rawMemoryReader);
+				readOnlyCachedMemoryReader = new ReadOnlyCachedProcessMemoryAccessor(cachedMemoryReader, process);
 				rttiReader = new RTTIReader(cachedMemoryReader);
 
 				var g_engineSymb = resolver.FindGlobal("g_engine");
