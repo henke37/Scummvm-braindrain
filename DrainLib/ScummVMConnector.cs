@@ -134,6 +134,9 @@ namespace DrainLib {
 			if(rttiReader.HasBaseClass(enginePtrVal, ".?AVTinselEngine@Tinsel@@")) {
 				return new TinselEngineAccessor(this, enginePtrVal);
 			}
+			if(rttiReader.HasBaseClass(enginePtrVal, ".?AVDirectorEngine@Director@@")) {
+				return new DirectorEngineAccessor(this, enginePtrVal);
+			}
 
 			if(rttiReader.HasBaseClass(enginePtrVal, ".?AVTestbedEngine@Testbed@@")) {
 				return new TestBedEngineAccessor(this, enginePtrVal);
