@@ -140,6 +140,9 @@ namespace DrainLib {
 			if(rttiReader.HasBaseClass(enginePtrVal, ".?AVHypnoEngine@Hypno@@")) {
 				return new HypnoEngineAccessor(this, enginePtrVal);
 			}
+			if(rttiReader.HasBaseClass(enginePtrVal, ".?AVDraciEngine@Draci@@")) {
+				return new DraciEngineAccessor(this, enginePtrVal);
+			}
 
 			if(rttiReader.HasBaseClass(enginePtrVal, ".?AVTestbedEngine@Testbed@@")) {
 				return new TestBedEngineAccessor(this, enginePtrVal);
