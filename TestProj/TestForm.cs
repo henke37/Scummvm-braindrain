@@ -120,6 +120,11 @@ namespace TestProj {
 				statusTxt.Text = $"{pers.Quest} - {pers.CurrentRoomId}";
 				return;
 			}
+			if(engine is DraciEngineAccessor draciEngine) {
+				var state = draciEngine.GetGameState();
+				statusTxt.Text = $"{state.CurrentRoom}";
+				return;
+			}
 			statusTxt.Text = engine.GameId;
 		}
 
