@@ -11,6 +11,7 @@ using Henke37.Win32.AccessRights;
 using Henke37.Win32.Processes;
 using Henke37.Win32.Snapshots;
 using Henke37.Win32.Memory;
+using System.IO;
 
 namespace DrainLib {
 	public class ScummVMConnector {
@@ -34,12 +35,17 @@ namespace DrainLib {
 					if(procEntry == null) throw new ProcessNotFoundException();
 					process = procEntry.Open(ProcessAccessRights.VMOperation | ProcessAccessRights.VMRead | ProcessAccessRights.Synchronize | ProcessAccessRights.QueryInformation);
 				}
-				ModuleEntry mainModule = process.GetModules().First(m => m.Name == executableName);
-
-				string pdbPath = mainModule.Path.Replace(".exe", ".pdb");
 
 				resolver = new SymbolResolver();
-				resolver.AddPdb(pdbPath, mainModule.BaseAddress);
+
+				var modules = process.GetModules().ToList();
+				ModuleEntry mainModule = modules.First(m => m.Name == executableName);
+
+				foreach(var module in modules) {
+					string pdbPath = PDBForModule(module);
+					if(!File.Exists(pdbPath)) continue;
+					resolver.AddPdb(pdbPath, module.BaseAddress);
+				}
 
 				rawMemoryReader = new LiveProcessMemoryAccessor(process);
 				cachedMemoryReader = new CachedProcessMemoryAccessor(rawMemoryReader);
@@ -52,6 +58,11 @@ namespace DrainLib {
 				process = null;
 				throw new IncompleteReadException(err);
 			}
+		}
+
+		private string PDBForModule(ModuleEntry module) {
+			int lastDot=module.Path.LastIndexOf('.');
+			return module.Path.Substring(0, lastDot) + ".pdb";
 		}
 
 		public bool Connected {
