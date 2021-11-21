@@ -157,6 +157,9 @@ namespace DrainLib {
 			if(rttiReader.HasBaseClass(enginePtrVal, ".?AVNancyEngine@Nancy@@")) {
 				return new NancyEngineAccessor(this, enginePtrVal);
 			}
+			if(rttiReader.HasBaseClass(enginePtrVal, ".?AVAvalancheEngine@Avalanche@@")) {
+				return new AvalancheEngineAccessor(this, enginePtrVal);
+			}
 
 			if(rttiReader.HasBaseClass(enginePtrVal, ".?AVTestbedEngine@Testbed@@")) {
 				return new TestBedEngineAccessor(this, enginePtrVal);
