@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29009.5
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DrainLib", "DrainLib\DrainLib.csproj", "{3FADAE26-5A97-4B46-9730-6BF8502633E8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DrainLib", "DrainLib\DrainLib.csproj", "{3FADAE26-5A97-4B46-9730-6BF8502633E8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestProj", "TestProj\TestProj.csproj", "{01F80EF9-8616-4249-B6FE-8E20178AB1A5}"
 EndProject

@@ -16,6 +16,7 @@
 	  <ProjectReference Include="..\..\..\DebugHelp\DebugHelp\DebugHelp.csproj" />
 	  <ProjectReference Include="..\..\..\DebugHelp\MSVCRTTI\MSVCRTTI.csproj" />
 	  <ProjectReference Include="..\..\..\DebugHelp\PdbAccess\PdbAccess.csproj" />
+	  <ProjectReference Include="..\..\..\DebugHelp\Win32Base\Win32Base.csproj" />
 	  <ProjectReference Include="..\..\..\DebugHelp\Win32ProcessAccess\Win32ProcessAccess.csproj" />
 	</ItemGroup>
 </Project>
