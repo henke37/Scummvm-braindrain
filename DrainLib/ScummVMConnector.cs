@@ -39,7 +39,6 @@ namespace DrainLib {
 				resolver = new SymbolResolver();
 
 				var modules = process.GetModules().ToList();
-				ModuleEntry mainModule = modules.First(m => m.Name == executableName);
 
 				foreach(var module in modules) {
 					string pdbPath = PDBForModule(module);
@@ -53,7 +52,7 @@ namespace DrainLib {
 				rttiReader = new RTTIReader(cachedMemoryReader);
 
 				var g_engineSymb = resolver.FindGlobal("g_engine");
-				g_engineAddr = mainModule.BaseAddress + (int)g_engineSymb.relativeVirtualAddress;
+				g_engineAddr = (IntPtr)g_engineSymb.virtualAddress;
 			} catch(Win32Exception err) when(err.NativeErrorCode == IncompleteReadException.ErrorNumber) {
 				process = null;
 				throw new IncompleteReadException(err);
