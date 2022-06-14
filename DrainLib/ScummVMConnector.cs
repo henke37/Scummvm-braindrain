@@ -38,9 +38,7 @@ namespace DrainLib {
 
 				resolver = new SymbolResolver();
 
-				var modules = process.GetModules().ToList();
-
-				foreach(var module in modules) {
+				foreach(var module in process.GetModules()) {
 					string pdbPath = PDBForModule(module);
 					if(!File.Exists(pdbPath)) continue;
 					resolver.AddPdb(pdbPath, module.BaseAddress);
