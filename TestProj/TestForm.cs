@@ -125,7 +125,7 @@ namespace TestProj {
 				statusTxt.Text = $"{state.CurrentRoom}";
 				return;
 			}
-			statusTxt.Text = engine.GameId;
+			statusTxt.Text = engine.GameId+(engine.IsDemo?"-demo":"");
 		}
 
 		private void UpdateConnector() {
