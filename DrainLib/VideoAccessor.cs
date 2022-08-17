@@ -32,6 +32,11 @@ namespace DrainLib {
 		private int coktelDecoderFrameCountOffset;
 		private int coktelDecoderFrameRateOffset;
 		private int vmdDecoderStreamOffset;
+		//Bink decoder
+		private int binkDecoderBinkOffset;
+		private int binkTrackFrameRateOffset;
+		private int binkTrackCurFrameOffset;
+		private int binkTrackFrameCountOffset;
 		#endregion
 
 		public VideoAccessor(ScummVMConnector connector) : base(connector) {
@@ -70,6 +75,14 @@ namespace DrainLib {
 			coktelDecoderFrameRateOffset = Resolver.FieldOffset(coktelDecoderCl, "_frameRate");
 			var vmdDecoderCl = Resolver.FindClass("Video::VMDDecoder");
 			vmdDecoderStreamOffset = Resolver.FieldOffset(vmdDecoderCl, "_stream");
+
+			var binkDecoderCl = Resolver.FindClass("Video::BinkDecoder");
+			binkDecoderBinkOffset = Resolver.FieldOffset(binkDecoderCl, "_bink");
+
+			var binkTrackCl = Resolver.FindClass("Video::BinkDecoder::BinkVideoTrack");
+			binkTrackFrameRateOffset = Resolver.FieldOffset(binkTrackCl, "_frameRate");
+			binkTrackCurFrameOffset = Resolver.FieldOffset(binkTrackCl, "_curFrame");
+			binkTrackFrameCountOffset = Resolver.FieldOffset(binkTrackCl, "_frameCount");
 		}
 
 		public VideoState? ReadDecoder(IntPtr decoderAddr) {
@@ -84,7 +97,30 @@ namespace DrainLib {
 			if(RttiReader.HasBaseClass(decoderAddr, ".?AVAdvancedVMDDecoder@Video@@")) {
 				return ReadVmdDecoder(decoderAddr);
 			}
+			if(RttiReader.HasBaseClass(decoderAddr, ".?AVBinkDecoder@Video@@")) {
+				return ReadBinkDecoder(decoderAddr);
+			}
 			throw new NotSupportedException("No support for the decoder");
+		}
+
+		private VideoState? ReadBinkDecoder(IntPtr decoderAddr) {
+			var videoTrackPtrVal = MemoryReader.ReadIntPtr(decoderAddr + videoDecNextVideoTrackOffset);
+			var fileStreamPtrVal = MemoryReader.ReadIntPtr(decoderAddr + binkDecoderBinkOffset);
+
+			if(videoTrackPtrVal == IntPtr.Zero) return null;
+
+			var state = ReadBinkVideoTrack(videoTrackPtrVal);
+			state.FileName = ReadFileName(fileStreamPtrVal);
+			return state;
+		}
+
+		private VideoState ReadBinkVideoTrack(IntPtr videoTrackAddr) {
+			var state = new VideoState();
+			state.CurrentFrame = MemoryReader.ReadUInt32(videoTrackAddr + binkTrackCurFrameOffset);
+			state.FrameCount = MemoryReader.ReadUInt32(videoTrackAddr + binkTrackFrameCountOffset);
+			state.FrameRate = ReadRational(videoTrackAddr + binkTrackFrameRateOffset);
+
+			return state;
 		}
 
 		private VideoState? ReadSmkDecoder(IntPtr decoderAddr) {
