@@ -20,6 +20,9 @@ namespace DrainLib {
 		//Com::File
 		private int comFileNameOffset;
 
+		//Com::SubReadStream
+		private int subStreamParentStreamOffset;
+
 		//Com::Rational
 		private int comRationalNumOffset;
 		private int comRationalDenomOffset;
@@ -45,6 +48,11 @@ namespace DrainLib {
 			var comFileClSymb = Resolver.FindClass("Common::File");
 			comFileNameOffset = Resolver.FieldOffset(comFileClSymb, "_name");
 
+			var subStreamClSymb = Resolver.FindClass("Common::SubReadStream");
+			var parentStreamFieldSymb=Resolver.FindField(subStreamClSymb, "_parentStream");
+			var parentStreamClSymb = parentStreamFieldSymb.type;
+			subStreamParentStreamOffset = parentStreamFieldSymb.offset + Resolver.FieldOffset(parentStreamClSymb, "_pointer");
+
 			var comRationalClSymb = Resolver.FindClass("Common::Rational");
 			comRationalNumOffset = Resolver.FieldOffset(comRationalClSymb, "_num");
 			comRationalDenomOffset = Resolver.FieldOffset(comRationalClSymb, "_denom");
@@ -60,9 +68,16 @@ namespace DrainLib {
 		}
 
 		protected string? ReadFileName(IntPtr streamAddr) {
-			if(!RttiReader.TryDynamicCast(streamAddr, ".?AVFile@Common@@", out var fileAddr)) return null;
-			return ReadFileNameInternal(fileAddr);
+			if(RttiReader.TryDynamicCast(streamAddr, ".?AVFile@Common@@", out var fileAddr)) return ReadFileNameInternal(fileAddr);
+			if(RttiReader.TryDynamicCast(streamAddr, ".?AVSubReadStream@Common@@", out var subStreamAddr)) return ReadSubStreamFileName(subStreamAddr);
+			return null;
 		}
+
+		private string? ReadSubStreamFileName(IntPtr subStreamAddr) {
+			var parentStreamAddr = MemoryReader.ReadIntPtr(subStreamAddr + subStreamParentStreamOffset);
+			return ReadFileName(parentStreamAddr);
+		}
+
 		protected string ReadFileNameInternal(IntPtr fileAddr) {
 			return ReadComString(fileAddr + comFileNameOffset);
 		}
