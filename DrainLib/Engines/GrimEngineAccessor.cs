@@ -14,6 +14,8 @@ namespace DrainLib.Engines {
 
 		private IntPtr gMovieAddr;
 		private int videoDecoderOffset;
+
+		private IntPtr luaInstanceAddr;
 		#endregion
 
 		private VideoAccessor videoAccessor;
@@ -31,8 +33,10 @@ namespace DrainLib.Engines {
 			var movieCl = Resolver.FindClass("Grim::MoviePlayer");
 			videoDecoderOffset = Resolver.FieldOffset(movieCl, "_videoDecoder");
 
-			var gMovieSymb = Resolver.FindGlobal("Grim::g_movie");
-			gMovieAddr = (IntPtr)gMovieSymb.virtualAddress;
+			gMovieAddr = Resolver.GlobalAddress("Grim::g_movie");
+
+			var luaBaseCl = Resolver.FindClass("Grim::LuaBase");
+			luaInstanceAddr = Resolver.StaticFieldAddress(luaBaseCl, "s_instance");
 		}
 
 		public override string GameId => gameType == GameType.MONKEY4 ? "monkey4":"grim";
