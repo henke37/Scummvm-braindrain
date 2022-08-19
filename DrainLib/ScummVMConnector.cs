@@ -69,109 +69,110 @@ namespace DrainLib {
 		public BaseEngineAccessor? GetEngine() {
 			if(!Connected) return null;
 			IntPtr enginePtrVal = cachedMemoryReader!.ReadIntPtr(g_engineAddr);
+			IntPtr engineAddr;
 
 			if(enginePtrVal == IntPtr.Zero) return null;
 
 #pragma warning disable CS8602 // Dereference of a possibly null reference.
-			if(rttiReader.HasBaseClass(enginePtrVal, ".?AVScummEngine@Scumm@@")) {
-				return new ScummEngineAccessor(this, enginePtrVal);
+			if(rttiReader.TryDynamicCast(enginePtrVal, ".?AVScummEngine@Scumm@@", out engineAddr)) {
+				return new ScummEngineAccessor(this, engineAddr);
 			}
-			if(rttiReader.HasBaseClass(enginePtrVal, ".?AVSkyEngine@Sky@@")) {
-				return new SkyEngineAccessor(this, enginePtrVal);
+			if(rttiReader.TryDynamicCast(enginePtrVal, ".?AVSkyEngine@Sky@@", out engineAddr)) {
+				return new SkyEngineAccessor(this, engineAddr);
 			}
-			if(rttiReader.HasBaseClass(enginePtrVal, ".?AVToonEngine@Toon@@")) {
-				return new ToonEngineAccessor(this, enginePtrVal);
+			if(rttiReader.TryDynamicCast(enginePtrVal, ".?AVToonEngine@Toon@@", out engineAddr)) {
+				return new ToonEngineAccessor(this, engineAddr);
 			}
-			if(rttiReader.HasBaseClass(enginePtrVal, ".?AVQueenEngine@Queen@@")) {
-				return new QueenEngineAccessor(this, enginePtrVal);
+			if(rttiReader.TryDynamicCast(enginePtrVal, ".?AVQueenEngine@Queen@@", out engineAddr)) {
+				return new QueenEngineAccessor(this, engineAddr);
 			}
-			if(rttiReader.HasBaseClass(enginePtrVal, ".?AVPinkEngine@Pink@@")) {
-				return new PinkEngineAccessor(this, enginePtrVal);
+			if(rttiReader.TryDynamicCast(enginePtrVal, ".?AVPinkEngine@Pink@@", out engineAddr)) {
+				return new PinkEngineAccessor(this, engineAddr);
 			}
-			if(rttiReader.HasBaseClass(enginePtrVal, ".?AVDrasculaEngine@Drascula@@")) {
-				return new DrasculaEngineAccessor(this, enginePtrVal);
+			if(rttiReader.TryDynamicCast(enginePtrVal, ".?AVDrasculaEngine@Drascula@@", out engineAddr)) {
+				return new DrasculaEngineAccessor(this, engineAddr);
 			}
-			if(rttiReader.HasBaseClass(enginePtrVal, ".?AVBladeRunnerEngine@BladeRunner@@")) {
-				return new BladeRunnerEngineAccessor(this, enginePtrVal);
+			if(rttiReader.TryDynamicCast(enginePtrVal, ".?AVBladeRunnerEngine@BladeRunner@@", out engineAddr)) {
+				return new BladeRunnerEngineAccessor(this, engineAddr);
 			}
-			if(rttiReader.HasBaseClass(enginePtrVal, ".?AVSupernovaEngine@Supernova@@")) {
-				return new SupernovaEngineAccessor(this, enginePtrVal);
+			if(rttiReader.TryDynamicCast(enginePtrVal, ".?AVSupernovaEngine@Supernova@@", out engineAddr)) {
+				return new SupernovaEngineAccessor(this, engineAddr);
 			}
-			if(rttiReader.HasBaseClass(enginePtrVal, ".?AVTuckerEngine@Tucker@@")) {
-				return new TuckerEngineAccessor(this, enginePtrVal);
+			if(rttiReader.TryDynamicCast(enginePtrVal, ".?AVTuckerEngine@Tucker@@", out engineAddr)) {
+				return new TuckerEngineAccessor(this, engineAddr);
 			}
-			if(rttiReader.HasBaseClass(enginePtrVal, ".?AVTeenAgentEngine@TeenAgent@@")) {
-				return new TeenAgentEngineAccessor(this, enginePtrVal);
+			if(rttiReader.TryDynamicCast(enginePtrVal, ".?AVTeenAgentEngine@TeenAgent@@", out engineAddr)) {
+				return new TeenAgentEngineAccessor(this, engineAddr);
 			}
-			if(rttiReader.HasBaseClass(enginePtrVal, ".?AVHDBGame@HDB@@")) {
-				return new HyperspaceDeliveryBoyEngineAccessor(this, enginePtrVal);
+			if(rttiReader.TryDynamicCast(enginePtrVal, ".?AVHDBGame@HDB@@", out engineAddr)) {
+				return new HyperspaceDeliveryBoyEngineAccessor(this, engineAddr);
 			}
-			if(rttiReader.HasBaseClass(enginePtrVal, ".?AVSherlockEngine@Sherlock@@")) {
-				return new SherlockEngineAccessor(this, enginePtrVal);
+			if(rttiReader.TryDynamicCast(enginePtrVal, ".?AVSherlockEngine@Sherlock@@", out engineAddr)) {
+				return new SherlockEngineAccessor(this, engineAddr);
 			}
-			if(rttiReader.HasBaseClass(enginePtrVal, ".?AVSciEngine@Sci@@")) {
-				return new SciEngineAccessor(this, enginePtrVal);
+			if(rttiReader.TryDynamicCast(enginePtrVal, ".?AVSciEngine@Sci@@", out engineAddr)) {
+				return new SciEngineAccessor(this, engineAddr);
 			}
-			if(rttiReader.HasBaseClass(enginePtrVal, ".?AVPlumbersGame@Plumbers@@")) {
-				return new PlumbersEngineAccessor(this, enginePtrVal);
+			if(rttiReader.TryDynamicCast(enginePtrVal, ".?AVPlumbersGame@Plumbers@@", out engineAddr)) {
+				return new PlumbersEngineAccessor(this, engineAddr);
 			}
-			if(rttiReader.HasBaseClass(enginePtrVal, ".?AVHopkinsEngine@Hopkins@@")) {
-				return new HopkinsEngineAccessor(this, enginePtrVal);
+			if(rttiReader.TryDynamicCast(enginePtrVal, ".?AVHopkinsEngine@Hopkins@@", out engineAddr)) {
+				return new HopkinsEngineAccessor(this, engineAddr);
 			}
-			if(rttiReader.HasBaseClass(enginePtrVal, ".?AVSludgeEngine@Sludge@@")) {
-				return new SludgeEngineAccessor(this, enginePtrVal);
+			if(rttiReader.TryDynamicCast(enginePtrVal, ".?AVSludgeEngine@Sludge@@", out engineAddr)) {
+				return new SludgeEngineAccessor(this, engineAddr);
 			}
-			if(rttiReader.HasBaseClass(enginePtrVal, ".?AVSagaEngine@Saga@@")) {
-				return new SagaEngineAccessor(this, enginePtrVal);
+			if(rttiReader.TryDynamicCast(enginePtrVal, ".?AVSagaEngine@Saga@@", out engineAddr)) {
+				return new SagaEngineAccessor(this, engineAddr);
 			}
-			if(rttiReader.HasBaseClass(enginePtrVal, ".?AVVoyeurEngine@Voyeur@@")) {
-				return new VoyeurEngineAccessor(this, enginePtrVal);
+			if(rttiReader.TryDynamicCast(enginePtrVal, ".?AVVoyeurEngine@Voyeur@@", out engineAddr)) {
+				return new VoyeurEngineAccessor(this, engineAddr);
 			}
-			if(rttiReader.HasBaseClass(enginePtrVal, ".?AVNeverhoodEngine@Neverhood@@")) {
-				return new NeverhoodEngineAccessor(this, enginePtrVal);
+			if(rttiReader.TryDynamicCast(enginePtrVal, ".?AVNeverhoodEngine@Neverhood@@", out engineAddr)) {
+				return new NeverhoodEngineAccessor(this, engineAddr);
 			}
-			if(rttiReader.HasBaseClass(enginePtrVal, ".?AVHadeschEngine@Hadesch@@")) {
-				return new HadesChEngineAccessor(this, enginePtrVal);
+			if(rttiReader.TryDynamicCast(enginePtrVal, ".?AVHadeschEngine@Hadesch@@", out engineAddr)) {
+				return new HadesChEngineAccessor(this, engineAddr);
 			}
-			if(rttiReader.HasBaseClass(enginePtrVal, ".?AVAGSEngine@AGS@@")) {
-				return new AGSEngineAccessor(this, enginePtrVal);
+			if(rttiReader.TryDynamicCast(enginePtrVal, ".?AVAGSEngine@AGS@@", out engineAddr)) {
+				return new AGSEngineAccessor(this, engineAddr);
 			}
-			if(rttiReader.HasBaseClass(enginePtrVal, ".?AVPrivateEngine@Private@@")) {
-				return new PrivateEngineAccessor(this, enginePtrVal);
+			if(rttiReader.TryDynamicCast(enginePtrVal, ".?AVPrivateEngine@Private@@", out engineAddr)) {
+				return new PrivateEngineAccessor(this, engineAddr);
 			}
-			if(rttiReader.HasBaseClass(enginePtrVal, ".?AVTinselEngine@Tinsel@@")) {
-				return new TinselEngineAccessor(this, enginePtrVal);
+			if(rttiReader.TryDynamicCast(enginePtrVal, ".?AVTinselEngine@Tinsel@@", out engineAddr)) {
+				return new TinselEngineAccessor(this, engineAddr);
 			}
-			if(rttiReader.HasBaseClass(enginePtrVal, ".?AVDirectorEngine@Director@@")) {
-				return new DirectorEngineAccessor(this, enginePtrVal);
+			if(rttiReader.TryDynamicCast(enginePtrVal, ".?AVDirectorEngine@Director@@", out engineAddr)) {
+				return new DirectorEngineAccessor(this, engineAddr);
 			}
-			if(rttiReader.HasBaseClass(enginePtrVal, ".?AVHypnoEngine@Hypno@@")) {
-				return new HypnoEngineAccessor(this, enginePtrVal);
+			if(rttiReader.TryDynamicCast(enginePtrVal, ".?AVHypnoEngine@Hypno@@", out engineAddr)) {
+				return new HypnoEngineAccessor(this, engineAddr);
 			}
-			if(rttiReader.HasBaseClass(enginePtrVal, ".?AVDraciEngine@Draci@@")) {
-				return new DraciEngineAccessor(this, enginePtrVal);
+			if(rttiReader.TryDynamicCast(enginePtrVal, ".?AVDraciEngine@Draci@@", out engineAddr)) {
+				return new DraciEngineAccessor(this, engineAddr);
 			}
-			if(rttiReader.HasBaseClass(enginePtrVal, ".?AVNancyEngine@Nancy@@")) {
-				return new NancyEngineAccessor(this, enginePtrVal);
+			if(rttiReader.TryDynamicCast(enginePtrVal, ".?AVNancyEngine@Nancy@@", out engineAddr)) {
+				return new NancyEngineAccessor(this, engineAddr);
 			}
-			if(rttiReader.HasBaseClass(enginePtrVal, ".?AVAvalancheEngine@Avalanche@@")) {
-				return new AvalancheEngineAccessor(this, enginePtrVal);
+			if(rttiReader.TryDynamicCast(enginePtrVal, ".?AVAvalancheEngine@Avalanche@@", out engineAddr)) {
+				return new AvalancheEngineAccessor(this, engineAddr);
 			}
-			if(rttiReader.HasBaseClass(enginePtrVal, ".?AVMadeEngine@Made@@")) {
-				return new MadeEngineAccessor(this, enginePtrVal);
+			if(rttiReader.TryDynamicCast(enginePtrVal, ".?AVMadeEngine@Made@@", out engineAddr)) {
+				return new MadeEngineAccessor(this, engineAddr);
 			}
-			if(rttiReader.HasBaseClass(enginePtrVal, ".?AVAGOSEngine@AGOS@@")) {
-				return new AGOSEngineAccessor(this, enginePtrVal);
+			if(rttiReader.TryDynamicCast(enginePtrVal, ".?AVAGOSEngine@AGOS@@", out engineAddr)) {
+				return new AGOSEngineAccessor(this, engineAddr);
 			}
-			if(rttiReader.HasBaseClass(enginePtrVal, ".?AVMTropolisEngine@MTropolis@@")) {
-				return new MTropolisEngineAccessor(this, enginePtrVal);
+			if(rttiReader.TryDynamicCast(enginePtrVal, ".?AVMTropolisEngine@MTropolis@@", out engineAddr)) {
+				return new MTropolisEngineAccessor(this, engineAddr);
 			}
-			if(rttiReader.HasBaseClass(enginePtrVal, ".?AVGrimEngine@Grim@@")) {
-				return new GrimEngineAccessor(this, enginePtrVal);
+			if(rttiReader.TryDynamicCast(enginePtrVal, ".?AVGrimEngine@Grim@@", out engineAddr)) {
+				return new GrimEngineAccessor(this, engineAddr);
 			}
 
-			if(rttiReader.HasBaseClass(enginePtrVal, ".?AVTestbedEngine@Testbed@@")) {
-				return new TestBedEngineAccessor(this, enginePtrVal);
+			if(rttiReader.TryDynamicCast(enginePtrVal, ".?AVTestbedEngine@Testbed@@", out engineAddr)) {
+				return new TestBedEngineAccessor(this, engineAddr);
 			}
 
 

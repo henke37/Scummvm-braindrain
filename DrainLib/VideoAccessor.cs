@@ -88,17 +88,17 @@ namespace DrainLib {
 		public VideoState? ReadDecoder(IntPtr decoderAddr) {
 			if(decoderAddr == IntPtr.Zero) return null;
 
-			if(RttiReader.HasBaseClass(decoderAddr, ".?AVSmackerDecoder@Video@@")) {
-				return ReadSmkDecoder(decoderAddr);
+			if(RttiReader.TryDynamicCast(decoderAddr, ".?AVSmackerDecoder@Video@@", out IntPtr smkDecoderAddr)) {
+				return ReadSmkDecoder(smkDecoderAddr);
 			}
-			if(RttiReader.HasBaseClass(decoderAddr, ".?AVAVIDecoder@Video@@")) {
-				return ReadAviDecoder(decoderAddr);
+			if(RttiReader.TryDynamicCast(decoderAddr, ".?AVAVIDecoder@Video@@", out IntPtr aviDecoderAddr)) {
+				return ReadAviDecoder(aviDecoderAddr);
 			}
-			if(RttiReader.HasBaseClass(decoderAddr, ".?AVAdvancedVMDDecoder@Video@@")) {
-				return ReadVmdDecoder(decoderAddr);
+			if(RttiReader.TryDynamicCast(decoderAddr, ".?AVAdvancedVMDDecoder@Video@@", out IntPtr vmdDecoderAddr)) {
+				return ReadVmdDecoder(vmdDecoderAddr);
 			}
-			if(RttiReader.HasBaseClass(decoderAddr, ".?AVBinkDecoder@Video@@")) {
-				return ReadBinkDecoder(decoderAddr);
+			if(RttiReader.TryDynamicCast(decoderAddr, ".?AVBinkDecoder@Video@@", out IntPtr bnkDecoderAddr)) {
+				return ReadBinkDecoder(bnkDecoderAddr);
 			}
 			throw new NotSupportedException("No support for the decoder");
 		}
@@ -177,8 +177,8 @@ namespace DrainLib {
 			state.FrameCount = MemoryReader.ReadUInt32(coktelDecoderAddr + coktelDecoderFrameCountOffset);
 			state.FrameRate = ReadRational(coktelDecoderAddr + coktelDecoderFrameRateOffset);
 
-			if(RttiReader.HasBaseClass(coktelDecoderAddr, ".?AVVMDDecoder@Video@@")) {
-				var streamPtrVal = MemoryReader.ReadIntPtr(coktelDecoderAddr + vmdDecoderStreamOffset);
+			if(RttiReader.TryDynamicCast(coktelDecoderAddr, ".?AVVMDDecoder@Video@@",out IntPtr vmdDecoderAddr)) {
+				var streamPtrVal = MemoryReader.ReadIntPtr(vmdDecoderAddr + vmdDecoderStreamOffset);
 				state.FileName = ReadFileName(streamPtrVal);
 			}
 
