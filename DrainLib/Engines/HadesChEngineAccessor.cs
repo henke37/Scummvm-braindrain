@@ -50,6 +50,7 @@ namespace DrainLib.Engines {
 			currentRoomIdOffset = Resolver.FieldOffset(persistentCl, "_currentRoomId");
 			previousRoomIdOffset = Resolver.FieldOffset(persistentCl, "_previousRoomId");
 			inventoryOffset = Resolver.FieldOffset(persistentCl, "_inventory");
+			hintsAreEnabledOffset = Resolver.FieldOffset(persistentCl, "_hintsAreEnabled");
 
 			LoadADSymbols(descriptorOffset, true);
 		}
